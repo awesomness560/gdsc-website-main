@@ -13,7 +13,7 @@ export const dummyHackdscData = {
     subtitle:
       'UT Dallas’ student hackathon — ship a project, join workshops, and compete for prizes over one weekend.',
     primaryCta: { label: 'Register', href: '#register' },
-    secondaryCta: { label: 'View schedule', href: '/' },
+    secondaryCta: { label: 'View schedule', href: '/hackdsc/schedule' },
     meta: [
       { icon: 'calendar' as const, text: 'Sep 12–13, 2026' },
       { icon: 'map-pin' as const, text: 'Richardson, TX' },

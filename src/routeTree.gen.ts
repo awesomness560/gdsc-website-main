@@ -9,18 +9,20 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as HackdscRouteImport } from './routes/hackdsc'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as HackdscRouteRouteImport } from './routes/hackdsc/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as HackdscIndexRouteImport } from './routes/hackdsc/index'
+import { Route as HackdscScheduleRouteImport } from './routes/hackdsc/schedule'
 
-const HackdscRoute = HackdscRouteImport.update({
-  id: '/hackdsc',
-  path: '/hackdsc',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HackdscRouteRoute = HackdscRouteRouteImport.update({
+  id: '/hackdsc',
+  path: '/hackdsc',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -28,51 +30,72 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HackdscIndexRoute = HackdscIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => HackdscRouteRoute,
+} as any)
+const HackdscScheduleRoute = HackdscScheduleRouteImport.update({
+  id: '/schedule',
+  path: '/schedule',
+  getParentRoute: () => HackdscRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/hackdsc': typeof HackdscRouteRouteWithChildren
   '/about': typeof AboutRoute
-  '/hackdsc': typeof HackdscRoute
+  '/hackdsc/schedule': typeof HackdscScheduleRoute
+  '/hackdsc/': typeof HackdscIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/hackdsc': typeof HackdscRoute
+  '/hackdsc/schedule': typeof HackdscScheduleRoute
+  '/hackdsc': typeof HackdscIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/hackdsc': typeof HackdscRouteRouteWithChildren
   '/about': typeof AboutRoute
-  '/hackdsc': typeof HackdscRoute
+  '/hackdsc/schedule': typeof HackdscScheduleRoute
+  '/hackdsc/': typeof HackdscIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/hackdsc'
+  fullPaths: '/' | '/hackdsc' | '/about' | '/hackdsc/schedule' | '/hackdsc/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/hackdsc'
-  id: '__root__' | '/' | '/about' | '/hackdsc'
+  to: '/' | '/about' | '/hackdsc/schedule' | '/hackdsc'
+  id:
+    | '__root__'
+    | '/'
+    | '/hackdsc'
+    | '/about'
+    | '/hackdsc/schedule'
+    | '/hackdsc/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  HackdscRouteRoute: typeof HackdscRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
-  HackdscRoute: typeof HackdscRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/hackdsc': {
-      id: '/hackdsc'
-      path: '/hackdsc'
-      fullPath: '/hackdsc'
-      preLoaderRoute: typeof HackdscRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/about': {
       id: '/about'
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/hackdsc': {
+      id: '/hackdsc'
+      path: '/hackdsc'
+      fullPath: '/hackdsc'
+      preLoaderRoute: typeof HackdscRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -82,13 +105,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/hackdsc/': {
+      id: '/hackdsc/'
+      path: '/'
+      fullPath: '/hackdsc/'
+      preLoaderRoute: typeof HackdscIndexRouteImport
+      parentRoute: typeof HackdscRouteRoute
+    }
+    '/hackdsc/schedule': {
+      id: '/hackdsc/schedule'
+      path: '/schedule'
+      fullPath: '/hackdsc/schedule'
+      preLoaderRoute: typeof HackdscScheduleRouteImport
+      parentRoute: typeof HackdscRouteRoute
+    }
   }
 }
 
+interface HackdscRouteRouteChildren {
+  HackdscScheduleRoute: typeof HackdscScheduleRoute
+  HackdscIndexRoute: typeof HackdscIndexRoute
+}
+
+const HackdscRouteRouteChildren: HackdscRouteRouteChildren = {
+  HackdscScheduleRoute: HackdscScheduleRoute,
+  HackdscIndexRoute: HackdscIndexRoute,
+}
+
+const HackdscRouteRouteWithChildren = HackdscRouteRoute._addFileChildren(
+  HackdscRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  HackdscRouteRoute: HackdscRouteRouteWithChildren,
   AboutRoute: AboutRoute,
-  HackdscRoute: HackdscRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -4,7 +4,7 @@ import { TanStackDevtools } from '@tanstack/react-devtools'
 
 import { AppShell } from '#/components/layout/AppShell'
 import { SiteNavbar } from '#/components/layout/SiteNavbar'
-import { siteNavLinks } from '#/data/site-nav'
+import { siteNavItems } from '#/data/site-nav'
 import '../styles.css'
 
 export const Route = createRootRoute({
@@ -14,7 +14,7 @@ export const Route = createRootRoute({
 function RootComponent() {
   return (
     <AppShell>
-      <SiteNavbar links={siteNavLinks} />
+      <SiteNavbar items={siteNavItems} />
       <Outlet />
       <TanStackDevtools
         config={{

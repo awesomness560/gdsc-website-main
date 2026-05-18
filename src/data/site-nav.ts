@@ -1,7 +1,13 @@
-import type { NavLink } from '#/types/landing'
+import type { SiteNavItem } from '#/types/navigation'
 
-export const siteNavLinks: NavLink[] = [
+export const siteNavItems: SiteNavItem[] = [
   { label: 'About Us', href: '/about' },
-  { label: 'HACKDSC', href: '/hackdsc' },
-  { label: 'Schedule', href: '/' },
+  {
+    label: 'HACKDSC',
+    href: '/hackdsc',
+    children: [
+      { label: 'Overview', href: '/hackdsc' },
+      { label: 'Schedule', href: '/hackdsc/schedule' },
+    ],
+  },
 ]

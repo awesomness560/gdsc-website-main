@@ -13,7 +13,7 @@ import {
   TracksSection,
 } from '#/components/sections/hackdsc'
 
-export const Route = createFileRoute('/hackdsc')({
+export const Route = createFileRoute('/hackdsc/')({
   component: HackdscPage,
 })
 

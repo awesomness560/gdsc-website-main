@@ -10,6 +10,19 @@ export type {
 } from '#/types/hackdsc'
 
 export type {
+  NavGroup,
+  NavLink as SiteNavLink,
+  SiteNavItem,
+} from '#/types/navigation'
+
+export type {
+  ScheduleDay,
+  ScheduleEvent,
+  ScheduleHero,
+  SchedulePageData,
+} from '#/types/schedule'
+
+export type {
   AboutHero,
   AboutPageData,
   Division,
