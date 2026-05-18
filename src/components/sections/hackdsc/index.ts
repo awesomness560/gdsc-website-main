@@ -1,0 +1,7 @@
+export { HackHeroSection } from '#/components/sections/hackdsc/HackHeroSection'
+export { HackHeroActions } from '#/components/sections/hackdsc/HackHeroActions'
+export { CountdownSection } from '#/components/sections/hackdsc/CountdownSection'
+export { HackStatsSection } from '#/components/sections/hackdsc/HackStatsSection'
+export { TracksSection } from '#/components/sections/hackdsc/TracksSection'
+export { SponsorsSection } from '#/components/sections/hackdsc/SponsorsSection'
+export { FaqSection } from '#/components/sections/hackdsc/FaqSection'

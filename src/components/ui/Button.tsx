@@ -1,4 +1,6 @@
+import { Link } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
+import { isInternalPath } from '#/lib/navigation'
 import { cn } from '#/lib/cn'
 
 type ButtonVariant = 'primary' | 'secondary' | 'ghost'
@@ -33,6 +35,15 @@ export function Button({
   )
 
   if (href) {
+    if (isInternalPath(href)) {
+      return (
+        <Link to={href} preload="intent" className={classes}>
+          {children}
+          {icon}
+        </Link>
+      )
+    }
+
     return (
       <a href={href} className={classes}>
         {children}

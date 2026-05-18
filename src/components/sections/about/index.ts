@@ -1,0 +1,5 @@
+export { AboutHeroSection } from '#/components/sections/about/AboutHeroSection'
+export { LeadershipSection } from '#/components/sections/about/LeadershipSection'
+export { DivisionSection } from '#/components/sections/about/DivisionSection'
+export { PastOfficersSection } from '#/components/sections/about/PastOfficersSection'
+export { MemberCard } from '#/components/sections/about/MemberCard'

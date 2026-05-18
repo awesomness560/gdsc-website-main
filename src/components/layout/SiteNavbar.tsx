@@ -1,3 +1,4 @@
+import { Link, useRouterState } from '@tanstack/react-router'
 import { Menu, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import type { NavLink } from '#/types/landing'
@@ -7,8 +8,37 @@ type SiteNavbarProps = {
   links: NavLink[]
 }
 
+function NavItem({
+  link,
+  pathname,
+  onNavigate,
+  className,
+}: {
+  link: NavLink
+  pathname: string
+  onNavigate?: () => void
+  className: string
+}) {
+  const isActive = pathname === link.href
+
+  return (
+    <Link
+      to={link.href}
+      preload="intent"
+      onClick={onNavigate}
+      className={cn(
+        className,
+        isActive && 'bg-white/5 text-fg',
+      )}
+    >
+      {link.label}
+    </Link>
+  )
+}
+
 export function SiteNavbar({ links }: SiteNavbarProps) {
   const [menuOpen, setMenuOpen] = useState(false)
+  const pathname = useRouterState({ select: (s) => s.location.pathname })
 
   useEffect(() => {
     if (!menuOpen) return
@@ -47,8 +77,9 @@ export function SiteNavbar({ links }: SiteNavbarProps) {
           aria-label="Main navigation"
         >
           <div className="flex items-center justify-between gap-4">
-            <a
-              href="/"
+            <Link
+              to="/"
+              preload="intent"
               aria-label="GDSC home"
               className="flex shrink-0 items-center gap-2.5"
               onClick={closeMenu}
@@ -64,17 +95,16 @@ export function SiteNavbar({ links }: SiteNavbarProps) {
               <span className="text-base font-bold leading-none tracking-tight">
                 GDSC
               </span>
-            </a>
+            </Link>
 
             <div className="hidden items-center gap-1 md:flex">
               {links.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
+                <NavItem
+                  key={link.label}
+                  link={link}
+                  pathname={pathname}
                   className="rounded-2xl px-4 py-2.5 text-sm font-medium text-fg-secondary transition-colors hover:bg-white/5 hover:text-fg"
-                >
-                  {link.label}
-                </a>
+                />
               ))}
             </div>
 
@@ -103,14 +133,13 @@ export function SiteNavbar({ links }: SiteNavbarProps) {
           >
             <div className="mt-3 flex flex-col gap-1 border-t border-border-subtle pt-3">
               {links.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
+                <NavItem
+                  key={link.label}
+                  link={link}
+                  pathname={pathname}
+                  onNavigate={closeMenu}
                   className="rounded-xl px-3 py-3 text-sm font-medium text-fg-secondary transition-colors hover:bg-white/5 hover:text-fg"
-                  onClick={closeMenu}
-                >
-                  {link.label}
-                </a>
+                />
               ))}
             </div>
           </div>

@@ -6,10 +6,10 @@ type PageBackgroundProps = {
 
 export function PageBackground({ children }: PageBackgroundProps) {
   return (
-    <div className="relative min-h-screen text-fg">
+    <div className="relative min-h-screen bg-page-gradient text-fg">
       <div
         aria-hidden
-        className="pointer-events-none fixed inset-0 -z-10 bg-page-gradient"
+        className="pointer-events-none absolute inset-0 min-h-full overflow-hidden"
       >
         <div className="absolute inset-0 bg-grid-pattern opacity-40" />
         <div className="absolute top-[38%] left-[26%] h-64 w-64 rounded-full bg-google-blue/20 blur-3xl" />
@@ -17,7 +17,7 @@ export function PageBackground({ children }: PageBackgroundProps) {
         <div className="absolute right-[18%] bottom-[12%] h-64 w-64 rounded-full bg-google-green/12 blur-3xl" />
       </div>
 
-      {children}
+      <div className="relative">{children}</div>
     </div>
   )
 }

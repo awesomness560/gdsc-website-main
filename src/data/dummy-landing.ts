@@ -13,7 +13,7 @@ export const dummyLandingData = {
     subtitle:
       'Workshops, project nights, and community events for students who want to ship real software at UT Dallas.',
     primaryCta: { label: 'Explore events', href: '#events' },
-    secondaryCta: { label: 'Meet the team', href: '#about' },
+    secondaryCta: { label: 'Meet the team', href: '/about' },
     meta: [
       { icon: 'map-pin' as const, text: 'UT Dallas' },
       { icon: 'sparkles' as const, text: 'Workshops · Projects · Community' },

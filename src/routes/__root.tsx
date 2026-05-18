@@ -2,9 +2,9 @@ import { Outlet, createRootRoute } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 
-import { PageBackground } from '#/components/layout/PageBackground'
+import { AppShell } from '#/components/layout/AppShell'
 import { SiteNavbar } from '#/components/layout/SiteNavbar'
-import { dummyLandingData } from '#/data/dummy-landing'
+import { siteNavLinks } from '#/data/site-nav'
 import '../styles.css'
 
 export const Route = createRootRoute({
@@ -13,8 +13,8 @@ export const Route = createRootRoute({
 
 function RootComponent() {
   return (
-    <PageBackground>
-      <SiteNavbar links={dummyLandingData.navLinks} />
+    <AppShell>
+      <SiteNavbar links={siteNavLinks} />
       <Outlet />
       <TanStackDevtools
         config={{
@@ -27,6 +27,6 @@ function RootComponent() {
           },
         ]}
       />
-    </PageBackground>
+    </AppShell>
   )
 }

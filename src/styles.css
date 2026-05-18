@@ -31,12 +31,34 @@
   background-size: 58px 58px;
 }
 
+@utility bg-hack-page-gradient {
+  background:
+    radial-gradient(ellipse 90% 55% at 50% -5%, var(--color-hack-glow-red), transparent 55%),
+    radial-gradient(circle at 85% 15%, var(--color-hack-glow-blue), transparent 42%),
+    radial-gradient(circle at 8% 45%, var(--color-hack-glow-violet), transparent 38%),
+    radial-gradient(circle at 55% 85%, var(--color-glow-green), transparent 32%),
+    linear-gradient(
+      165deg,
+      var(--color-hack-bg-deep) 0%,
+      var(--color-hack-bg-base) 45%,
+      var(--color-bg-base) 100%
+    );
+}
+
+@utility bg-hack-grid-pattern {
+  background-image:
+    linear-gradient(rgba(120, 80, 160, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(120, 80, 160, 0.07) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
 * {
   box-sizing: border-box;
 }
 
 html {
   scroll-behavior: smooth;
+  background-color: var(--color-bg-deep);
 }
 
 html,

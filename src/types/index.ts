@@ -1,4 +1,23 @@
 export type {
+  CountdownTime,
+  HackdscPageData,
+  HackFaqItem,
+  HackHero,
+  HackSponsor,
+  HackStat,
+  HackTrack,
+  HackTrackIcon,
+} from '#/types/hackdsc'
+
+export type {
+  AboutHero,
+  AboutPageData,
+  Division,
+  LeadershipTeam,
+  TeamMember,
+} from '#/types/about'
+
+export type {
   ClubEvent,
   CtaLink,
   EventStatus,
