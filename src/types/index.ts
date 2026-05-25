@@ -47,6 +47,15 @@ export type {
 } from '#/types/events'
 
 export type {
+  AuthErrorCode,
+  AuthFieldErrors,
+  AuthStatus,
+  AuthUser,
+  SignInCredentials,
+  SignUpCredentials,
+} from '#/types/auth'
+
+export type {
   CtaLink,
   GoogleAccent,
   HeroContent,

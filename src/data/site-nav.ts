@@ -12,3 +12,5 @@ export const siteNavItems: SiteNavItem[] = [
     ],
   },
 ]
+
+export const signInNavLink = { label: 'Sign in', href: '/login' } as const

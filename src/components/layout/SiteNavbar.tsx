@@ -1,6 +1,8 @@
 import { Link, useRouterState } from '@tanstack/react-router'
 import { ChevronDown, Menu, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { signInNavLink } from '#/data/site-nav'
+import { isAuthRoute } from '#/lib/auth-routes'
 import { isNavGroup } from '#/types/navigation'
 import type { NavGroup, NavLink, SiteNavItem } from '#/types/navigation'
 import { cn } from '#/lib/cn'
@@ -17,6 +19,7 @@ const mobileLinkClass =
 
 function isPathActive(pathname: string, href: string) {
   if (href === '/') return pathname === '/'
+  if (href === signInNavLink.href) return isAuthRoute(pathname)
   return pathname === href || pathname.startsWith(`${href}/`)
 }
 
@@ -274,6 +277,18 @@ export function SiteNavbar({ items }: SiteNavbarProps) {
                   />
                 ),
               )}
+              <Link
+                to={signInNavLink.href}
+                preload="intent"
+                className={cn(
+                  'ml-2 inline-flex h-10 items-center justify-center rounded-2xl px-4 text-sm font-semibold transition-colors',
+                  'bg-accent text-accent-fg shadow-[0_8px_24px_rgba(74,140,255,0.25)] hover:bg-accent-hover',
+                  isPathActive(pathname, signInNavLink.href) &&
+                    'ring-2 ring-white/20',
+                )}
+              >
+                {signInNavLink.label}
+              </Link>
             </div>
 
             <button
@@ -317,6 +332,19 @@ export function SiteNavbar({ items }: SiteNavbarProps) {
                   />
                 ),
               )}
+              <Link
+                to={signInNavLink.href}
+                preload="intent"
+                onClick={closeMenu}
+                className={cn(
+                  'mt-1 inline-flex h-11 items-center justify-center rounded-2xl px-4 text-sm font-semibold',
+                  'bg-accent text-accent-fg shadow-[0_8px_24px_rgba(74,140,255,0.25)] hover:bg-accent-hover',
+                  isPathActive(pathname, signInNavLink.href) &&
+                    'ring-2 ring-white/20',
+                )}
+              >
+                {signInNavLink.label}
+              </Link>
             </div>
           </div>
         </nav>

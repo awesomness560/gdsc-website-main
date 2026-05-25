@@ -9,7 +9,8 @@ export function getRouter() {
     defaultPreload: 'intent',
     defaultPreloadStaleTime: 0,
     defaultPendingComponent: RoutePending,
-    defaultPendingMs: 0,
+    /** Brief delay avoids a one-frame pending flash on fast/lazy route transitions. */
+    defaultPendingMs: 150,
   })
 
   return router
