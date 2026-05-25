@@ -1,7 +1,8 @@
 import { Link, useRouterState } from '@tanstack/react-router'
 import { ChevronDown, Menu, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { isNavGroup, type NavGroup, type NavLink, type SiteNavItem } from '#/types/navigation'
+import { isNavGroup } from '#/types/navigation'
+import type { NavGroup, NavLink, SiteNavItem } from '#/types/navigation'
 import { cn } from '#/lib/cn'
 
 type SiteNavbarProps = {

@@ -1,5 +1,4 @@
-import type { GoogleAccent } from '#/types/landing'
-import type { SectionCopy } from '#/types/landing'
+import type { GoogleAccent, SectionCopy } from '#/types/landing'
 
 export interface HackHero {
   status: {

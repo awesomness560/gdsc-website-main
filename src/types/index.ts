@@ -31,6 +31,22 @@ export type {
 } from '#/types/about'
 
 export type {
+  ClubEventDetail,
+  EventType,
+  EventTypeColors,
+  EventPresenter,
+  EventRegistration,
+  EventRegistrationState,
+  EventResource,
+  EventResourceKind,
+  EventsPageData,
+  EventsPageHero,
+  EventsSearch,
+  EventLocation,
+  EventStatusPill,
+} from '#/types/events'
+
+export type {
   ClubEvent,
   CtaLink,
   EventStatus,

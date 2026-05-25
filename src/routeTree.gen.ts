@@ -11,9 +11,12 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as HackdscRouteRouteImport } from './routes/hackdsc/route'
+import { Route as EventsRouteRouteImport } from './routes/events/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as HackdscIndexRouteImport } from './routes/hackdsc/index'
+import { Route as EventsIndexRouteImport } from './routes/events/index'
 import { Route as HackdscScheduleRouteImport } from './routes/hackdsc/schedule'
+import { Route as EventsSlugRouteImport } from './routes/events/$slug'
 
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
@@ -23,6 +26,11 @@ const AboutRoute = AboutRouteImport.update({
 const HackdscRouteRoute = HackdscRouteRouteImport.update({
   id: '/hackdsc',
   path: '/hackdsc',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EventsRouteRoute = EventsRouteRouteImport.update({
+  id: '/events',
+  path: '/events',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -35,49 +43,85 @@ const HackdscIndexRoute = HackdscIndexRouteImport.update({
   path: '/',
   getParentRoute: () => HackdscRouteRoute,
 } as any)
+const EventsIndexRoute = EventsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => EventsRouteRoute,
+} as any)
 const HackdscScheduleRoute = HackdscScheduleRouteImport.update({
   id: '/schedule',
   path: '/schedule',
   getParentRoute: () => HackdscRouteRoute,
 } as any)
+const EventsSlugRoute = EventsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => EventsRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/events': typeof EventsRouteRouteWithChildren
   '/hackdsc': typeof HackdscRouteRouteWithChildren
   '/about': typeof AboutRoute
+  '/events/$slug': typeof EventsSlugRoute
   '/hackdsc/schedule': typeof HackdscScheduleRoute
+  '/events/': typeof EventsIndexRoute
   '/hackdsc/': typeof HackdscIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/events/$slug': typeof EventsSlugRoute
   '/hackdsc/schedule': typeof HackdscScheduleRoute
+  '/events': typeof EventsIndexRoute
   '/hackdsc': typeof HackdscIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/events': typeof EventsRouteRouteWithChildren
   '/hackdsc': typeof HackdscRouteRouteWithChildren
   '/about': typeof AboutRoute
+  '/events/$slug': typeof EventsSlugRoute
   '/hackdsc/schedule': typeof HackdscScheduleRoute
+  '/events/': typeof EventsIndexRoute
   '/hackdsc/': typeof HackdscIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/hackdsc' | '/about' | '/hackdsc/schedule' | '/hackdsc/'
+  fullPaths:
+    | '/'
+    | '/events'
+    | '/hackdsc'
+    | '/about'
+    | '/events/$slug'
+    | '/hackdsc/schedule'
+    | '/events/'
+    | '/hackdsc/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/hackdsc/schedule' | '/hackdsc'
+  to:
+    | '/'
+    | '/about'
+    | '/events/$slug'
+    | '/hackdsc/schedule'
+    | '/events'
+    | '/hackdsc'
   id:
     | '__root__'
     | '/'
+    | '/events'
     | '/hackdsc'
     | '/about'
+    | '/events/$slug'
     | '/hackdsc/schedule'
+    | '/events/'
     | '/hackdsc/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  EventsRouteRoute: typeof EventsRouteRouteWithChildren
   HackdscRouteRoute: typeof HackdscRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
 }
@@ -98,6 +142,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HackdscRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/events': {
+      id: '/events'
+      path: '/events'
+      fullPath: '/events'
+      preLoaderRoute: typeof EventsRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -112,6 +163,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HackdscIndexRouteImport
       parentRoute: typeof HackdscRouteRoute
     }
+    '/events/': {
+      id: '/events/'
+      path: '/'
+      fullPath: '/events/'
+      preLoaderRoute: typeof EventsIndexRouteImport
+      parentRoute: typeof EventsRouteRoute
+    }
     '/hackdsc/schedule': {
       id: '/hackdsc/schedule'
       path: '/schedule'
@@ -119,8 +177,29 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HackdscScheduleRouteImport
       parentRoute: typeof HackdscRouteRoute
     }
+    '/events/$slug': {
+      id: '/events/$slug'
+      path: '/$slug'
+      fullPath: '/events/$slug'
+      preLoaderRoute: typeof EventsSlugRouteImport
+      parentRoute: typeof EventsRouteRoute
+    }
   }
 }
+
+interface EventsRouteRouteChildren {
+  EventsSlugRoute: typeof EventsSlugRoute
+  EventsIndexRoute: typeof EventsIndexRoute
+}
+
+const EventsRouteRouteChildren: EventsRouteRouteChildren = {
+  EventsSlugRoute: EventsSlugRoute,
+  EventsIndexRoute: EventsIndexRoute,
+}
+
+const EventsRouteRouteWithChildren = EventsRouteRoute._addFileChildren(
+  EventsRouteRouteChildren,
+)
 
 interface HackdscRouteRouteChildren {
   HackdscScheduleRoute: typeof HackdscScheduleRoute
@@ -138,6 +217,7 @@ const HackdscRouteRouteWithChildren = HackdscRouteRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  EventsRouteRoute: EventsRouteRouteWithChildren,
   HackdscRouteRoute: HackdscRouteRouteWithChildren,
   AboutRoute: AboutRoute,
 }
