@@ -11,18 +11,24 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as MembershipRouteImport } from './routes/membership'
 import { Route as JoinRouteImport } from './routes/join'
-import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as HackdscRouteRouteImport } from './routes/hackdsc/route'
 import { Route as EventsRouteRouteImport } from './routes/events/route'
+import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as HackdscIndexRouteImport } from './routes/hackdsc/index'
 import { Route as EventsIndexRouteImport } from './routes/events/index'
+import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as HackdscScheduleRouteImport } from './routes/hackdsc/schedule'
 import { Route as HackdscRegisterRouteImport } from './routes/hackdsc/register'
 import { Route as EventsSlugRouteImport } from './routes/events/$slug'
 import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
+import { Route as AdminSiteContentRouteImport } from './routes/admin/site-content'
+import { Route as AdminSettingsRouteImport } from './routes/admin/settings'
+import { Route as AdminMembersRouteImport } from './routes/admin/members'
+import { Route as AdminEventsRouteImport } from './routes/admin/events'
+import { Route as AdminApplicationsRouteImport } from './routes/admin/applications'
 import { Route as AuthSignupRouteImport } from './routes/_auth/signup'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 
@@ -34,11 +40,6 @@ const MembershipRoute = MembershipRouteImport.update({
 const JoinRoute = JoinRouteImport.update({
   id: '/join',
   path: '/join',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminRoute = AdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -54,6 +55,11 @@ const HackdscRouteRoute = HackdscRouteRouteImport.update({
 const EventsRouteRoute = EventsRouteRouteImport.update({
   id: '/events',
   path: '/events',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRouteRoute = AdminRouteRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRouteRoute = AuthRouteRouteImport.update({
@@ -75,6 +81,11 @@ const EventsIndexRoute = EventsIndexRouteImport.update({
   path: '/',
   getParentRoute: () => EventsRouteRoute,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const HackdscScheduleRoute = HackdscScheduleRouteImport.update({
   id: '/schedule',
   path: '/schedule',
@@ -95,6 +106,31 @@ const AuthCallbackRoute = AuthCallbackRouteImport.update({
   path: '/auth/callback',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminSiteContentRoute = AdminSiteContentRouteImport.update({
+  id: '/site-content',
+  path: '/site-content',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminSettingsRoute = AdminSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminMembersRoute = AdminMembersRouteImport.update({
+  id: '/members',
+  path: '/members',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminEventsRoute = AdminEventsRouteImport.update({
+  id: '/events',
+  path: '/events',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminApplicationsRoute = AdminApplicationsRouteImport.update({
+  id: '/applications',
+  path: '/applications',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AuthSignupRoute = AuthSignupRouteImport.update({
   id: '/signup',
   path: '/signup',
@@ -108,33 +144,44 @@ const AuthLoginRoute = AuthLoginRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteRouteWithChildren
   '/events': typeof EventsRouteRouteWithChildren
   '/hackdsc': typeof HackdscRouteRouteWithChildren
   '/about': typeof AboutRoute
-  '/admin': typeof AdminRoute
   '/join': typeof JoinRoute
   '/membership': typeof MembershipRoute
   '/login': typeof AuthLoginRoute
   '/signup': typeof AuthSignupRoute
+  '/admin/applications': typeof AdminApplicationsRoute
+  '/admin/events': typeof AdminEventsRoute
+  '/admin/members': typeof AdminMembersRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/site-content': typeof AdminSiteContentRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/events/$slug': typeof EventsSlugRoute
   '/hackdsc/register': typeof HackdscRegisterRoute
   '/hackdsc/schedule': typeof HackdscScheduleRoute
+  '/admin/': typeof AdminIndexRoute
   '/events/': typeof EventsIndexRoute
   '/hackdsc/': typeof HackdscIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/admin': typeof AdminRoute
   '/join': typeof JoinRoute
   '/membership': typeof MembershipRoute
   '/login': typeof AuthLoginRoute
   '/signup': typeof AuthSignupRoute
+  '/admin/applications': typeof AdminApplicationsRoute
+  '/admin/events': typeof AdminEventsRoute
+  '/admin/members': typeof AdminMembersRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/site-content': typeof AdminSiteContentRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/events/$slug': typeof EventsSlugRoute
   '/hackdsc/register': typeof HackdscRegisterRoute
   '/hackdsc/schedule': typeof HackdscScheduleRoute
+  '/admin': typeof AdminIndexRoute
   '/events': typeof EventsIndexRoute
   '/hackdsc': typeof HackdscIndexRoute
 }
@@ -142,18 +189,24 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_auth': typeof AuthRouteRouteWithChildren
+  '/admin': typeof AdminRouteRouteWithChildren
   '/events': typeof EventsRouteRouteWithChildren
   '/hackdsc': typeof HackdscRouteRouteWithChildren
   '/about': typeof AboutRoute
-  '/admin': typeof AdminRoute
   '/join': typeof JoinRoute
   '/membership': typeof MembershipRoute
   '/_auth/login': typeof AuthLoginRoute
   '/_auth/signup': typeof AuthSignupRoute
+  '/admin/applications': typeof AdminApplicationsRoute
+  '/admin/events': typeof AdminEventsRoute
+  '/admin/members': typeof AdminMembersRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/site-content': typeof AdminSiteContentRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/events/$slug': typeof EventsSlugRoute
   '/hackdsc/register': typeof HackdscRegisterRoute
   '/hackdsc/schedule': typeof HackdscScheduleRoute
+  '/admin/': typeof AdminIndexRoute
   '/events/': typeof EventsIndexRoute
   '/hackdsc/': typeof HackdscIndexRoute
 }
@@ -161,51 +214,68 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/events'
     | '/hackdsc'
     | '/about'
-    | '/admin'
     | '/join'
     | '/membership'
     | '/login'
     | '/signup'
+    | '/admin/applications'
+    | '/admin/events'
+    | '/admin/members'
+    | '/admin/settings'
+    | '/admin/site-content'
     | '/auth/callback'
     | '/events/$slug'
     | '/hackdsc/register'
     | '/hackdsc/schedule'
+    | '/admin/'
     | '/events/'
     | '/hackdsc/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
-    | '/admin'
     | '/join'
     | '/membership'
     | '/login'
     | '/signup'
+    | '/admin/applications'
+    | '/admin/events'
+    | '/admin/members'
+    | '/admin/settings'
+    | '/admin/site-content'
     | '/auth/callback'
     | '/events/$slug'
     | '/hackdsc/register'
     | '/hackdsc/schedule'
+    | '/admin'
     | '/events'
     | '/hackdsc'
   id:
     | '__root__'
     | '/'
     | '/_auth'
+    | '/admin'
     | '/events'
     | '/hackdsc'
     | '/about'
-    | '/admin'
     | '/join'
     | '/membership'
     | '/_auth/login'
     | '/_auth/signup'
+    | '/admin/applications'
+    | '/admin/events'
+    | '/admin/members'
+    | '/admin/settings'
+    | '/admin/site-content'
     | '/auth/callback'
     | '/events/$slug'
     | '/hackdsc/register'
     | '/hackdsc/schedule'
+    | '/admin/'
     | '/events/'
     | '/hackdsc/'
   fileRoutesById: FileRoutesById
@@ -213,10 +283,10 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
+  AdminRouteRoute: typeof AdminRouteRouteWithChildren
   EventsRouteRoute: typeof EventsRouteRouteWithChildren
   HackdscRouteRoute: typeof HackdscRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
-  AdminRoute: typeof AdminRoute
   JoinRoute: typeof JoinRoute
   MembershipRoute: typeof MembershipRoute
   AuthCallbackRoute: typeof AuthCallbackRoute
@@ -238,13 +308,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JoinRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin': {
-      id: '/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AdminRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -264,6 +327,13 @@ declare module '@tanstack/react-router' {
       path: '/events'
       fullPath: '/events'
       preLoaderRoute: typeof EventsRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_auth': {
@@ -294,6 +364,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EventsIndexRouteImport
       parentRoute: typeof EventsRouteRoute
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/hackdsc/schedule': {
       id: '/hackdsc/schedule'
       path: '/schedule'
@@ -321,6 +398,41 @@ declare module '@tanstack/react-router' {
       fullPath: '/auth/callback'
       preLoaderRoute: typeof AuthCallbackRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/admin/site-content': {
+      id: '/admin/site-content'
+      path: '/site-content'
+      fullPath: '/admin/site-content'
+      preLoaderRoute: typeof AdminSiteContentRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/settings': {
+      id: '/admin/settings'
+      path: '/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AdminSettingsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/members': {
+      id: '/admin/members'
+      path: '/members'
+      fullPath: '/admin/members'
+      preLoaderRoute: typeof AdminMembersRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/events': {
+      id: '/admin/events'
+      path: '/events'
+      fullPath: '/admin/events'
+      preLoaderRoute: typeof AdminEventsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/applications': {
+      id: '/admin/applications'
+      path: '/applications'
+      fullPath: '/admin/applications'
+      preLoaderRoute: typeof AdminApplicationsRouteImport
+      parentRoute: typeof AdminRouteRoute
     }
     '/_auth/signup': {
       id: '/_auth/signup'
@@ -351,6 +463,28 @@ const AuthRouteRouteChildren: AuthRouteRouteChildren = {
 
 const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
   AuthRouteRouteChildren,
+)
+
+interface AdminRouteRouteChildren {
+  AdminApplicationsRoute: typeof AdminApplicationsRoute
+  AdminEventsRoute: typeof AdminEventsRoute
+  AdminMembersRoute: typeof AdminMembersRoute
+  AdminSettingsRoute: typeof AdminSettingsRoute
+  AdminSiteContentRoute: typeof AdminSiteContentRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteRouteChildren: AdminRouteRouteChildren = {
+  AdminApplicationsRoute: AdminApplicationsRoute,
+  AdminEventsRoute: AdminEventsRoute,
+  AdminMembersRoute: AdminMembersRoute,
+  AdminSettingsRoute: AdminSettingsRoute,
+  AdminSiteContentRoute: AdminSiteContentRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
+  AdminRouteRouteChildren,
 )
 
 interface EventsRouteRouteChildren {
@@ -386,10 +520,10 @@ const HackdscRouteRouteWithChildren = HackdscRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRouteRoute: AuthRouteRouteWithChildren,
+  AdminRouteRoute: AdminRouteRouteWithChildren,
   EventsRouteRoute: EventsRouteRouteWithChildren,
   HackdscRouteRoute: HackdscRouteRouteWithChildren,
   AboutRoute: AboutRoute,
-  AdminRoute: AdminRoute,
   JoinRoute: JoinRoute,
   MembershipRoute: MembershipRoute,
   AuthCallbackRoute: AuthCallbackRoute,

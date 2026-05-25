@@ -1,40 +1,18 @@
 import { supabase } from '#/lib/supabase'
-import type { UserProfile, UserRole } from '#/types/auth'
-
-type UsersRow = {
-  id: string
-  full_name: string | null
-  avatar_url: string | null
-  is_verified: boolean
-  roles: string[] | null
-  created_at: string
-  updated_at: string
-}
-
-function mapUserProfileRow(row: UsersRow): UserProfile {
-  return {
-    id: row.id,
-    full_name: row.full_name,
-    avatar_url: row.avatar_url,
-    is_verified: row.is_verified,
-    roles: (row.roles?.length ? row.roles : ['user']) as UserRole[],
-    created_at: row.created_at,
-    updated_at: row.updated_at,
-  }
-}
+import { mapUsersRowToProfile } from '#/lib/admin-member-mapper'
+import type { UserProfile } from '#/types/auth'
+import { USER_PROFILE_COLUMNS, type UsersRow } from '#/types/users'
 
 export async function fetchUserProfile(userId: string): Promise<UserProfile | null> {
   const { data, error } = await supabase
     .from('users')
-    .select(
-      'id, full_name, avatar_url, is_verified, roles, created_at, updated_at',
-    )
+    .select(USER_PROFILE_COLUMNS)
     .eq('id', userId)
     .maybeSingle()
 
   if (error) throw error
   if (!data) return null
-  return mapUserProfileRow(data as UsersRow)
+  return mapUsersRowToProfile(data as UsersRow)
 }
 
 /** Ensures a profile row exists after signup (no-op if a DB trigger already created it). */

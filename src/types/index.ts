@@ -69,6 +69,17 @@ export type {
 } from '#/types/events'
 
 export type {
+  AdminMember,
+  AdminMemberActivity,
+  AdminMembersSummary,
+  MemberFilter,
+  MemberSort,
+  RosterSyncPreview,
+} from '#/types/admin-member'
+
+export type { UsersRow, UpdateUserProfileInput } from '#/types/users'
+
+export type {
   AuthErrorCode,
   AuthFieldErrors,
   AuthProvider,

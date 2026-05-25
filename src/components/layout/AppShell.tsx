@@ -2,6 +2,7 @@ import { useRouterState } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 import { HackPageBackground } from '#/components/layout/HackPageBackground'
 import { PageBackground } from '#/components/layout/PageBackground'
+import { isAdminRoute } from '#/lib/admin-routes'
 import { isAuthRoute } from '#/lib/auth-routes'
 
 type AppShellProps = {
@@ -12,8 +13,9 @@ export function AppShell({ children }: AppShellProps) {
   const pathname = useRouterState({ select: (s) => s.location.pathname })
   const isHackRoute = pathname === '/hackdsc' || pathname.startsWith('/hackdsc/')
   const isAuth = isAuthRoute(pathname)
+  const isAdmin = isAdminRoute(pathname)
 
-  if (isAuth) {
+  if (isAuth || isAdmin) {
     return <>{children}</>
   }
 

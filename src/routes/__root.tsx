@@ -8,6 +8,7 @@ import { AppShell } from '#/components/layout/AppShell'
 import { SiteNavbar } from '#/components/layout/SiteNavbar'
 import { AuthProvider } from '#/contexts/AuthContext'
 import { siteNavItems } from '#/data/site-nav'
+import { isAdminRoute } from '#/lib/admin-routes'
 import { isAuthRoute } from '#/lib/auth-routes'
 import { createAppQueryClient } from '#/queries/query-client'
 import '../styles.css'
@@ -19,7 +20,7 @@ export const Route = createRootRoute({
 function RootComponent() {
   const [queryClient] = useState(createAppQueryClient)
   const pathname = useRouterState({ select: (s) => s.location.pathname })
-  const hideNav = isAuthRoute(pathname)
+  const hideNav = isAuthRoute(pathname) || isAdminRoute(pathname)
 
   return (
     <QueryClientProvider client={queryClient}>

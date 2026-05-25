@@ -15,6 +15,16 @@ export {
 export { mapAuthApiError } from '#/api/map-auth-error'
 export { fetchUserProfile, upsertUserProfile } from '#/api/users'
 export {
+  computeAdminMembersSummary,
+  fetchAdminMembers,
+  mapAdminUsersError,
+  setAdminMemberPrimaryRole,
+  setAdminMemberVerified,
+  setAdminMembersPrimaryRole,
+  setAdminMembersVerified,
+  updateAdminMember,
+} from '#/api/admin-users'
+export {
   fetchHackathonRegistrationStatus,
   fetchMyHackathonSubmission,
   mapHackathonSubmissionError,

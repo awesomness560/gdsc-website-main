@@ -16,3 +16,12 @@ export {
   useSaveHackathonDraftMutation,
   useSubmitHackathonApplicationMutation,
 } from '#/queries/hackathon-submissions'
+export { adminUserKeys } from '#/queries/admin-user-keys'
+export {
+  getAdminUsersMutationError,
+  useAdminMembersQuery,
+  useBulkSetAdminMembersRoleMutation,
+  useBulkSetAdminMembersVerifiedMutation,
+  useSetAdminMemberRoleMutation,
+  useSetAdminMemberVerifiedMutation,
+} from '#/queries/admin-users'
