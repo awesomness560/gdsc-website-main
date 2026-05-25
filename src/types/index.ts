@@ -1,3 +1,15 @@
+export type { SiteConfig } from '#/types/site-config'
+
+export type {
+  DbDietaryRestriction,
+  DbExperienceLevel,
+  DbTeamStatus,
+  HackathonRegistrationStatus,
+  HackathonSubmission,
+  HackathonSubmissionRow,
+  SubmissionStatus,
+} from '#/types/hackathon-submission'
+
 export type {
   HackdscExperienceLevel,
   HackdscRegistrationData,

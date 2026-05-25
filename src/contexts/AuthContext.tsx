@@ -14,6 +14,7 @@ import {
   useSignOutMutation,
   useSignUpMutation,
 } from '#/queries/auth'
+import { isAdminRole } from '#/lib/auth-roles'
 import type {
   AuthFieldErrors,
   AuthStatus,
@@ -22,6 +23,7 @@ import type {
   SignUpCredentials,
   SupabaseAuthUser,
   UserProfile,
+  UserRole,
 } from '#/types/auth'
 
 type AuthContextValue = {
@@ -33,6 +35,10 @@ type AuthContextValue = {
   auth: SupabaseAuthUser | null
   /** `users.is_verified` — full GDG member (roster sync). */
   isMember: boolean
+  /** Roles from `public.users.roles` (defaults to `['user']` when missing). */
+  roles: UserRole[]
+  /** True when the user has the `admin` role. */
+  isAdmin: boolean
   status: AuthStatus
   isAuthenticated: boolean
   isLoading: boolean
@@ -66,6 +72,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const profile = user?.profile ?? null
   const auth = user?.auth ?? null
   const isMember = user?.isVerified ?? false
+  const roles = user?.roles ?? (['user'] as UserRole[])
+  const isAdmin = isAdminRole(roles)
 
   const isSessionPending = sessionQuery.isPending
   const isSignInPending = signInMutation.isPending
@@ -137,6 +145,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       profile,
       auth,
       isMember,
+      roles,
+      isAdmin,
       status,
       isAuthenticated,
       isLoading,
@@ -155,6 +165,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       profile,
       auth,
       isMember,
+      roles,
+      isAdmin,
       status,
       isAuthenticated,
       isLoading,

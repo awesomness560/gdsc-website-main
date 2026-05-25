@@ -1,5 +1,5 @@
 import { ArrowLeft, ArrowRight, Check } from 'lucide-react'
-import { useState, type FormEvent } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 import { RegisterChipSelect } from '#/components/hackdsc/register/RegisterChipSelect'
 import { RegisterConditionalBlock } from '#/components/hackdsc/register/RegisterConditionalBlock'
 import { RegisterConfirmSummary } from '#/components/hackdsc/register/RegisterConfirmSummary'
@@ -19,7 +19,15 @@ import {
   TEAMMATE_SKILL_OPTIONS,
 } from '#/data/hackdsc-registration'
 import { useAuth } from '#/contexts/AuthContext'
+import { getHackdscHackathonId } from '#/lib/hackathon-config'
 import { createInitialRegistrationForm } from '#/lib/hackdsc-registration-form'
+import {
+  getHackathonMutationError,
+  useHackathonRegistrationQuery,
+  useMyHackathonSubmissionQuery,
+  useSaveHackathonDraftMutation,
+  useSubmitHackathonApplicationMutation,
+} from '#/queries/hackathon-submissions'
 import {
   validateAllRegistrationSteps,
   validateRegistrationStep,
@@ -39,20 +47,65 @@ type HackdscRegisterFormProps = {
 
 export function HackdscRegisterForm({ onSubmitted }: HackdscRegisterFormProps) {
   const { user } = useAuth()
+  const hackathonId = getHackdscHackathonId()
+  const userId = user?.auth.id
+
+  const registrationQuery = useHackathonRegistrationQuery(hackathonId)
+  const submissionQuery = useMyHackathonSubmissionQuery(userId, hackathonId)
+  const saveDraftMutation = useSaveHackathonDraftMutation(hackathonId)
+  const submitMutation = useSubmitHackathonApplicationMutation(hackathonId)
+
   const [step, setStep] = useState<HackdscRegistrationStepId>(1)
   const [maxReachedStep, setMaxReachedStep] =
     useState<HackdscRegistrationStepId>(1)
   const [form, setForm] = useState<HackdscRegistrationFormState>(() =>
     createInitialRegistrationForm(user),
   )
+  const [submissionId, setSubmissionId] = useState<string | null>(null)
+  const [hydratedFromServer, setHydratedFromServer] = useState(false)
   const [resumeFile, setResumeFile] = useState<File | null>(null)
   const [errors, setErrors] = useState<HackdscRegistrationErrors>({})
+  const [saveError, setSaveError] = useState<string | null>(null)
   const [submitted, setSubmitted] = useState(false)
-  const [submitting, setSubmitting] = useState(false)
   /** User jumped here from confirm — offer quick return to review. */
   const [editingFromConfirm, setEditingFromConfirm] = useState(false)
-
   const stepMeta = HACKDSC_REGISTRATION_STEPS[step - 1]
+  const isRegistrationOpen = registrationQuery.data?.isOpen ?? true
+  const isLoading =
+    submissionQuery.isPending || registrationQuery.isPending || !hydratedFromServer
+  const isSaving = saveDraftMutation.isPending
+  const isSubmitting = submitMutation.isPending
+  const busy = isSaving || isSubmitting
+
+  useEffect(() => {
+    if (submissionQuery.isPending || hydratedFromServer) return
+
+    if (submissionQuery.data) {
+      setForm(submissionQuery.data.form)
+      setSubmissionId(submissionQuery.data.id)
+      if (submissionQuery.data.status === 'submitted') {
+        setSubmitted(true)
+      }
+    }
+
+    setHydratedFromServer(true)
+  }, [submissionQuery.data, submissionQuery.isPending, hydratedFromServer])
+
+  async function persistDraft(nextForm: HackdscRegistrationFormState) {
+    if (!userId || !isRegistrationOpen) return
+
+    setSaveError(null)
+    try {
+      const saved = await saveDraftMutation.mutateAsync({
+        userId,
+        submissionId,
+        form: nextForm,
+      })
+      setSubmissionId(saved.id)
+    } catch (error) {
+      setSaveError(getHackathonMutationError(error))
+    }
+  }
 
   function patch(partial: Partial<HackdscRegistrationFormState>) {
     setForm((prev) => ({ ...prev, ...partial }))
@@ -90,12 +143,14 @@ export function HackdscRegisterForm({ onSubmitted }: HackdscRegisterFormProps) {
     if (step > 1) goToStep((step - 1) as HackdscRegistrationStepId)
   }
 
-  function handleContinue() {
+  async function handleContinue() {
     const stepErrors = validateRegistrationStep(step, form, resumeFile)
     if (Object.keys(stepErrors).length > 0) {
       setErrors(stepErrors)
       return
     }
+
+    await persistDraft(form)
 
     if (editingFromConfirm) {
       returnToConfirm()
@@ -111,6 +166,8 @@ export function HackdscRegisterForm({ onSubmitted }: HackdscRegisterFormProps) {
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
+    if (!userId) return
+
     const stepErrors = validateAllRegistrationSteps(form, resumeFile)
     if (Object.keys(stepErrors).length > 0) {
       const firstStep = ([1, 2, 3, 4, 5, 6] as const).find(
@@ -124,12 +181,46 @@ export function HackdscRegisterForm({ onSubmitted }: HackdscRegisterFormProps) {
       return
     }
 
-    setSubmitting(true)
-    // Database wiring will replace this stub.
-    await new Promise((r) => setTimeout(r, 600))
-    setSubmitting(false)
-    setSubmitted(true)
-    onSubmitted?.()
+    setSaveError(null)
+    try {
+      const saved = await submitMutation.mutateAsync({
+        userId,
+        submissionId,
+        form,
+      })
+      setSubmissionId(saved.id)
+      setSubmitted(true)
+      onSubmitted?.()
+    } catch (error) {
+      setSaveError(getHackathonMutationError(error))
+    }
+  }
+
+  if (isLoading) {
+    return (
+      <p className="py-12 text-center text-sm text-fg-muted">
+        Loading your application…
+      </p>
+    )
+  }
+
+  if (submissionQuery.isError || registrationQuery.isError) {
+    return (
+      <p className="rounded-xl border border-google-red/30 bg-google-red/10 px-4 py-3 text-sm text-google-red">
+        {getHackathonMutationError(
+          submissionQuery.error ?? registrationQuery.error,
+        )}
+      </p>
+    )
+  }
+
+  if (!isRegistrationOpen && !submitted) {
+    return (
+      <p className="rounded-xl border border-border-default bg-surface/50 px-4 py-3 text-sm text-fg-secondary">
+        Registration is closed for this hackathon. The deadline plus grace period
+        has passed.
+      </p>
+    )
   }
 
   if (submitted) {
@@ -156,6 +247,12 @@ export function HackdscRegisterForm({ onSubmitted }: HackdscRegisterFormProps) {
       className="flex flex-col sm:min-h-[min(720px,calc(100dvh-8rem))]"
       noValidate
     >
+      {saveError ? (
+        <p className="mb-4 rounded-xl border border-google-red/30 bg-google-red/10 px-3 py-2 text-xs text-google-red">
+          {saveError}
+        </p>
+      ) : null}
+
       <RegisterProgress
         currentStep={step}
         maxReachedStep={maxReachedStep}
@@ -528,8 +625,9 @@ export function HackdscRegisterForm({ onSubmitted }: HackdscRegisterFormProps) {
             {step < 6 ? (
               <button
                 type="button"
-                onClick={handleContinue}
-                className="inline-flex h-11 shrink-0 items-center gap-1.5 rounded-2xl bg-accent px-5 text-sm font-semibold text-accent-fg shadow-[0_12px_32px_rgba(74,140,255,0.28)] transition-colors hover:bg-accent-hover"
+                onClick={() => void handleContinue()}
+                disabled={busy}
+                className="inline-flex h-11 shrink-0 items-center gap-1.5 rounded-2xl bg-accent px-5 text-sm font-semibold text-accent-fg shadow-[0_12px_32px_rgba(74,140,255,0.28)] transition-colors hover:bg-accent-hover disabled:opacity-70"
               >
                 {editingFromConfirm ? 'Save & review' : 'Continue'}
                 <ArrowRight className="h-4 w-4" aria-hidden />
@@ -537,7 +635,7 @@ export function HackdscRegisterForm({ onSubmitted }: HackdscRegisterFormProps) {
             ) : (
               <button
                 type="submit"
-                disabled={submitting}
+                disabled={busy}
                 className={cn(
                   'inline-flex h-11 w-full items-center justify-center rounded-2xl',
                   'bg-accent px-5 text-sm font-semibold text-accent-fg',
@@ -546,7 +644,7 @@ export function HackdscRegisterForm({ onSubmitted }: HackdscRegisterFormProps) {
                   'sm:w-auto sm:min-w-[200px]',
                 )}
               >
-                {submitting ? 'Submitting…' : 'Submit application'}
+                {isSubmitting ? 'Submitting…' : 'Submit application'}
               </button>
             )}
           </div>

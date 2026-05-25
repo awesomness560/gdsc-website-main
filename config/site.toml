@@ -1,0 +1,12 @@
+# Site-wide settings (safe to commit). Copy this file when cloning — no .env needed for these.
+# Secrets (Supabase keys) stay in .env — see .env.example.
+
+[hackdsc]
+# UUID from public.hackathons for the active event
+hackathon_id = "19ef5f2f-0311-49bd-8aa3-8d7df650b11c"
+name = "HackDSC Fall 2026"
+tagline = "Build the impossible"
+
+[membership]
+gdg_chapter_url = "https://gdg.community.dev/gdg-on-campus-the-university-of-texas-at-dallas-richardson-united-states/"
+contact_email = "gdsc@utdallas.edu"

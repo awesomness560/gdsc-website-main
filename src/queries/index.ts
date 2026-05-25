@@ -8,3 +8,11 @@ export {
   useSignOutMutation,
   useSignUpMutation,
 } from '#/queries/auth'
+export { hackathonSubmissionKeys } from '#/queries/hackathon-submission-keys'
+export {
+  getHackathonMutationError,
+  useHackathonRegistrationQuery,
+  useMyHackathonSubmissionQuery,
+  useSaveHackathonDraftMutation,
+  useSubmitHackathonApplicationMutation,
+} from '#/queries/hackathon-submissions'

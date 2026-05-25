@@ -5,6 +5,8 @@ export const AUTH_POST_LOGIN_REDIRECT_KEY = 'auth_post_login_redirect'
 
 export const HACKDSC_REGISTER_PATH = '/hackdsc/register'
 
+export const ADMIN_DASHBOARD_PATH = '/admin'
+
 /** Safe in-app path for post-login redirect (blocks auth pages and open redirects). */
 export function sanitizeAuthRedirect(redirect: unknown): string | undefined {
   if (typeof redirect !== 'string' || !isInternalPath(redirect)) return undefined

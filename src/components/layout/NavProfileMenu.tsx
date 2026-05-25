@@ -1,5 +1,7 @@
-import { Loader2, LogOut } from 'lucide-react'
+import { Link } from '@tanstack/react-router'
+import { LayoutDashboard, Loader2, LogOut } from 'lucide-react'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { isAdminRole } from '#/lib/auth-roles'
 import { BecomeMemberLink } from '#/components/membership/BecomeMemberLink'
 import { MemberPill } from '#/components/membership/MemberPill'
 import { UserAvatar } from '#/components/ui/UserAvatar'
@@ -20,6 +22,7 @@ type ProfileMenuPanelProps = {
   onSignOut: () => void
   signingOut: boolean
   className?: string
+  onNavigate?: () => void
 }
 
 function ProfileMenuHeader({ user }: { user: AuthUser }) {
@@ -38,12 +41,18 @@ function ProfileMenuHeader({ user }: { user: AuthUser }) {
   )
 }
 
+const menuItemClass =
+  'flex w-full items-center gap-2.5 px-3.5 py-2.5 text-left text-sm font-medium text-fg-secondary transition-colors hover:bg-white/5 hover:text-fg disabled:cursor-not-allowed disabled:opacity-60'
+
 function ProfileMenuPanel({
   user,
   onSignOut,
   signingOut,
   className,
+  onNavigate,
 }: ProfileMenuPanelProps) {
+  const showAdminLink = isAdminRole(user.roles)
+
   return (
     <div
       className={cn(
@@ -54,15 +63,23 @@ function ProfileMenuPanel({
       role="menu"
     >
       <ProfileMenuHeader user={user} />
+      {showAdminLink ? (
+        <Link
+          to="/admin"
+          role="menuitem"
+          onClick={onNavigate}
+          className={menuItemClass}
+        >
+          <LayoutDashboard className="h-4 w-4 shrink-0 text-fg-muted" aria-hidden />
+          Admin dashboard
+        </Link>
+      ) : null}
       <button
         type="button"
         role="menuitem"
         disabled={signingOut}
         onClick={onSignOut}
-        className={cn(
-          'flex w-full items-center gap-2.5 px-3.5 py-2.5 text-left text-sm font-medium text-fg-secondary',
-          'transition-colors hover:bg-white/5 hover:text-fg disabled:cursor-not-allowed disabled:opacity-60',
-        )}
+        className={menuItemClass}
       >
         {signingOut ? (
           <Loader2 className="h-4 w-4 shrink-0 animate-spin text-fg-muted" aria-hidden />
@@ -181,6 +198,7 @@ export function NavProfileMenu({
             setOpen(false)
           }}
           signingOut={signingOut}
+          onNavigate={() => setOpen(false)}
           className="max-w-[min(16rem,calc(100vw-2rem))]"
         />
       </div>

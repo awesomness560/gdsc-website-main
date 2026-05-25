@@ -1,11 +1,11 @@
-/**
- * GDG membership constants — edit here when the chapter URL or contact email changes.
- */
-export const GDG_CHAPTER_URL =
-  'https://gdg.community.dev/gdg-on-campus-the-university-of-texas-at-dallas-richardson-united-states/'
+import { getMembershipSiteConfig } from '#/lib/site-config'
 
-export const MEMBERSHIP_CONTACT_EMAIL = 'gdsc@utdallas.edu'
+const membership = getMembershipSiteConfig()
 
+/** GDG chapter page — from `config/site.toml`. */
+export const GDG_CHAPTER_URL = membership.gdg_chapter_url
+
+export const MEMBERSHIP_CONTACT_EMAIL = membership.contact_email
 export const JOIN_PAGE_PATH = '/join'
 
 const MEMBERSHIP_CLAIM_KEY = 'gdg_membership_claimed'

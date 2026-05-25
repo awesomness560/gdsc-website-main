@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as MembershipRouteImport } from './routes/membership'
 import { Route as JoinRouteImport } from './routes/join'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as HackdscRouteRouteImport } from './routes/hackdsc/route'
 import { Route as EventsRouteRouteImport } from './routes/events/route'
@@ -33,6 +34,11 @@ const MembershipRoute = MembershipRouteImport.update({
 const JoinRoute = JoinRouteImport.update({
   id: '/join',
   path: '/join',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -105,6 +111,7 @@ export interface FileRoutesByFullPath {
   '/events': typeof EventsRouteRouteWithChildren
   '/hackdsc': typeof HackdscRouteRouteWithChildren
   '/about': typeof AboutRoute
+  '/admin': typeof AdminRoute
   '/join': typeof JoinRoute
   '/membership': typeof MembershipRoute
   '/login': typeof AuthLoginRoute
@@ -119,6 +126,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/admin': typeof AdminRoute
   '/join': typeof JoinRoute
   '/membership': typeof MembershipRoute
   '/login': typeof AuthLoginRoute
@@ -137,6 +145,7 @@ export interface FileRoutesById {
   '/events': typeof EventsRouteRouteWithChildren
   '/hackdsc': typeof HackdscRouteRouteWithChildren
   '/about': typeof AboutRoute
+  '/admin': typeof AdminRoute
   '/join': typeof JoinRoute
   '/membership': typeof MembershipRoute
   '/_auth/login': typeof AuthLoginRoute
@@ -155,6 +164,7 @@ export interface FileRouteTypes {
     | '/events'
     | '/hackdsc'
     | '/about'
+    | '/admin'
     | '/join'
     | '/membership'
     | '/login'
@@ -169,6 +179,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/admin'
     | '/join'
     | '/membership'
     | '/login'
@@ -186,6 +197,7 @@ export interface FileRouteTypes {
     | '/events'
     | '/hackdsc'
     | '/about'
+    | '/admin'
     | '/join'
     | '/membership'
     | '/_auth/login'
@@ -204,6 +216,7 @@ export interface RootRouteChildren {
   EventsRouteRoute: typeof EventsRouteRouteWithChildren
   HackdscRouteRoute: typeof HackdscRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
+  AdminRoute: typeof AdminRoute
   JoinRoute: typeof JoinRoute
   MembershipRoute: typeof MembershipRoute
   AuthCallbackRoute: typeof AuthCallbackRoute
@@ -223,6 +236,13 @@ declare module '@tanstack/react-router' {
       path: '/join'
       fullPath: '/join'
       preLoaderRoute: typeof JoinRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -369,6 +389,7 @@ const rootRouteChildren: RootRouteChildren = {
   EventsRouteRoute: EventsRouteRouteWithChildren,
   HackdscRouteRoute: HackdscRouteRouteWithChildren,
   AboutRoute: AboutRoute,
+  AdminRoute: AdminRoute,
   JoinRoute: JoinRoute,
   MembershipRoute: MembershipRoute,
   AuthCallbackRoute: AuthCallbackRoute,

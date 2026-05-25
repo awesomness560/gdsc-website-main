@@ -1,3 +1,4 @@
+import { getHackdscSiteConfig } from '#/lib/site-config'
 import type {
   HackdscExperienceLevel,
   HackdscRegistrationStep,
@@ -6,9 +7,11 @@ import type {
 export const MLH_CODE_OF_CONDUCT_URL =
   'https://github.com/MLH/mlh-policies/blob/main/code-of-conduct.md'
 
+const hackdsc = getHackdscSiteConfig()
+
 export const HACKDSC_REGISTER_EVENT = {
-  name: 'HackDSC Fall 2026',
-  tagline: 'Build the impossible',
+  name: hackdsc.name,
+  tagline: hackdsc.tagline,
 } as const
 
 export const HACKDSC_REGISTRATION_STEPS: HackdscRegistrationStep[] = [
