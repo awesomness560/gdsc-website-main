@@ -52,8 +52,12 @@ export type {
   AuthProvider,
   AuthStatus,
   AuthUser,
+  AuthUserMetadata,
   SignInCredentials,
   SignUpCredentials,
+  SupabaseAuthUser,
+  UserProfile,
+  UserRole,
 } from '#/types/auth'
 
 export type {

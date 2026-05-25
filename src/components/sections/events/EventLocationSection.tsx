@@ -1,6 +1,9 @@
 import { ArrowUpRight, MapPin } from 'lucide-react'
 import type { ClubEventDetail } from '#/types/events'
-import { getCampusMapThumbnailUrl } from '#/lib/campus-map'
+import {
+  getCampusMapEmbedUrl,
+  getCampusMapsLinkUrl,
+} from '#/lib/campus-map'
 
 type EventLocationSectionProps = {
   event: ClubEventDetail
@@ -8,14 +11,12 @@ type EventLocationSectionProps = {
 
 export function EventLocationSection({ event }: EventLocationSectionProps) {
   const { location } = event
-  const mapUrl =
+  const mapsLink =
     location.mapUrl ??
-    `https://maps.google.com/?q=${encodeURIComponent(
-      `${location.buildingFullName} ${location.room} UTD`,
-    )}`
-  const mapImage =
-    location.mapImageUrl ??
-    getCampusMapThumbnailUrl(location.buildingFullName, location.room)
+    getCampusMapsLinkUrl(location.buildingFullName, location.room)
+  const embedUrl =
+    location.mapEmbedUrl ??
+    getCampusMapEmbedUrl(location.buildingFullName, location.room)
 
   return (
     <section>
@@ -25,23 +26,28 @@ export function EventLocationSection({ event }: EventLocationSectionProps) {
       </p>
       <p className="text-sm text-fg-secondary">{location.buildingFullName}</p>
 
-      <a
-        href={mapUrl}
-        target="_blank"
-        rel="noreferrer"
-        className="group mt-3 block overflow-hidden rounded-xl border border-border-default bg-bg-elevated/40 transition-colors hover:border-border-strong"
-      >
-        <img
-          src={mapImage}
-          alt=""
-          className="aspect-[21/9] w-full object-cover opacity-90 transition-opacity group-hover:opacity-100"
-        />
-        <span className="flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-fg-secondary transition-colors group-hover:text-fg">
+      <div className="group mt-3 overflow-hidden rounded-2xl border border-border-default bg-bg-elevated/40 transition-colors hover:border-border-strong">
+        <div className="relative aspect-[21/9] min-h-[11rem] w-full bg-bg-elevated">
+          <iframe
+            title={`Map: ${location.buildingFullName}, ${location.room}`}
+            src={embedUrl}
+            className="absolute inset-0 h-full w-full border-0"
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            allowFullScreen
+          />
+        </div>
+        <a
+          href={mapsLink}
+          target="_blank"
+          rel="noreferrer"
+          className="flex items-center gap-1.5 border-t border-border-subtle px-3 py-2.5 text-xs font-medium text-fg-secondary transition-colors hover:bg-white/5 hover:text-fg"
+        >
           <MapPin className="h-3.5 w-3.5" />
           Open in Maps
           <ArrowUpRight className="h-3 w-3" />
-        </span>
-      </a>
+        </a>
+      </div>
     </section>
   )
 }

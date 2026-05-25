@@ -1,8 +1,9 @@
-import { Link } from '@tanstack/react-router'
-import { Check, Loader2 } from 'lucide-react'
+import { Link, useNavigate } from '@tanstack/react-router'
+import { Check } from 'lucide-react'
 import { useState, type FormEvent } from 'react'
 import { AuthField } from '#/components/auth/AuthField'
 import { GoogleSignInButton } from '#/components/auth/GoogleSignInButton'
+import { AuthSessionCompleting } from '#/components/auth/AuthSessionCompleting'
 import { useAuth } from '#/contexts/AuthContext'
 import {
   passwordRequirements,
@@ -56,12 +57,13 @@ function PasswordRequirements({ password }: { password: string }) {
 }
 
 export function AuthForm({ mode }: AuthFormProps) {
+  const navigate = useNavigate()
   const {
     signInWithEmail,
     signUpWithEmail,
     signInWithGoogle,
-    isLoading,
-    isAuthenticated,
+    isSignInPending,
+    isSignUpPending,
   } = useAuth()
 
   const isSignup = mode === 'signup'
@@ -73,22 +75,15 @@ export function AuthForm({ mode }: AuthFormProps) {
   const [googleLoading, setGoogleLoading] = useState(false)
   const [submitLoading, setSubmitLoading] = useState(false)
 
-  const busy = isLoading || googleLoading || submitLoading
+  const isCompletingSession =
+    submitLoading || isSignInPending || isSignUpPending
+  const busy = isCompletingSession || googleLoading
 
-  if (isAuthenticated) {
+  if (isCompletingSession) {
     return (
-      <div className="mx-auto w-full max-w-[400px] px-5 py-10 text-center sm:px-6">
-        <p className="text-lg font-semibold text-fg">You&apos;re signed in</p>
-        <p className="mt-2 text-sm text-fg-secondary">
-          You&apos;re all set. Head back to explore the site.
-        </p>
-        <Link
-          to="/"
-          className="mt-6 inline-flex h-11 items-center justify-center rounded-2xl bg-accent px-6 text-sm font-semibold text-accent-fg transition-colors hover:bg-accent-hover"
-        >
-          Back to home
-        </Link>
-      </div>
+      <AuthSessionCompleting
+        message={isSignup ? 'Creating your account…' : 'Finishing sign-in…'}
+      />
     )
   }
 
@@ -119,7 +114,12 @@ export function AuthForm({ mode }: AuthFormProps) {
       : await signInWithEmail({ email, password })
     setSubmitLoading(false)
 
-    if (result) setErrors(result)
+    if (result) {
+      setErrors(result)
+      return
+    }
+
+    navigate({ to: '/', replace: true })
   }
 
   return (
@@ -234,9 +234,6 @@ export function AuthForm({ mode }: AuthFormProps) {
           'disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-accent disabled:hover:shadow-[0_12px_32px_rgba(74,140,255,0.28)]',
         )}
       >
-        {submitLoading ? (
-          <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
-        ) : null}
         {isSignup ? 'Create account' : 'Sign in'}
       </button>
 

@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { Loader2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { AuthSessionCompleting } from '#/components/auth/AuthSessionCompleting'
 import { completeAuthFromUrl } from '#/api/auth'
 import { mapAuthApiError } from '#/api/map-auth-error'
 import { authKeys } from '#/queries/auth-keys'
@@ -45,7 +45,7 @@ function AuthCallbackPage() {
         <p className="text-sm text-google-red">{error}</p>
         <button
           type="button"
-          className="text-sm font-medium text-accent hover:text-accent-hover"
+          className="cursor-pointer text-sm font-medium text-accent hover:text-accent-hover"
           onClick={() => navigate({ to: '/login' })}
         >
           Back to sign in
@@ -55,9 +55,8 @@ function AuthCallbackPage() {
   }
 
   return (
-    <main className="flex min-h-[50vh] flex-col items-center justify-center gap-3 px-4">
-      <Loader2 className="h-8 w-8 animate-spin text-accent" aria-hidden />
-      <p className="text-sm text-fg-secondary">Finishing sign-in…</p>
+    <main className="flex min-h-[50vh] items-center justify-center px-4">
+      <AuthSessionCompleting />
     </main>
   )
 }

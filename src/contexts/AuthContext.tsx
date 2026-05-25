@@ -20,13 +20,19 @@ import type {
   AuthUser,
   SignInCredentials,
   SignUpCredentials,
+  SupabaseAuthUser,
+  UserProfile,
 } from '#/types/auth'
 
 type AuthContextValue = {
+  /** Full auth + profile payload stored in context. */
   user: AuthUser | null
+  /** `public.users` row when loaded (null if missing or signed out). */
+  profile: UserProfile | null
+  /** Supabase Auth session user fields. */
+  auth: SupabaseAuthUser | null
   status: AuthStatus
   isAuthenticated: boolean
-  /** Initial session restore or any auth mutation in flight */
   isLoading: boolean
   isSessionPending: boolean
   isSignInPending: boolean
@@ -55,6 +61,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const googleSignInMutation = useGoogleSignInMutation()
 
   const user = sessionQuery.data ?? null
+  const profile = user?.profile ?? null
+  const auth = user?.auth ?? null
+
   const isSessionPending = sessionQuery.isPending
   const isSignInPending = signInMutation.isPending
   const isSignUpPending = signUpMutation.isPending
@@ -122,6 +131,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const value = useMemo<AuthContextValue>(
     () => ({
       user,
+      profile,
+      auth,
       status,
       isAuthenticated,
       isLoading,
@@ -137,6 +148,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }),
     [
       user,
+      profile,
+      auth,
       status,
       isAuthenticated,
       isLoading,

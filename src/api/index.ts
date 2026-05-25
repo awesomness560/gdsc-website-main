@@ -1,7 +1,10 @@
 export {
+  buildAuthUser,
   completeAuthFromUrl,
   fetchAuthSession,
   mapAuthUser,
+  mapSupabaseAuthUser,
+  resolveAuthUser,
   signInWithEmailPassword,
   signInWithGoogle,
   signOut,
@@ -10,3 +13,4 @@ export {
   type SignUpResult,
 } from '#/api/auth'
 export { mapAuthApiError } from '#/api/map-auth-error'
+export { fetchUserProfile, upsertUserProfile } from '#/api/users'

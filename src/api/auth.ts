@@ -1,19 +1,17 @@
 import type { Provider, User } from '@supabase/supabase-js'
+import { fetchUserProfile, upsertUserProfile } from '#/api/users'
 import { supabase } from '#/lib/supabase'
 import type {
   AuthProvider,
   AuthUser,
+  AuthUserMetadata,
   SignInCredentials,
   SignUpCredentials,
+  SupabaseAuthUser,
+  UserProfile,
 } from '#/types/auth'
 
-/** Raw `user_metadata` shape from Supabase (email signup + OAuth). */
-export type AuthUserMetadata = {
-  full_name?: string
-  name?: string
-  avatar_url?: string
-  picture?: string
-}
+export type { AuthUserMetadata } from '#/types/auth'
 
 const OAUTH_REDIRECT_PATH = '/auth/callback'
 
@@ -32,28 +30,92 @@ function resolveProvider(user: User): AuthProvider {
   return 'oauth'
 }
 
-/** Map Supabase user → app `AuthUser` (full_name + avatar_url from metadata). */
-export function mapAuthUser(user: User): AuthUser {
-  const meta = (user.user_metadata ?? {}) as AuthUserMetadata
-
+export function mapSupabaseAuthUser(user: User): SupabaseAuthUser {
   return {
     id: user.id,
     email: user.email ?? '',
-    name:
-      meta.full_name ??
-      meta.name ??
-      user.email?.split('@')[0] ??
-      'Member',
-    avatarUrl: meta.avatar_url ?? meta.picture,
+    phone: user.phone ?? null,
+    emailConfirmedAt: user.email_confirmed_at ?? null,
+    lastSignInAt: user.last_sign_in_at ?? null,
+    createdAt: user.created_at,
+    updatedAt: user.updated_at ?? null,
     provider: resolveProvider(user),
+    isAnonymous: user.is_anonymous ?? false,
+    userMetadata: (user.user_metadata ?? {}) as AuthUserMetadata,
+    appMetadata: { ...(user.app_metadata ?? {}) },
   }
+}
+
+function resolveDisplayFields(
+  auth: SupabaseAuthUser,
+  profile: UserProfile | null,
+): Pick<AuthUser, 'name' | 'avatarUrl' | 'isVerified' | 'roles'> {
+  const meta = auth.userMetadata
+
+  const name =
+    profile?.full_name ??
+    meta.full_name ??
+    meta.name ??
+    auth.email.split('@')[0] ??
+    'Member'
+
+  const avatarUrl =
+    profile?.avatar_url ?? meta.avatar_url ?? meta.picture ?? undefined
+
+  return {
+    name,
+    avatarUrl: avatarUrl ?? undefined,
+    isVerified: profile?.is_verified ?? false,
+    roles: profile?.roles ?? (['user'] as AuthUser['roles']),
+  }
+}
+
+export function buildAuthUser(
+  user: User,
+  profile: UserProfile | null,
+): AuthUser {
+  const auth = mapSupabaseAuthUser(user)
+  return {
+    auth,
+    profile,
+    ...resolveDisplayFields(auth, profile),
+  }
+}
+
+async function ensureUserProfile(user: User): Promise<UserProfile | null> {
+  let profile = await fetchUserProfile(user.id)
+  if (profile) return profile
+
+  const meta = (user.user_metadata ?? {}) as AuthUserMetadata
+  const fullName = meta.full_name ?? meta.name
+  const avatarUrl = meta.avatar_url ?? meta.picture
+
+  if (!fullName && !avatarUrl) return null
+
+  await upsertUserProfile({
+    id: user.id,
+    full_name: fullName ?? user.email?.split('@')[0] ?? 'Member',
+    avatar_url: avatarUrl ?? null,
+  })
+  profile = await fetchUserProfile(user.id)
+  return profile
+}
+
+export async function resolveAuthUser(user: User): Promise<AuthUser> {
+  const profile = await ensureUserProfile(user)
+  return buildAuthUser(user, profile)
+}
+
+/** @deprecated Use `resolveAuthUser` — metadata only, no `public.users` row. */
+export function mapAuthUser(user: User): AuthUser {
+  return buildAuthUser(user, null)
 }
 
 export async function fetchAuthSession(): Promise<AuthUser | null> {
   const { data, error } = await supabase.auth.getSession()
   if (error) throw error
   if (!data.session?.user) return null
-  return mapAuthUser(data.session.user)
+  return resolveAuthUser(data.session.user)
 }
 
 export async function signInWithEmailPassword({
@@ -66,7 +128,7 @@ export async function signInWithEmailPassword({
   })
   if (error) throw error
   if (!data.user) throw new Error('Sign-in succeeded but no user was returned.')
-  return mapAuthUser(data.user)
+  return resolveAuthUser(data.user)
 }
 
 export type SignUpResult = {
@@ -86,15 +148,30 @@ export async function signUpWithEmailPassword({
     options: {
       data: {
         full_name: trimmedName,
+        avatar_url: null,
       },
     },
   })
   if (error) throw error
   if (!data.user) throw new Error('Sign-up succeeded but no user was returned.')
 
+  const needsEmailConfirmation = data.session === null
+
+  if (data.session) {
+    await upsertUserProfile({
+      id: data.user.id,
+      full_name: trimmedName,
+      avatar_url: null,
+    })
+    return {
+      user: await resolveAuthUser(data.user),
+      needsEmailConfirmation: false,
+    }
+  }
+
   return {
-    user: mapAuthUser(data.user),
-    needsEmailConfirmation: data.session === null,
+    user: buildAuthUser(data.user, null),
+    needsEmailConfirmation,
   }
 }
 

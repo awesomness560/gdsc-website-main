@@ -57,6 +57,9 @@ export interface EventLocation {
   building: string
   buildingFullName: string
   mapUrl?: string
+  /** iframe `src` for an interactive map preview */
+  mapEmbedUrl?: string
+  /** @deprecated Use map embed; static OSM thumbnails are unreliable */
   mapImageUrl?: string
 }
 
