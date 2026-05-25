@@ -2,8 +2,16 @@ import { createFileRoute, useRouter, useRouterState } from '@tanstack/react-rout
 import { useEffect } from 'react'
 import { AuthPage } from '#/components/auth'
 import type { AuthMode } from '#/components/auth/AuthForm'
+import { sanitizeAuthRedirect } from '#/lib/auth-redirect'
+
+type AuthSearch = {
+  redirect?: string
+}
 
 export const Route = createFileRoute('/_auth')({
+  validateSearch: (search: Record<string, unknown>): AuthSearch => ({
+    redirect: sanitizeAuthRedirect(search.redirect),
+  }),
   component: AuthLayout,
   /** Avoid flashing the global pending placeholder when switching login ↔ signup. */
   pendingComponent: () => null,

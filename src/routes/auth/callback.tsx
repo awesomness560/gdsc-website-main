@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { AuthSessionCompleting } from '#/components/auth/AuthSessionCompleting'
 import { completeAuthFromUrl } from '#/api/auth'
 import { mapAuthApiError } from '#/api/map-auth-error'
+import { consumeAuthRedirect } from '#/lib/auth-redirect'
 import { authKeys } from '#/queries/auth-keys'
 import { useQueryClient } from '@tanstack/react-query'
 
@@ -24,7 +25,7 @@ function AuthCallbackPage() {
         await completeAuthFromUrl()
         await queryClient.invalidateQueries({ queryKey: authKeys.session() })
         if (!cancelled) {
-          navigate({ to: '/', replace: true })
+          navigate({ to: consumeAuthRedirect() ?? '/', replace: true })
         }
       } catch (err) {
         if (!cancelled) {

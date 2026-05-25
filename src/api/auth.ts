@@ -111,6 +111,13 @@ export function mapAuthUser(user: User): AuthUser {
   return buildAuthUser(user, null)
 }
 
+/** Fast gate for route `beforeLoad` — session only, no profile fetch. */
+export async function hasAuthSession(): Promise<boolean> {
+  const { data, error } = await supabase.auth.getSession()
+  if (error) throw error
+  return Boolean(data.session?.user)
+}
+
 export async function fetchAuthSession(): Promise<AuthUser | null> {
   const { data, error } = await supabase.auth.getSession()
   if (error) throw error

@@ -1,4 +1,4 @@
-import { Link, useNavigate } from '@tanstack/react-router'
+import { Link, useNavigate, useSearch } from '@tanstack/react-router'
 import { Check } from 'lucide-react'
 import { useState, type FormEvent } from 'react'
 import { AuthField } from '#/components/auth/AuthField'
@@ -10,6 +10,7 @@ import {
   validateLoginFields,
   validateSignupFields,
 } from '#/lib/auth-validation'
+import { stashAuthRedirect } from '#/lib/auth-redirect'
 import { cn } from '#/lib/cn'
 import type { AuthFieldErrors } from '#/types/auth'
 
@@ -58,6 +59,10 @@ function PasswordRequirements({ password }: { password: string }) {
 
 export function AuthForm({ mode }: AuthFormProps) {
   const navigate = useNavigate()
+  const { redirect } = useSearch({ from: '/_auth' })
+  const redirectSearch = redirect ? { redirect } : undefined
+  const postAuthTo = redirect ?? '/'
+
   const {
     signInWithEmail,
     signUpWithEmail,
@@ -89,6 +94,7 @@ export function AuthForm({ mode }: AuthFormProps) {
 
   async function handleGoogle() {
     setErrors({})
+    if (redirect) stashAuthRedirect(redirect)
     setGoogleLoading(true)
     const result = await signInWithGoogle()
     setGoogleLoading(false)
@@ -119,7 +125,7 @@ export function AuthForm({ mode }: AuthFormProps) {
       return
     }
 
-    navigate({ to: '/', replace: true })
+    navigate({ to: postAuthTo, replace: true })
   }
 
   return (
@@ -243,6 +249,7 @@ export function AuthForm({ mode }: AuthFormProps) {
             Already have an account?{' '}
             <Link
               to="/login"
+              search={redirectSearch}
               replace
               preload="intent"
               onClick={() => setErrors({})}
@@ -256,6 +263,7 @@ export function AuthForm({ mode }: AuthFormProps) {
             Don&apos;t have an account?{' '}
             <Link
               to="/signup"
+              search={redirectSearch}
               replace
               preload="intent"
               onClick={() => setErrors({})}

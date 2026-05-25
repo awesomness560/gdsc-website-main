@@ -9,10 +9,7 @@ export function HackHeroActions({
   secondaryCta,
 }: HackHeroActionsProps) {
   return (
-    <section
-      id="register"
-      className="mx-auto max-w-4xl px-4 pb-6 text-center sm:pb-8"
-    >
+    <section className="mx-auto max-w-4xl px-4 pb-6 text-center sm:pb-8">
       <div className="flex flex-wrap items-center justify-center gap-3">
         <Button
           href={primaryCta.href}

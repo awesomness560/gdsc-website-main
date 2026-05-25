@@ -12,7 +12,7 @@ export const dummyHackdscData = {
     titleSuffix: 'in 36 hours.',
     subtitle:
       'UT Dallas’ student hackathon — ship a project, join workshops, and compete for prizes over one weekend.',
-    primaryCta: { label: 'Register', href: '#register' },
+    primaryCta: { label: 'Register', href: '/hackdsc/register' },
     secondaryCta: { label: 'View schedule', href: '/hackdsc/schedule' },
     meta: [
       { icon: 'calendar' as const, text: 'Sep 12–13, 2026' },

@@ -1,9 +1,9 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
+import { HACKDSC_REGISTER_PATH } from '#/lib/auth-redirect'
 import { dummyHackdscData } from '#/data/dummy-hackdsc'
 import type { CountdownTime } from '#/types/hackdsc'
 import { getCountdownTime } from '#/lib/countdown'
-import { HackMembershipBanner } from '#/components/membership/HackMembershipBanner'
 import {
   CountdownSection,
   FaqSection,
@@ -19,6 +19,12 @@ export const Route = createFileRoute('/hackdsc/')({
 })
 
 function HackdscPage() {
+  const router = useRouter()
+
+  useEffect(() => {
+    void router.preloadRoute({ to: HACKDSC_REGISTER_PATH })
+  }, [router])
+
   const {
     countdownTarget,
     hero,
@@ -55,10 +61,6 @@ function HackdscPage() {
       <HackHeroActions
         primaryCta={hero.primaryCta}
         secondaryCta={hero.secondaryCta}
-      />
-      <HackMembershipBanner
-        membershipDeadline={countdownTarget}
-        className="mx-auto max-w-4xl px-4 pb-8"
       />
       <CountdownSection timeLeft={timeLeft} />
       <TracksSection {...tracksSection} tracks={tracks} />

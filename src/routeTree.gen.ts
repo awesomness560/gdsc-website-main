@@ -19,6 +19,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as HackdscIndexRouteImport } from './routes/hackdsc/index'
 import { Route as EventsIndexRouteImport } from './routes/events/index'
 import { Route as HackdscScheduleRouteImport } from './routes/hackdsc/schedule'
+import { Route as HackdscRegisterRouteImport } from './routes/hackdsc/register'
 import { Route as EventsSlugRouteImport } from './routes/events/$slug'
 import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
 import { Route as AuthSignupRouteImport } from './routes/_auth/signup'
@@ -73,6 +74,11 @@ const HackdscScheduleRoute = HackdscScheduleRouteImport.update({
   path: '/schedule',
   getParentRoute: () => HackdscRouteRoute,
 } as any)
+const HackdscRegisterRoute = HackdscRegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => HackdscRouteRoute,
+} as any)
 const EventsSlugRoute = EventsSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -105,6 +111,7 @@ export interface FileRoutesByFullPath {
   '/signup': typeof AuthSignupRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/events/$slug': typeof EventsSlugRoute
+  '/hackdsc/register': typeof HackdscRegisterRoute
   '/hackdsc/schedule': typeof HackdscScheduleRoute
   '/events/': typeof EventsIndexRoute
   '/hackdsc/': typeof HackdscIndexRoute
@@ -118,6 +125,7 @@ export interface FileRoutesByTo {
   '/signup': typeof AuthSignupRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/events/$slug': typeof EventsSlugRoute
+  '/hackdsc/register': typeof HackdscRegisterRoute
   '/hackdsc/schedule': typeof HackdscScheduleRoute
   '/events': typeof EventsIndexRoute
   '/hackdsc': typeof HackdscIndexRoute
@@ -135,6 +143,7 @@ export interface FileRoutesById {
   '/_auth/signup': typeof AuthSignupRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/events/$slug': typeof EventsSlugRoute
+  '/hackdsc/register': typeof HackdscRegisterRoute
   '/hackdsc/schedule': typeof HackdscScheduleRoute
   '/events/': typeof EventsIndexRoute
   '/hackdsc/': typeof HackdscIndexRoute
@@ -152,6 +161,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/auth/callback'
     | '/events/$slug'
+    | '/hackdsc/register'
     | '/hackdsc/schedule'
     | '/events/'
     | '/hackdsc/'
@@ -165,6 +175,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/auth/callback'
     | '/events/$slug'
+    | '/hackdsc/register'
     | '/hackdsc/schedule'
     | '/events'
     | '/hackdsc'
@@ -181,6 +192,7 @@ export interface FileRouteTypes {
     | '/_auth/signup'
     | '/auth/callback'
     | '/events/$slug'
+    | '/hackdsc/register'
     | '/hackdsc/schedule'
     | '/events/'
     | '/hackdsc/'
@@ -269,6 +281,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HackdscScheduleRouteImport
       parentRoute: typeof HackdscRouteRoute
     }
+    '/hackdsc/register': {
+      id: '/hackdsc/register'
+      path: '/register'
+      fullPath: '/hackdsc/register'
+      preLoaderRoute: typeof HackdscRegisterRouteImport
+      parentRoute: typeof HackdscRouteRoute
+    }
     '/events/$slug': {
       id: '/events/$slug'
       path: '/$slug'
@@ -329,11 +348,13 @@ const EventsRouteRouteWithChildren = EventsRouteRoute._addFileChildren(
 )
 
 interface HackdscRouteRouteChildren {
+  HackdscRegisterRoute: typeof HackdscRegisterRoute
   HackdscScheduleRoute: typeof HackdscScheduleRoute
   HackdscIndexRoute: typeof HackdscIndexRoute
 }
 
 const HackdscRouteRouteChildren: HackdscRouteRouteChildren = {
+  HackdscRegisterRoute: HackdscRegisterRoute,
   HackdscScheduleRoute: HackdscScheduleRoute,
   HackdscIndexRoute: HackdscIndexRoute,
 }

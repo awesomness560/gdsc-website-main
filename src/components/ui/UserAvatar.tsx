@@ -9,7 +9,7 @@ type UserAvatarProps = {
   email?: string
   avatarUrl?: string
   size?: UserAvatarSize
-  /** 2px Google four-color ring for verified members (nav + presenter cards only). */
+  /** 2px smooth Google-color ring for verified members (nav + presenter cards only). */
   memberRing?: boolean
   className?: string
 }
@@ -20,9 +20,9 @@ const sizeClass: Record<UserAvatarSize, { box: string; text: string }> = {
   md: { box: 'h-10 w-10 text-[13px]', text: 'font-medium' },
 }
 
-/** Google subscriber-style ring: blue, red, yellow, green — one quarter each. */
+/** Smooth conic blend through Google palette (loops back to blue). */
 const memberRingClass =
-  'bg-[conic-gradient(from_225deg,#4285f4_0deg_90deg,#ea4335_90deg_180deg,#fbbc05_180deg_270deg,#34a853_270deg_360deg)] shadow-[0_0_6px_rgba(66,133,244,0.5),0_0_10px_rgba(234,67,53,0.25),0_0_10px_rgba(251,188,5,0.2),0_0_6px_rgba(52,168,83,0.45)]'
+  'bg-[conic-gradient(from_210deg,#4285f4,#5b9cf5,#ea4335,#f5a623,#fbbc05,#7bc67e,#34a853,#4285f4)] shadow-[0_0_8px_rgba(66,133,244,0.35),0_0_12px_rgba(52,168,83,0.25)]'
 
 export function UserAvatar({
   name,
