@@ -69,6 +69,15 @@ export type {
 } from '#/types/events'
 
 export type {
+  AdminApplication,
+  ApplicationActivityItem,
+  ApplicationDecisionStatus,
+  ApplicationFlag,
+  ApplicationListFilters,
+  ApplicationNote,
+} from '#/types/admin-application'
+
+export type {
   AdminMember,
   AdminMemberActivity,
   AdminMembersSummary,

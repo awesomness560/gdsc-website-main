@@ -1,15 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { AdminPlaceholderPage } from '#/components/admin/AdminPlaceholderPage'
+import { AdminApplicationsPage } from '#/components/admin/applications/AdminApplicationsPage'
 
 export const Route = createFileRoute('/admin/applications')({
-  component: AdminApplicationsPage,
+  component: AdminApplicationsRoute,
 })
 
-function AdminApplicationsPage() {
-  return (
-    <AdminPlaceholderPage
-      title="Applications"
-      description="Review HackDSC and other applications from members."
-    />
-  )
+function AdminApplicationsRoute() {
+  return <AdminApplicationsPage />
 }

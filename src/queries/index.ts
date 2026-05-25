@@ -25,3 +25,13 @@ export {
   useSetAdminMemberRoleMutation,
   useSetAdminMemberVerifiedMutation,
 } from '#/queries/admin-users'
+export { adminApplicationKeys } from '#/queries/admin-application-keys'
+export {
+  getAdminApplicationsMutationError,
+  useAddApplicationNoteMutation,
+  useAdminApplicationsQuery,
+  useFlagApplicationMutation,
+  useMarkApplicationReviewedMutation,
+  useSetApplicationDecisionMutation,
+  useUnflagApplicationMutation,
+} from '#/queries/admin-applications'

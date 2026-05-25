@@ -25,6 +25,15 @@ export {
   updateAdminMember,
 } from '#/api/admin-users'
 export {
+  addApplicationNote,
+  fetchAdminApplications,
+  flagApplication,
+  mapAdminApplicationsError,
+  markApplicationReviewed,
+  setApplicationDecision,
+  unflagApplication,
+} from '#/api/admin-applications'
+export {
   fetchHackathonRegistrationStatus,
   fetchMyHackathonSubmission,
   mapHackathonSubmissionError,
