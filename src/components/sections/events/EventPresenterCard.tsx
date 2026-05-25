@@ -26,6 +26,7 @@ export function EventPresenterCard({ presenter }: EventPresenterCardProps) {
         name={presenter.name}
         avatarUrl={presenter.avatarUrl}
         size="md"
+        memberRing={presenter.isMember === true}
         className="!h-12 !w-12 !text-sm"
       />
 

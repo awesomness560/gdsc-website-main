@@ -42,6 +42,8 @@ export interface EventPresenter {
   avatarUrl?: string
   linkedInUrl?: string
   websiteUrl?: string
+  /** Verified GDG member — shows muted rainbow avatar ring on event detail. */
+  isMember?: boolean
 }
 
 export interface EventResource {

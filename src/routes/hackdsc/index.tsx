@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { dummyHackdscData } from '#/data/dummy-hackdsc'
 import type { CountdownTime } from '#/types/hackdsc'
 import { getCountdownTime } from '#/lib/countdown'
+import { HackMembershipBanner } from '#/components/membership/HackMembershipBanner'
 import {
   CountdownSection,
   FaqSection,
@@ -54,6 +55,10 @@ function HackdscPage() {
       <HackHeroActions
         primaryCta={hero.primaryCta}
         secondaryCta={hero.secondaryCta}
+      />
+      <HackMembershipBanner
+        membershipDeadline={countdownTarget}
+        className="mx-auto max-w-4xl px-4 pb-8"
       />
       <CountdownSection timeLeft={timeLeft} />
       <TracksSection {...tracksSection} tracks={tracks} />

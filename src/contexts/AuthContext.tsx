@@ -31,6 +31,8 @@ type AuthContextValue = {
   profile: UserProfile | null
   /** Supabase Auth session user fields. */
   auth: SupabaseAuthUser | null
+  /** `users.is_verified` — full GDG member (roster sync). */
+  isMember: boolean
   status: AuthStatus
   isAuthenticated: boolean
   isLoading: boolean
@@ -63,6 +65,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const user = sessionQuery.data ?? null
   const profile = user?.profile ?? null
   const auth = user?.auth ?? null
+  const isMember = user?.isVerified ?? false
 
   const isSessionPending = sessionQuery.isPending
   const isSignInPending = signInMutation.isPending
@@ -133,6 +136,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       user,
       profile,
       auth,
+      isMember,
       status,
       isAuthenticated,
       isLoading,
@@ -150,6 +154,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       user,
       profile,
       auth,
+      isMember,
       status,
       isAuthenticated,
       isLoading,

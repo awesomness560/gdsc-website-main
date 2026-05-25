@@ -9,6 +9,8 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as MembershipRouteImport } from './routes/membership'
+import { Route as JoinRouteImport } from './routes/join'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as HackdscRouteRouteImport } from './routes/hackdsc/route'
 import { Route as EventsRouteRouteImport } from './routes/events/route'
@@ -22,6 +24,16 @@ import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
 import { Route as AuthSignupRouteImport } from './routes/_auth/signup'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 
+const MembershipRoute = MembershipRouteImport.update({
+  id: '/membership',
+  path: '/membership',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JoinRoute = JoinRouteImport.update({
+  id: '/join',
+  path: '/join',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -87,6 +99,8 @@ export interface FileRoutesByFullPath {
   '/events': typeof EventsRouteRouteWithChildren
   '/hackdsc': typeof HackdscRouteRouteWithChildren
   '/about': typeof AboutRoute
+  '/join': typeof JoinRoute
+  '/membership': typeof MembershipRoute
   '/login': typeof AuthLoginRoute
   '/signup': typeof AuthSignupRoute
   '/auth/callback': typeof AuthCallbackRoute
@@ -98,6 +112,8 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/join': typeof JoinRoute
+  '/membership': typeof MembershipRoute
   '/login': typeof AuthLoginRoute
   '/signup': typeof AuthSignupRoute
   '/auth/callback': typeof AuthCallbackRoute
@@ -113,6 +129,8 @@ export interface FileRoutesById {
   '/events': typeof EventsRouteRouteWithChildren
   '/hackdsc': typeof HackdscRouteRouteWithChildren
   '/about': typeof AboutRoute
+  '/join': typeof JoinRoute
+  '/membership': typeof MembershipRoute
   '/_auth/login': typeof AuthLoginRoute
   '/_auth/signup': typeof AuthSignupRoute
   '/auth/callback': typeof AuthCallbackRoute
@@ -128,6 +146,8 @@ export interface FileRouteTypes {
     | '/events'
     | '/hackdsc'
     | '/about'
+    | '/join'
+    | '/membership'
     | '/login'
     | '/signup'
     | '/auth/callback'
@@ -139,6 +159,8 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/join'
+    | '/membership'
     | '/login'
     | '/signup'
     | '/auth/callback'
@@ -153,6 +175,8 @@ export interface FileRouteTypes {
     | '/events'
     | '/hackdsc'
     | '/about'
+    | '/join'
+    | '/membership'
     | '/_auth/login'
     | '/_auth/signup'
     | '/auth/callback'
@@ -168,11 +192,27 @@ export interface RootRouteChildren {
   EventsRouteRoute: typeof EventsRouteRouteWithChildren
   HackdscRouteRoute: typeof HackdscRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
+  JoinRoute: typeof JoinRoute
+  MembershipRoute: typeof MembershipRoute
   AuthCallbackRoute: typeof AuthCallbackRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/membership': {
+      id: '/membership'
+      path: '/membership'
+      fullPath: '/membership'
+      preLoaderRoute: typeof MembershipRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/join': {
+      id: '/join'
+      path: '/join'
+      fullPath: '/join'
+      preLoaderRoute: typeof JoinRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -308,6 +348,8 @@ const rootRouteChildren: RootRouteChildren = {
   EventsRouteRoute: EventsRouteRouteWithChildren,
   HackdscRouteRoute: HackdscRouteRouteWithChildren,
   AboutRoute: AboutRoute,
+  JoinRoute: JoinRoute,
+  MembershipRoute: MembershipRoute,
   AuthCallbackRoute: AuthCallbackRoute,
 }
 export const routeTree = rootRouteImport

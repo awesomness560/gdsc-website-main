@@ -67,12 +67,14 @@ const eventDrafts: EventDraft[] = [
         role: 'Software Engineer @ Google',
         bio: 'Works on search quality tooling and loves teaching practical ML.',
         linkedInUrl: 'https://linkedin.com',
+        isMember: true,
       },
       {
         id: 'p2',
         name: 'Priya N.',
         role: 'Senior, CS @ UTD',
         bio: 'AI/ML lead for GDG — built last semester’s study-jam curriculum.',
+        isMember: true,
       },
     ],
     resources: [
@@ -116,6 +118,7 @@ const eventDrafts: EventDraft[] = [
         id: 'p3',
         name: 'Jordan Lee',
         role: 'Web Dev Officer @ GDG',
+        isMember: true,
       },
     ],
     resources: [],

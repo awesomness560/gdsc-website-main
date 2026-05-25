@@ -1,5 +1,7 @@
 import { Loader2, LogOut } from 'lucide-react'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { BecomeMemberLink } from '#/components/membership/BecomeMemberLink'
+import { MemberPill } from '#/components/membership/MemberPill'
 import { UserAvatar } from '#/components/ui/UserAvatar'
 import type { AuthUser } from '#/types/auth'
 import { cn } from '#/lib/cn'
@@ -14,12 +16,30 @@ const avatarOpenRing =
   'shadow-[0_0_0_2px_rgba(74,140,255,0.55)] ring-2 ring-accent/35'
 
 type ProfileMenuPanelProps = {
+  user: AuthUser
   onSignOut: () => void
   signingOut: boolean
   className?: string
 }
 
+function ProfileMenuHeader({ user }: { user: AuthUser }) {
+  return (
+    <div className="border-b border-border-subtle px-3.5 py-3">
+      <p className="truncate text-sm font-semibold text-fg">{user.name}</p>
+      <p className="truncate text-xs text-fg-muted">{user.auth.email}</p>
+      <div className="mt-2">
+        {user.isVerified ? (
+          <MemberPill />
+        ) : (
+          <BecomeMemberLink />
+        )}
+      </div>
+    </div>
+  )
+}
+
 function ProfileMenuPanel({
+  user,
   onSignOut,
   signingOut,
   className,
@@ -27,12 +47,13 @@ function ProfileMenuPanel({
   return (
     <div
       className={cn(
-        'min-w-[11.5rem] overflow-hidden rounded-2xl border border-border-default',
-        'bg-surface-overlay py-1 shadow-[0_16px_40px_rgba(0,0,0,0.42)] ring-1 ring-white/8',
+        'min-w-[14rem] overflow-hidden rounded-2xl border border-border-default',
+        'bg-surface-overlay shadow-[0_16px_40px_rgba(0,0,0,0.42)] ring-1 ring-white/8',
         className,
       )}
       role="menu"
     >
+      <ProfileMenuHeader user={user} />
       <button
         type="button"
         role="menuitem"
@@ -108,9 +129,10 @@ export function NavProfileMenu({
     >
       <UserAvatar
         name={user.name}
-        email={user.email}
+        email={user.auth.email}
         avatarUrl={user.avatarUrl}
         size={avatarSize}
+        memberRing={user.isVerified}
       />
     </button>
   )
@@ -131,7 +153,11 @@ export function NavProfileMenu({
               : 'pointer-events-none -translate-y-0.5 opacity-0',
           )}
         >
-          <ProfileMenuPanel onSignOut={onSignOut} signingOut={signingOut} />
+          <ProfileMenuPanel
+            user={user}
+            onSignOut={onSignOut}
+            signingOut={signingOut}
+          />
         </div>
       </div>
     )
@@ -149,6 +175,7 @@ export function NavProfileMenu({
         )}
       >
         <ProfileMenuPanel
+          user={user}
           onSignOut={() => {
             onSignOut()
             setOpen(false)
@@ -170,7 +197,10 @@ export function NavAuthSkeleton({
 }) {
   return (
     <div
-      className={cn('h-9 w-9 shrink-0 rounded-full bg-white/5 animate-pulse md:h-10 md:w-10', className)}
+      className={cn(
+        'h-9 w-9 shrink-0 rounded-full bg-white/5 animate-pulse md:h-10 md:w-10',
+        className,
+      )}
       aria-hidden
     >
       {children}
