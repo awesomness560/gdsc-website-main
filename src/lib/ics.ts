@@ -11,9 +11,9 @@ export function buildIcsContent(event: ClubEventDetail) {
   return [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//GDSC UTD//Events//EN',
+    'PRODID:-//GDG UTD//Events//EN',
     'BEGIN:VEVENT',
-    `UID:${event.id}@gdsc-utd`,
+    `UID:${event.id}@gdg-utd`,
     `DTSTAMP:${formatIcsDate(new Date().toISOString())}`,
     `DTSTART:${formatIcsDate(event.startsAt)}`,
     `DTEND:${formatIcsDate(event.endsAt)}`,

@@ -5,7 +5,7 @@ export const dummyAboutData = {
     kicker: 'About us',
     title: 'Meet the',
     titleGradient: 'team.',
-    subtitle: 'Leadership, divisions, and the people who run GDSC at UT Dallas.',
+    subtitle: 'Leadership, divisions, and the people who run GDG at UT Dallas.',
   },
   leadership: {
     president: {

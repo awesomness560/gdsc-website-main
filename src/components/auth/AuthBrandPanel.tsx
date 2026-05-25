@@ -21,7 +21,7 @@ function BrandMark({ logoClassName }: { logoClassName: string }) {
         decoding="async"
         className={logoClassName}
       />
-      <p className="mt-5 text-2xl font-bold tracking-tight text-fg">GDSC</p>
+      <p className="mt-5 text-2xl font-bold tracking-tight text-fg">GDG</p>
     </>
   )
 }

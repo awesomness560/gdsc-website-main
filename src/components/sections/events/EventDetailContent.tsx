@@ -84,7 +84,7 @@ export function EventDetailContent({
           <h1 className="text-2xl font-medium tracking-tight text-fg sm:text-[1.75rem]">
             {event.title}
           </h1>
-          <p className="mt-1.5 text-sm text-fg-secondary">Google Developer Student Club · UTD</p>
+          <p className="mt-1.5 text-sm text-fg-secondary">Google Developer Groups · UTD</p>
         </header>
 
         <div className="grid gap-4 sm:grid-cols-2">

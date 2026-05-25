@@ -46,9 +46,13 @@ export function GoogleSignInButton({
       onClick={onClick}
       disabled={disabled || loading}
       className={cn(
-        'inline-flex h-11 w-full items-center justify-center gap-3 rounded-2xl px-5',
-        'bg-[#f8f9fc] text-[#1f1f1f] text-sm font-semibold shadow-[0_1px_2px_rgba(0,0,0,0.12)]',
-        'transition-colors hover:bg-white disabled:cursor-not-allowed disabled:opacity-60',
+        'inline-flex h-11 w-full cursor-pointer items-center justify-center gap-3 rounded-2xl px-5',
+        'bg-[#f8f9fc] text-[#1f1f1f] text-sm font-semibold',
+        'shadow-[0_1px_2px_rgba(0,0,0,0.12)] ring-1 ring-black/5',
+        'transition-[background-color,box-shadow,transform] duration-200',
+        'hover:bg-white hover:shadow-[0_4px_14px_rgba(0,0,0,0.14)] hover:ring-black/8',
+        'active:scale-[0.99]',
+        'disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-[#f8f9fc] disabled:hover:shadow-[0_1px_2px_rgba(0,0,0,0.12)]',
       )}
     >
       {loading ? (

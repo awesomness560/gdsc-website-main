@@ -18,6 +18,7 @@ import { Route as HackdscIndexRouteImport } from './routes/hackdsc/index'
 import { Route as EventsIndexRouteImport } from './routes/events/index'
 import { Route as HackdscScheduleRouteImport } from './routes/hackdsc/schedule'
 import { Route as EventsSlugRouteImport } from './routes/events/$slug'
+import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
 import { Route as AuthSignupRouteImport } from './routes/_auth/signup'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 
@@ -65,6 +66,11 @@ const EventsSlugRoute = EventsSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => EventsRouteRoute,
 } as any)
+const AuthCallbackRoute = AuthCallbackRouteImport.update({
+  id: '/auth/callback',
+  path: '/auth/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthSignupRoute = AuthSignupRouteImport.update({
   id: '/signup',
   path: '/signup',
@@ -83,6 +89,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/login': typeof AuthLoginRoute
   '/signup': typeof AuthSignupRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/events/$slug': typeof EventsSlugRoute
   '/hackdsc/schedule': typeof HackdscScheduleRoute
   '/events/': typeof EventsIndexRoute
@@ -93,6 +100,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/login': typeof AuthLoginRoute
   '/signup': typeof AuthSignupRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/events/$slug': typeof EventsSlugRoute
   '/hackdsc/schedule': typeof HackdscScheduleRoute
   '/events': typeof EventsIndexRoute
@@ -107,6 +115,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/_auth/login': typeof AuthLoginRoute
   '/_auth/signup': typeof AuthSignupRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/events/$slug': typeof EventsSlugRoute
   '/hackdsc/schedule': typeof HackdscScheduleRoute
   '/events/': typeof EventsIndexRoute
@@ -121,6 +130,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/login'
     | '/signup'
+    | '/auth/callback'
     | '/events/$slug'
     | '/hackdsc/schedule'
     | '/events/'
@@ -131,6 +141,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/login'
     | '/signup'
+    | '/auth/callback'
     | '/events/$slug'
     | '/hackdsc/schedule'
     | '/events'
@@ -144,6 +155,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/_auth/login'
     | '/_auth/signup'
+    | '/auth/callback'
     | '/events/$slug'
     | '/hackdsc/schedule'
     | '/events/'
@@ -156,6 +168,7 @@ export interface RootRouteChildren {
   EventsRouteRoute: typeof EventsRouteRouteWithChildren
   HackdscRouteRoute: typeof HackdscRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
+  AuthCallbackRoute: typeof AuthCallbackRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -223,6 +236,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EventsSlugRouteImport
       parentRoute: typeof EventsRouteRoute
     }
+    '/auth/callback': {
+      id: '/auth/callback'
+      path: '/auth/callback'
+      fullPath: '/auth/callback'
+      preLoaderRoute: typeof AuthCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_auth/signup': {
       id: '/_auth/signup'
       path: '/signup'
@@ -288,6 +308,7 @@ const rootRouteChildren: RootRouteChildren = {
   EventsRouteRoute: EventsRouteRouteWithChildren,
   HackdscRouteRoute: HackdscRouteRouteWithChildren,
   AboutRoute: AboutRoute,
+  AuthCallbackRoute: AuthCallbackRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -49,6 +49,7 @@ export type {
 export type {
   AuthErrorCode,
   AuthFieldErrors,
+  AuthProvider,
   AuthStatus,
   AuthUser,
   SignInCredentials,

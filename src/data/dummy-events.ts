@@ -20,7 +20,7 @@ const eventDrafts: EventDraft[] = [
     title: 'Open Collab Hours',
     shortBlurb: 'Drop in anytime — work on club projects, homework, or meet other builders.',
     descriptionParagraphs: [
-      'Our collaboration space stays open for the semester. Stop by for help with workshops, project teams, or just to cowork with other GDSC members.',
+      'Our collaboration space stays open for the semester. Stop by for help with workshops, project teams, or just to cowork with other GDG members.',
     ],
     categoryId: 'type-project-night',
     startsAt: liveWindow.startsAt,
@@ -72,7 +72,7 @@ const eventDrafts: EventDraft[] = [
         id: 'p2',
         name: 'Priya N.',
         role: 'Senior, CS @ UTD',
-        bio: 'AI/ML lead for GDSC — built last semester’s study-jam curriculum.',
+        bio: 'AI/ML lead for GDG — built last semester’s study-jam curriculum.',
       },
     ],
     resources: [
@@ -115,7 +115,7 @@ const eventDrafts: EventDraft[] = [
       {
         id: 'p3',
         name: 'Jordan Lee',
-        role: 'Web Dev Officer @ GDSC',
+        role: 'Web Dev Officer @ GDG',
       },
     ],
     resources: [],
@@ -200,7 +200,7 @@ const eventDrafts: EventDraft[] = [
       {
         id: 'p5',
         name: 'Sam Okonkwo',
-        role: 'Cloud Engineer @ GDSC',
+        role: 'Cloud Engineer @ GDG',
       },
     ],
     resources: [
@@ -236,7 +236,7 @@ const eventDrafts: EventDraft[] = [
       {
         id: 'p6',
         name: 'Jordan Lee',
-        role: 'Web Dev Officer @ GDSC',
+        role: 'Web Dev Officer @ GDG',
       },
     ],
     resources: [

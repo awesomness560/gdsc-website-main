@@ -7,7 +7,7 @@ export const dummyLandingData = {
     { label: 'Schedule', href: '#schedule' },
   ],
   hero: {
-    statusLabel: 'Google Developer Student Club · UTD',
+    statusLabel: 'Google Developer Groups · UTD',
     titleLines: ['Build with', 'community,'],
     titleGradient: 'projects and events.',
     subtitle:

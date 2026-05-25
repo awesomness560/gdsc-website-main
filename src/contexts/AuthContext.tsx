@@ -3,16 +3,17 @@ import {
   useCallback,
   useContext,
   useMemo,
-  useState,
   type ReactNode,
 } from 'react'
+import { mapAuthApiError } from '#/api/map-auth-error'
 import {
-  AUTH_STUB_DELAY_MS,
-  DEMO_LOGIN,
-  dummyAuthUser,
-  dummyGoogleUser,
-} from '#/data/dummy-auth'
-import { meetsAllPasswordRequirements } from '#/lib/auth-validation'
+  useAuthSessionListener,
+  useAuthSessionQuery,
+  useGoogleSignInMutation,
+  useSignInMutation,
+  useSignOutMutation,
+  useSignUpMutation,
+} from '#/queries/auth'
 import type {
   AuthFieldErrors,
   AuthStatus,
@@ -25,7 +26,13 @@ type AuthContextValue = {
   user: AuthUser | null
   status: AuthStatus
   isAuthenticated: boolean
+  /** Initial session restore or any auth mutation in flight */
   isLoading: boolean
+  isSessionPending: boolean
+  isSignInPending: boolean
+  isSignUpPending: boolean
+  isSignOutPending: boolean
+  isGoogleSignInPending: boolean
   signInWithEmail: (
     credentials: SignInCredentials,
   ) => Promise<AuthFieldErrors | null>
@@ -38,84 +45,79 @@ type AuthContextValue = {
 
 const AuthContext = createContext<AuthContextValue | null>(null)
 
-function delay(ms: number) {
-  return new Promise<void>((resolve) => {
-    window.setTimeout(resolve, ms)
-  })
-}
-
-function mapLoginFailure(): AuthFieldErrors {
-  return {
-    general: 'Invalid email or password. Try the demo account or sign up.',
-  }
-}
-
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<AuthUser | null>(null)
-  const [status, setStatus] = useState<AuthStatus>('unauthenticated')
+  useAuthSessionListener()
 
-  const isLoading = status === 'loading'
+  const sessionQuery = useAuthSessionQuery()
+  const signInMutation = useSignInMutation()
+  const signUpMutation = useSignUpMutation()
+  const signOutMutation = useSignOutMutation()
+  const googleSignInMutation = useGoogleSignInMutation()
+
+  const user = sessionQuery.data ?? null
+  const isSessionPending = sessionQuery.isPending
+  const isSignInPending = signInMutation.isPending
+  const isSignUpPending = signUpMutation.isPending
+  const isSignOutPending = signOutMutation.isPending
+  const isGoogleSignInPending = googleSignInMutation.isPending
+
+  const isLoading =
+    isSessionPending ||
+    isSignInPending ||
+    isSignUpPending ||
+    isSignOutPending ||
+    isGoogleSignInPending
+
+  const status: AuthStatus = useMemo(() => {
+    if (isSessionPending) return 'loading'
+    if (user) return 'authenticated'
+    return 'unauthenticated'
+  }, [isSessionPending, user])
+
   const isAuthenticated = status === 'authenticated' && user !== null
 
   const signInWithEmail = useCallback(
-    async ({ email, password }: SignInCredentials) => {
-      setStatus('loading')
-      await delay(AUTH_STUB_DELAY_MS)
-
-      const normalizedEmail = email.trim().toLowerCase()
-      const valid =
-        normalizedEmail === DEMO_LOGIN.email.toLowerCase() &&
-        password === DEMO_LOGIN.password
-
-      if (!valid) {
-        setStatus('unauthenticated')
-        return mapLoginFailure()
+    async (credentials: SignInCredentials) => {
+      try {
+        await signInMutation.mutateAsync(credentials)
+        return null
+      } catch (error) {
+        return mapAuthApiError(error)
       }
-
-      setUser({ ...dummyAuthUser, email: normalizedEmail })
-      setStatus('authenticated')
-      return null
     },
-    [],
+    [signInMutation],
   )
 
   const signUpWithEmail = useCallback(
-    async ({ name, email, password }: SignUpCredentials) => {
-      setStatus('loading')
-      await delay(AUTH_STUB_DELAY_MS)
-
-      if (!meetsAllPasswordRequirements(password)) {
-        setStatus('unauthenticated')
-        return { password: 'Password does not meet the requirements below.' }
+    async (credentials: SignUpCredentials) => {
+      try {
+        const result = await signUpMutation.mutateAsync(credentials)
+        if (result.needsEmailConfirmation) {
+          return {
+            general:
+              'Check your email to confirm your account, then sign in.',
+          }
+        }
+        return null
+      } catch (error) {
+        return mapAuthApiError(error)
       }
-
-      setUser({
-        ...dummyAuthUser,
-        id: `usr_${Date.now()}`,
-        email: email.trim().toLowerCase(),
-        name: name.trim(),
-        provider: 'email',
-      })
-      setStatus('authenticated')
-      return null
     },
-    [],
+    [signUpMutation],
   )
 
   const signInWithGoogle = useCallback(async () => {
-    setStatus('loading')
-    await delay(AUTH_STUB_DELAY_MS)
-    setUser(dummyGoogleUser)
-    setStatus('authenticated')
-    return null
-  }, [])
+    try {
+      await googleSignInMutation.mutateAsync()
+      return null
+    } catch (error) {
+      return mapAuthApiError(error)
+    }
+  }, [googleSignInMutation])
 
   const signOut = useCallback(async () => {
-    setStatus('loading')
-    await delay(400)
-    setUser(null)
-    setStatus('unauthenticated')
-  }, [])
+    await signOutMutation.mutateAsync()
+  }, [signOutMutation])
 
   const value = useMemo<AuthContextValue>(
     () => ({
@@ -123,6 +125,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       status,
       isAuthenticated,
       isLoading,
+      isSessionPending,
+      isSignInPending,
+      isSignUpPending,
+      isSignOutPending,
+      isGoogleSignInPending,
       signInWithEmail,
       signUpWithEmail,
       signInWithGoogle,
@@ -133,6 +140,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       status,
       isAuthenticated,
       isLoading,
+      isSessionPending,
+      isSignInPending,
+      isSignUpPending,
+      isSignOutPending,
+      isGoogleSignInPending,
       signInWithEmail,
       signUpWithEmail,
       signInWithGoogle,

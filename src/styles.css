@@ -85,6 +85,15 @@ input {
   font: inherit;
 }
 
+button:not(:disabled),
+[role='button']:not(:disabled) {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
 @keyframes shimmer {
   0% {
     transform: translateX(-100%);

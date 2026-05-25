@@ -1,9 +1,11 @@
+export type AuthProvider = 'email' | 'google' | 'github' | 'oauth'
+
 export type AuthUser = {
   id: string
   email: string
   name: string
   avatarUrl?: string
-  provider: 'email' | 'google'
+  provider: AuthProvider
 }
 
 export type AuthStatus =

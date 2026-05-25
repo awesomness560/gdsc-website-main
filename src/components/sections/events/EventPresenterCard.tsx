@@ -1,18 +1,9 @@
 import { Globe, Linkedin } from 'lucide-react'
+import { UserAvatar } from '#/components/ui/UserAvatar'
 import type { EventPresenter } from '#/types/events'
-import { cn } from '#/lib/cn'
 
 type EventPresenterCardProps = {
   presenter: EventPresenter
-}
-
-function getInitials(name: string) {
-  return name
-    .split(' ')
-    .map((part) => part[0])
-    .join('')
-    .slice(0, 2)
-    .toUpperCase()
 }
 
 export function EventPresenterCard({ presenter }: EventPresenterCardProps) {
@@ -31,22 +22,12 @@ export function EventPresenterCard({ presenter }: EventPresenterCardProps) {
 
   return (
     <div className="flex gap-3 rounded-2xl border border-border-subtle bg-surface/50 p-4">
-      {presenter.avatarUrl ? (
-        <img
-          src={presenter.avatarUrl}
-          alt=""
-          className="h-12 w-12 shrink-0 rounded-full object-cover"
-        />
-      ) : (
-        <div
-          className={cn(
-            'flex h-12 w-12 shrink-0 items-center justify-center rounded-full',
-            'border border-border-default bg-bg-elevated text-sm font-semibold text-fg-secondary',
-          )}
-        >
-          {getInitials(presenter.name)}
-        </div>
-      )}
+      <UserAvatar
+        name={presenter.name}
+        avatarUrl={presenter.avatarUrl}
+        size="md"
+        className="!h-12 !w-12 !text-sm"
+      />
 
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center gap-x-2 gap-y-1">

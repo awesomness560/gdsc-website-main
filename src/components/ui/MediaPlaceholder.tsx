@@ -7,7 +7,7 @@ import { cn } from '#/lib/cn'
 
 export type PlaceholderVariantMode = 'seeded' | 'generated'
 
-/** Optional slug → icon map; unknown slugs fall back to GDSC mark. */
+/** Optional slug → icon map; unknown slugs fall back to GDG mark. */
 const SLUG_GLYPHS: Record<string, ComponentType<{ className?: string }>> = {
   workshop: Wrench,
   'industry-talk': Mic,
@@ -20,13 +20,13 @@ export type MediaPlaceholderProps = {
   eventType?: EventType
   variant?: PlaceholderVariantMode
   state?: 'static' | 'loading'
-  glyph?: 'category' | 'gdsc' | 'none'
+  glyph?: 'category' | 'gdg' | 'none'
   className?: string
   showVariantToggle?: boolean
   'aria-label'?: string
 }
 
-function GdscMark({ className }: { className?: string }) {
+function GdgMark({ className }: { className?: string }) {
   return (
     <img
       src="/gdsc-icon.png"
@@ -90,7 +90,7 @@ export function MediaPlaceholder({
         {glyph === 'none' ? null : useCategoryGlyph && Glyph ? (
           <Glyph className="h-[42%] w-[42%] max-h-32 max-w-32 text-white/20" strokeWidth={1.25} />
         ) : (
-          <GdscMark className="h-[38%] w-[38%] max-h-28 max-w-28" />
+          <GdgMark className="h-[38%] w-[38%] max-h-28 max-w-28" />
         )}
       </div>
 

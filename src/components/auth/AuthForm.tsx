@@ -80,7 +80,7 @@ export function AuthForm({ mode }: AuthFormProps) {
       <div className="mx-auto w-full max-w-[400px] px-5 py-10 text-center sm:px-6">
         <p className="text-lg font-semibold text-fg">You&apos;re signed in</p>
         <p className="mt-2 text-sm text-fg-secondary">
-          Auth is using dummy data for now. Head back to explore the site.
+          You&apos;re all set. Head back to explore the site.
         </p>
         <Link
           to="/"
@@ -134,8 +134,8 @@ export function AuthForm({ mode }: AuthFormProps) {
         </h1>
         <p className="text-sm text-fg-secondary">
           {isSignup
-            ? 'Join the GDSC community.'
-            : 'Sign in to your GDSC account.'}
+            ? 'Join the GDG community.'
+            : 'Sign in to your GDG account.'}
         </p>
       </header>
 
@@ -213,7 +213,7 @@ export function AuthForm({ mode }: AuthFormProps) {
           <div className="flex justify-end">
             <button
               type="button"
-              className="text-xs text-fg-muted transition-colors hover:text-fg-secondary"
+              className="cursor-pointer text-xs text-fg-muted transition-colors hover:text-fg-secondary"
               tabIndex={!isSignup ? 0 : -1}
             >
               Forgot password?
@@ -226,9 +226,12 @@ export function AuthForm({ mode }: AuthFormProps) {
         type="submit"
         disabled={busy}
         className={cn(
-          'inline-flex h-11 w-full items-center justify-center gap-2 rounded-2xl px-5 text-sm font-semibold transition-colors',
-          'bg-accent text-accent-fg shadow-[0_12px_32px_rgba(74,140,255,0.28)] hover:bg-accent-hover',
-          'disabled:cursor-not-allowed disabled:opacity-60',
+          'inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-2xl px-5 text-sm font-semibold',
+          'bg-accent text-accent-fg shadow-[0_12px_32px_rgba(74,140,255,0.28)]',
+          'transition-[background-color,box-shadow,transform] duration-200',
+          'hover:bg-accent-hover hover:shadow-[0_14px_36px_rgba(74,140,255,0.36)]',
+          'active:scale-[0.99]',
+          'disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-accent disabled:hover:shadow-[0_12px_32px_rgba(74,140,255,0.28)]',
         )}
       >
         {submitLoading ? (
@@ -246,7 +249,7 @@ export function AuthForm({ mode }: AuthFormProps) {
               replace
               preload="intent"
               onClick={() => setErrors({})}
-              className="font-medium text-fg-secondary transition-colors hover:text-fg"
+              className="cursor-pointer font-medium text-fg-secondary transition-colors hover:text-fg"
             >
               Sign in
             </Link>
@@ -259,7 +262,7 @@ export function AuthForm({ mode }: AuthFormProps) {
               replace
               preload="intent"
               onClick={() => setErrors({})}
-              className="font-medium text-fg-secondary transition-colors hover:text-fg"
+              className="cursor-pointer font-medium text-fg-secondary transition-colors hover:text-fg"
             >
               Sign up
             </Link>
