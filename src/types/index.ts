@@ -1,4 +1,14 @@
 export type {
+  HackdscExperienceLevel,
+  HackdscRegistrationData,
+  HackdscRegistrationErrors,
+  HackdscRegistrationFormState,
+  HackdscRegistrationStep,
+  HackdscRegistrationStepId,
+  HackdscTeamSize,
+} from '#/types/hackdsc-registration'
+
+export type {
   CountdownTime,
   HackdscPageData,
   HackFaqItem,

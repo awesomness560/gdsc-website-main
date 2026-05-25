@@ -48,7 +48,7 @@ export function HackMembershipBanner({
         application to be considered.{' '}
         <Link
           to={JOIN_PAGE_PATH}
-          className="font-medium text-fg transition-colors hover:text-accent"
+          className="font-semibold text-accent underline decoration-accent/60 underline-offset-[3px] transition-colors hover:text-accent-hover hover:decoration-accent"
         >
           Become a member →
         </Link>
