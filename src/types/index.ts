@@ -47,12 +47,7 @@ export type {
 } from '#/types/events'
 
 export type {
-  ClubEvent,
   CtaLink,
-  EventStatus,
-  EventStatusFilter,
-  EventSummary,
-  EventType,
   GoogleAccent,
   HeroContent,
   HeroMetaIcon,

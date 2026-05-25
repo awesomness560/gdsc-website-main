@@ -1,5 +1,6 @@
 import type { ClubEventDetail, EventsPageData } from '#/types/events'
 import { dummyEventTypes, getEventTypeById } from '#/data/event-types'
+import { getDevLiveEventWindow } from '#/lib/live-event-window'
 
 type EventDraft = Omit<ClubEventDetail, 'category'>
 
@@ -10,7 +11,30 @@ function withCategory(event: EventDraft): ClubEventDetail {
   }
 }
 
+const liveWindow = getDevLiveEventWindow()
+
 const eventDrafts: EventDraft[] = [
+  {
+    id: 'open-collab-hours',
+    slug: 'open-collab-hours',
+    title: 'Open Collab Hours',
+    shortBlurb: 'Drop in anytime — work on club projects, homework, or meet other builders.',
+    descriptionParagraphs: [
+      'Our collaboration space stays open for the semester. Stop by for help with workshops, project teams, or just to cowork with other GDSC members.',
+    ],
+    categoryId: 'type-project-night',
+    startsAt: liveWindow.startsAt,
+    endsAt: liveWindow.endsAt,
+    location: {
+      room: 'MC 2.410',
+      building: 'ECSW',
+      buildingFullName: 'Engineering and Computer Science West',
+      mapUrl: 'https://maps.google.com/?q=UT+Dallas+ECSW',
+    },
+    registration: { state: 'walk-in' },
+    presenters: [],
+    resources: [],
+  },
   {
     id: 'intro-to-rag',
     slug: 'intro-to-rag',

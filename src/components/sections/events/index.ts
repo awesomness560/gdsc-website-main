@@ -1,6 +1,6 @@
 export { EventCard } from '#/components/sections/events/EventCard'
 export { EventCompactRow } from '#/components/sections/events/EventCompactRow'
-export { EventsSection } from '#/components/sections/events/EventsSection'
+export { HomeEventsSection } from '#/components/sections/events/HomeEventsSection'
 export { EventsPageHero } from '#/components/sections/events/EventsPageHero'
 export { LiveNowStrip } from '#/components/sections/events/LiveNowStrip'
 export { EventCategoryChips } from '#/components/sections/events/EventCategoryChips'

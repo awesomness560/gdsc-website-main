@@ -36,24 +36,6 @@ export interface Stat {
   accent: GoogleAccent
 }
 
-export type EventStatus = 'Upcoming' | 'Ongoing' | 'Past'
-
-export type EventType = 'Workshop' | 'Technical Project'
-
-/** Calendar event — named to avoid clashing with the DOM `Event` type. */
-export interface ClubEvent {
-  id: string
-  title: string
-  type: EventType
-  status: EventStatus
-  date: string
-  time: string
-  location: string
-  description: string
-}
-
-export type EventStatusFilter = EventStatus | 'All'
-
 export interface SectionCopy {
   kicker: string
   title: string
@@ -69,19 +51,12 @@ export interface Program {
   accent: ProgramAccent
 }
 
-export interface EventSummary {
-  total: number
-  upcoming: number
-  ongoing: number
-}
-
 /** Shape returned by a future landing-page API endpoint. */
 export interface LandingPageData {
   navLinks: NavLink[]
   hero: HeroContent
   stats: Stat[]
   eventsSection: SectionCopy
-  events: ClubEvent[]
   programsSection: SectionCopy
   programs: Program[]
 }

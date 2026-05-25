@@ -17,7 +17,7 @@ export function LiveNowStrip({ event, search, compact }: LiveNowStripProps) {
       to="/events/$slug"
       params={{ slug: event.slug }}
       search={search}
-      className="group flex items-center gap-3 border-y border-border-default bg-surface/60 px-4 py-3 transition-colors hover:border-border-strong hover:bg-surface sm:px-6"
+      className="group flex items-center gap-3 bg-surface/60 px-4 py-3 transition-colors hover:bg-surface-raised sm:px-6"
     >
       <span className="relative flex h-2.5 w-2.5 shrink-0">
         <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-google-green opacity-60" />

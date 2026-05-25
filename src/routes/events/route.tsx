@@ -83,9 +83,13 @@ function EventsLayout() {
   return (
     <main>
       <EventsPageHero {...hero} />
-      {liveEvent ? <LiveNowStrip event={liveEvent} search={search} compact={isMobile} /> : null}
 
       <div className="mx-auto max-w-6xl space-y-4 px-4 pb-6">
+        {liveEvent ? (
+          <div className="overflow-hidden rounded-2xl border border-border-default">
+            <LiveNowStrip event={liveEvent} search={search} compact={isMobile} />
+          </div>
+        ) : null}
         <EventCategoryChips
           eventTypes={eventTypes}
           active={activeCategories}
