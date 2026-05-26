@@ -1,4 +1,4 @@
-import { Link } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import { ExternalLink, Loader2, LogOut } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { AdminBrand } from '#/components/admin/AdminBrand'
@@ -15,6 +15,7 @@ type AdminSidebarProps = {
 }
 
 function SidebarFooter({ onNavigate }: { onNavigate?: () => void }) {
+  const navigate = useNavigate()
   const { user, signOut, isSignOutPending } = useAuth()
   const [menuOpen, setMenuOpen] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
@@ -65,9 +66,12 @@ function SidebarFooter({ onNavigate }: { onNavigate?: () => void }) {
             role="menuitem"
             disabled={isSignOutPending}
             onClick={() => {
-              void signOut()
-              onNavigate?.()
-              setMenuOpen(false)
+              void (async () => {
+                await signOut()
+                onNavigate?.()
+                setMenuOpen(false)
+                navigate({ to: '/' })
+              })()
             }}
             className="flex w-full items-center gap-2 px-3 py-2.5 text-sm font-medium text-fg-secondary transition-colors hover:bg-white/5 hover:text-fg disabled:opacity-60"
           >

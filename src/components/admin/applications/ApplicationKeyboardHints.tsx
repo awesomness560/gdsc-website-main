@@ -24,20 +24,15 @@ function Kbd({ children }: { children: string }) {
 
 type ApplicationKeyboardHintsProps = {
   className?: string
+  /** Hide on mobile — shortcuts are desktop-only. */
   hiddenOnMobile?: boolean
-  open?: boolean
-  onOpenChange?: (open: boolean) => void
 }
 
 export function ApplicationKeyboardHints({
   className,
   hiddenOnMobile = true,
-  open: openProp,
-  onOpenChange,
 }: ApplicationKeyboardHintsProps) {
-  const [internalOpen, setInternalOpen] = useState(false)
-  const open = openProp ?? internalOpen
-  const setOpen = onOpenChange ?? setInternalOpen
+  const [open, setOpen] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -45,9 +40,16 @@ export function ApplicationKeyboardHints({
     function handlePointerDown(e: MouseEvent) {
       if (!rootRef.current?.contains(e.target as Node)) setOpen(false)
     }
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape') setOpen(false)
+    }
     document.addEventListener('mousedown', handlePointerDown)
-    return () => document.removeEventListener('mousedown', handlePointerDown)
-  }, [open, setOpen])
+    window.addEventListener('keydown', handleKeyDown)
+    return () => {
+      document.removeEventListener('mousedown', handlePointerDown)
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [open])
 
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
@@ -62,11 +64,11 @@ export function ApplicationKeyboardHints({
         return
       }
       e.preventDefault()
-      setOpen(!open)
+      setOpen((v) => !v)
     }
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
-  }, [open, setOpen])
+  }, [])
 
   return (
     <div
@@ -79,7 +81,7 @@ export function ApplicationKeyboardHints({
     >
       <button
         type="button"
-        onClick={() => setOpen(!open)}
+        onClick={() => setOpen((v) => !v)}
         className={cn(
           'inline-flex h-9 w-9 items-center justify-center rounded-xl border border-border-default text-fg-muted transition-colors',
           'hover:bg-white/5 hover:text-fg-secondary',
