@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { LayoutDashboard, Loader2, LogOut } from 'lucide-react'
+import { FileText, LayoutDashboard, Loader2, LogOut, User } from 'lucide-react'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { isAdminRole } from '#/lib/auth-roles'
 import { BecomeMemberLink } from '#/components/membership/BecomeMemberLink'
@@ -7,6 +7,8 @@ import { MemberPill } from '#/components/membership/MemberPill'
 import { UserAvatar } from '#/components/ui/UserAvatar'
 import type { AuthUser } from '#/types/auth'
 import { cn } from '#/lib/cn'
+import { hasHackdscHackathonId } from '#/lib/hackathon-config'
+import { useMyHackathonSubmissionQuery } from '#/queries/hackathon-submissions'
 
 const avatarButtonClass =
   'relative rounded-full transition-[transform,box-shadow] duration-200 ease-out hover:scale-[1.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent'
@@ -52,6 +54,12 @@ function ProfileMenuPanel({
   onNavigate,
 }: ProfileMenuPanelProps) {
   const showAdminLink = isAdminRole(user.roles)
+  const canShowHackdsc = hasHackdscHackathonId()
+  const submissionQuery = useMyHackathonSubmissionQuery(
+    user.auth.id,
+    canShowHackdsc ? undefined : null,
+  )
+  const hasSubmission = Boolean(submissionQuery.data)
 
   return (
     <div
@@ -63,6 +71,26 @@ function ProfileMenuPanel({
       role="menu"
     >
       <ProfileMenuHeader user={user} />
+      <Link
+        to="/account"
+        role="menuitem"
+        onClick={onNavigate}
+        className={menuItemClass}
+      >
+        <User className="h-4 w-4 shrink-0 text-fg-muted" aria-hidden />
+        My account
+      </Link>
+      {hasSubmission ? (
+        <Link
+          to="/account/hackdsc"
+          role="menuitem"
+          onClick={onNavigate}
+          className={menuItemClass}
+        >
+          <FileText className="h-4 w-4 shrink-0 text-fg-muted" aria-hidden />
+          My application
+        </Link>
+      ) : null}
       {showAdminLink ? (
         <Link
           to="/admin"

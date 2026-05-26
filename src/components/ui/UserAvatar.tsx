@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import { getAvatarColorClass, getInitials } from '#/lib/avatar'
 import { cn } from '#/lib/cn'
 
-type UserAvatarSize = 'nav' | 'sm' | 'md'
+type UserAvatarSize = 'nav' | 'sm' | 'md' | 'lg'
 
 type UserAvatarProps = {
   name: string
@@ -18,6 +18,7 @@ const sizeClass: Record<UserAvatarSize, { box: string; text: string }> = {
   nav: { box: 'h-9 w-9 text-[13px]', text: 'font-medium' },
   sm: { box: 'h-8 w-8 text-xs', text: 'font-medium' },
   md: { box: 'h-10 w-10 text-[13px]', text: 'font-medium' },
+  lg: { box: 'h-16 w-16 text-lg', text: 'font-semibold' },
 }
 
 /** Smooth conic blend through Google palette (loops back to blue). */

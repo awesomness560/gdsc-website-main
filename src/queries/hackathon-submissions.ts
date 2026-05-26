@@ -10,22 +10,29 @@ import { getHackdscHackathonId } from '#/lib/hackathon-config'
 import { hackathonSubmissionKeys } from '#/queries/hackathon-submission-keys'
 import type { HackdscRegistrationFormState } from '#/types/hackdsc-registration'
 
-export function useHackathonRegistrationQuery(hackathonId = getHackdscHackathonId()) {
+export function useHackathonRegistrationQuery(hackathonId?: string | null) {
+  const resolvedHackathonId =
+    hackathonId === undefined ? getHackdscHackathonId() : hackathonId
+
   return useQuery({
-    queryKey: hackathonSubmissionKeys.registration(hackathonId),
-    queryFn: () => fetchHackathonRegistrationStatus(hackathonId),
+    queryKey: hackathonSubmissionKeys.registration(resolvedHackathonId ?? ''),
+    queryFn: () => fetchHackathonRegistrationStatus(resolvedHackathonId!),
+    enabled: Boolean(resolvedHackathonId),
     staleTime: 60 * 1000,
   })
 }
 
 export function useMyHackathonSubmissionQuery(
   userId: string | undefined,
-  hackathonId = getHackdscHackathonId(),
+  hackathonId?: string | null,
 ) {
+  const resolvedHackathonId =
+    hackathonId === undefined ? getHackdscHackathonId() : hackathonId
+
   return useQuery({
-    queryKey: hackathonSubmissionKeys.mine(hackathonId, userId ?? ''),
-    queryFn: () => fetchMyHackathonSubmission(hackathonId, userId!),
-    enabled: Boolean(userId),
+    queryKey: hackathonSubmissionKeys.mine(resolvedHackathonId ?? '', userId ?? ''),
+    queryFn: () => fetchMyHackathonSubmission(resolvedHackathonId!, userId!),
+    enabled: Boolean(userId && resolvedHackathonId),
     staleTime: 30 * 1000,
   })
 }

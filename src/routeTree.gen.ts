@@ -15,11 +15,13 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as HackdscRouteRouteImport } from './routes/hackdsc/route'
 import { Route as EventsRouteRouteImport } from './routes/events/route'
 import { Route as AdminRouteRouteImport } from './routes/admin/route'
+import { Route as AccountRouteRouteImport } from './routes/account/route'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as HackdscIndexRouteImport } from './routes/hackdsc/index'
 import { Route as EventsIndexRouteImport } from './routes/events/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as AccountIndexRouteImport } from './routes/account/index'
 import { Route as HackdscScheduleRouteImport } from './routes/hackdsc/schedule'
 import { Route as HackdscRegisterRouteImport } from './routes/hackdsc/register'
 import { Route as EventsSlugRouteImport } from './routes/events/$slug'
@@ -29,6 +31,9 @@ import { Route as AdminSettingsRouteImport } from './routes/admin/settings'
 import { Route as AdminMembersRouteImport } from './routes/admin/members'
 import { Route as AdminEventsRouteImport } from './routes/admin/events'
 import { Route as AdminApplicationsRouteImport } from './routes/admin/applications'
+import { Route as AccountSettingsRouteImport } from './routes/account/settings'
+import { Route as AccountHackdscRouteImport } from './routes/account/hackdsc'
+import { Route as AccountEventsRouteImport } from './routes/account/events'
 import { Route as AuthSignupRouteImport } from './routes/_auth/signup'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 
@@ -62,6 +67,11 @@ const AdminRouteRoute = AdminRouteRouteImport.update({
   path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AccountRouteRoute = AccountRouteRouteImport.update({
+  id: '/account',
+  path: '/account',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRouteRoute = AuthRouteRouteImport.update({
   id: '/_auth',
   getParentRoute: () => rootRouteImport,
@@ -85,6 +95,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AdminRouteRoute,
+} as any)
+const AccountIndexRoute = AccountIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AccountRouteRoute,
 } as any)
 const HackdscScheduleRoute = HackdscScheduleRouteImport.update({
   id: '/schedule',
@@ -131,6 +146,21 @@ const AdminApplicationsRoute = AdminApplicationsRouteImport.update({
   path: '/applications',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AccountSettingsRoute = AccountSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AccountRouteRoute,
+} as any)
+const AccountHackdscRoute = AccountHackdscRouteImport.update({
+  id: '/hackdsc',
+  path: '/hackdsc',
+  getParentRoute: () => AccountRouteRoute,
+} as any)
+const AccountEventsRoute = AccountEventsRouteImport.update({
+  id: '/events',
+  path: '/events',
+  getParentRoute: () => AccountRouteRoute,
+} as any)
 const AuthSignupRoute = AuthSignupRouteImport.update({
   id: '/signup',
   path: '/signup',
@@ -144,6 +174,7 @@ const AuthLoginRoute = AuthLoginRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/account': typeof AccountRouteRouteWithChildren
   '/admin': typeof AdminRouteRouteWithChildren
   '/events': typeof EventsRouteRouteWithChildren
   '/hackdsc': typeof HackdscRouteRouteWithChildren
@@ -152,6 +183,9 @@ export interface FileRoutesByFullPath {
   '/membership': typeof MembershipRoute
   '/login': typeof AuthLoginRoute
   '/signup': typeof AuthSignupRoute
+  '/account/events': typeof AccountEventsRoute
+  '/account/hackdsc': typeof AccountHackdscRoute
+  '/account/settings': typeof AccountSettingsRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/events': typeof AdminEventsRoute
   '/admin/members': typeof AdminMembersRoute
@@ -161,6 +195,7 @@ export interface FileRoutesByFullPath {
   '/events/$slug': typeof EventsSlugRoute
   '/hackdsc/register': typeof HackdscRegisterRoute
   '/hackdsc/schedule': typeof HackdscScheduleRoute
+  '/account/': typeof AccountIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/events/': typeof EventsIndexRoute
   '/hackdsc/': typeof HackdscIndexRoute
@@ -172,6 +207,9 @@ export interface FileRoutesByTo {
   '/membership': typeof MembershipRoute
   '/login': typeof AuthLoginRoute
   '/signup': typeof AuthSignupRoute
+  '/account/events': typeof AccountEventsRoute
+  '/account/hackdsc': typeof AccountHackdscRoute
+  '/account/settings': typeof AccountSettingsRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/events': typeof AdminEventsRoute
   '/admin/members': typeof AdminMembersRoute
@@ -181,6 +219,7 @@ export interface FileRoutesByTo {
   '/events/$slug': typeof EventsSlugRoute
   '/hackdsc/register': typeof HackdscRegisterRoute
   '/hackdsc/schedule': typeof HackdscScheduleRoute
+  '/account': typeof AccountIndexRoute
   '/admin': typeof AdminIndexRoute
   '/events': typeof EventsIndexRoute
   '/hackdsc': typeof HackdscIndexRoute
@@ -189,6 +228,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_auth': typeof AuthRouteRouteWithChildren
+  '/account': typeof AccountRouteRouteWithChildren
   '/admin': typeof AdminRouteRouteWithChildren
   '/events': typeof EventsRouteRouteWithChildren
   '/hackdsc': typeof HackdscRouteRouteWithChildren
@@ -197,6 +237,9 @@ export interface FileRoutesById {
   '/membership': typeof MembershipRoute
   '/_auth/login': typeof AuthLoginRoute
   '/_auth/signup': typeof AuthSignupRoute
+  '/account/events': typeof AccountEventsRoute
+  '/account/hackdsc': typeof AccountHackdscRoute
+  '/account/settings': typeof AccountSettingsRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/events': typeof AdminEventsRoute
   '/admin/members': typeof AdminMembersRoute
@@ -206,6 +249,7 @@ export interface FileRoutesById {
   '/events/$slug': typeof EventsSlugRoute
   '/hackdsc/register': typeof HackdscRegisterRoute
   '/hackdsc/schedule': typeof HackdscScheduleRoute
+  '/account/': typeof AccountIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/events/': typeof EventsIndexRoute
   '/hackdsc/': typeof HackdscIndexRoute
@@ -214,6 +258,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/account'
     | '/admin'
     | '/events'
     | '/hackdsc'
@@ -222,6 +267,9 @@ export interface FileRouteTypes {
     | '/membership'
     | '/login'
     | '/signup'
+    | '/account/events'
+    | '/account/hackdsc'
+    | '/account/settings'
     | '/admin/applications'
     | '/admin/events'
     | '/admin/members'
@@ -231,6 +279,7 @@ export interface FileRouteTypes {
     | '/events/$slug'
     | '/hackdsc/register'
     | '/hackdsc/schedule'
+    | '/account/'
     | '/admin/'
     | '/events/'
     | '/hackdsc/'
@@ -242,6 +291,9 @@ export interface FileRouteTypes {
     | '/membership'
     | '/login'
     | '/signup'
+    | '/account/events'
+    | '/account/hackdsc'
+    | '/account/settings'
     | '/admin/applications'
     | '/admin/events'
     | '/admin/members'
@@ -251,6 +303,7 @@ export interface FileRouteTypes {
     | '/events/$slug'
     | '/hackdsc/register'
     | '/hackdsc/schedule'
+    | '/account'
     | '/admin'
     | '/events'
     | '/hackdsc'
@@ -258,6 +311,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_auth'
+    | '/account'
     | '/admin'
     | '/events'
     | '/hackdsc'
@@ -266,6 +320,9 @@ export interface FileRouteTypes {
     | '/membership'
     | '/_auth/login'
     | '/_auth/signup'
+    | '/account/events'
+    | '/account/hackdsc'
+    | '/account/settings'
     | '/admin/applications'
     | '/admin/events'
     | '/admin/members'
@@ -275,6 +332,7 @@ export interface FileRouteTypes {
     | '/events/$slug'
     | '/hackdsc/register'
     | '/hackdsc/schedule'
+    | '/account/'
     | '/admin/'
     | '/events/'
     | '/hackdsc/'
@@ -283,6 +341,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
+  AccountRouteRoute: typeof AccountRouteRouteWithChildren
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
   EventsRouteRoute: typeof EventsRouteRouteWithChildren
   HackdscRouteRoute: typeof HackdscRouteRouteWithChildren
@@ -336,6 +395,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/account': {
+      id: '/account'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof AccountRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_auth': {
       id: '/_auth'
       path: ''
@@ -370,6 +436,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRouteRoute
+    }
+    '/account/': {
+      id: '/account/'
+      path: '/'
+      fullPath: '/account/'
+      preLoaderRoute: typeof AccountIndexRouteImport
+      parentRoute: typeof AccountRouteRoute
     }
     '/hackdsc/schedule': {
       id: '/hackdsc/schedule'
@@ -434,6 +507,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminApplicationsRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/account/settings': {
+      id: '/account/settings'
+      path: '/settings'
+      fullPath: '/account/settings'
+      preLoaderRoute: typeof AccountSettingsRouteImport
+      parentRoute: typeof AccountRouteRoute
+    }
+    '/account/hackdsc': {
+      id: '/account/hackdsc'
+      path: '/hackdsc'
+      fullPath: '/account/hackdsc'
+      preLoaderRoute: typeof AccountHackdscRouteImport
+      parentRoute: typeof AccountRouteRoute
+    }
+    '/account/events': {
+      id: '/account/events'
+      path: '/events'
+      fullPath: '/account/events'
+      preLoaderRoute: typeof AccountEventsRouteImport
+      parentRoute: typeof AccountRouteRoute
+    }
     '/_auth/signup': {
       id: '/_auth/signup'
       path: '/signup'
@@ -463,6 +557,24 @@ const AuthRouteRouteChildren: AuthRouteRouteChildren = {
 
 const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
   AuthRouteRouteChildren,
+)
+
+interface AccountRouteRouteChildren {
+  AccountEventsRoute: typeof AccountEventsRoute
+  AccountHackdscRoute: typeof AccountHackdscRoute
+  AccountSettingsRoute: typeof AccountSettingsRoute
+  AccountIndexRoute: typeof AccountIndexRoute
+}
+
+const AccountRouteRouteChildren: AccountRouteRouteChildren = {
+  AccountEventsRoute: AccountEventsRoute,
+  AccountHackdscRoute: AccountHackdscRoute,
+  AccountSettingsRoute: AccountSettingsRoute,
+  AccountIndexRoute: AccountIndexRoute,
+}
+
+const AccountRouteRouteWithChildren = AccountRouteRoute._addFileChildren(
+  AccountRouteRouteChildren,
 )
 
 interface AdminRouteRouteChildren {
@@ -520,6 +632,7 @@ const HackdscRouteRouteWithChildren = HackdscRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRouteRoute: AuthRouteRouteWithChildren,
+  AccountRouteRoute: AccountRouteRouteWithChildren,
   AdminRouteRoute: AdminRouteRouteWithChildren,
   EventsRouteRoute: EventsRouteRouteWithChildren,
   HackdscRouteRoute: HackdscRouteRouteWithChildren,
