@@ -165,13 +165,26 @@ export async function signUpWithEmailPassword({
   const needsEmailConfirmation = data.session === null
 
   if (data.session) {
-    await upsertUserProfile({
-      id: data.user.id,
-      full_name: trimmedName,
-      avatar_url: null,
-    })
+    try {
+      await upsertUserProfile({
+        id: data.user.id,
+        full_name: trimmedName,
+        avatar_url: null,
+      })
+    } catch (profileError) {
+      console.warn('[auth] profile upsert failed after signup', profileError)
+    }
+
+    let user: AuthUser
+    try {
+      user = await resolveAuthUser(data.user)
+    } catch (profileError) {
+      console.warn('[auth] profile load failed after signup', profileError)
+      user = buildAuthUser(data.user, null)
+    }
+
     return {
-      user: await resolveAuthUser(data.user),
+      user,
       needsEmailConfirmation: false,
     }
   }

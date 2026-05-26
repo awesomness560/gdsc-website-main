@@ -7,7 +7,6 @@ import { hasHackdscHackathonId } from '#/lib/hackathon-config'
 import { getInitials } from '#/lib/avatar'
 import { cn } from '#/lib/cn'
 import { MemberPill } from '#/components/membership/MemberPill'
-import { BecomeMemberLink } from '#/components/membership/BecomeMemberLink'
 import { UserAvatar } from '#/components/ui/UserAvatar'
 import { useMyHackathonSubmissionQuery } from '#/queries/hackathon-submissions'
 
@@ -97,19 +96,14 @@ function AccountLayout() {
                 ·
               </span>
               <span>Joined {joinedLabel}</span>
-              <span aria-hidden className="text-fg-muted/50">
-                ·
-              </span>
               {user.isVerified ? (
-                <MemberPill />
-              ) : (
-                <span className="inline-flex items-center gap-2">
-                  <span className="text-xs font-semibold tracking-wide text-fg-muted uppercase">
-                    Not yet a member
+                <>
+                  <span aria-hidden className="text-fg-muted/50">
+                    ·
                   </span>
-                  <BecomeMemberLink className="text-sm font-medium text-accent underline decoration-accent/60 underline-offset-[3px] hover:text-accent-hover hover:decoration-accent" />
-                </span>
-              )}
+                  <MemberPill />
+                </>
+              ) : null}
             </div>
           </div>
         </div>
@@ -127,7 +121,7 @@ function AccountLayout() {
         </nav>
       </header>
 
-      <section className="mx-auto mt-8 w-full max-w-3xl sm:max-w-none">
+      <section className="mt-8 w-full">
         <Outlet />
       </section>
     </main>

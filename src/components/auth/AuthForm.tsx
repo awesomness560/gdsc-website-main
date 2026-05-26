@@ -77,6 +77,7 @@ export function AuthForm({ mode }: AuthFormProps) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [errors, setErrors] = useState<AuthFieldErrors>({})
+  const [signupEmailSent, setSignupEmailSent] = useState(false)
   const [googleLoading, setGoogleLoading] = useState(false)
   const [submitLoading, setSubmitLoading] = useState(false)
 
@@ -115,13 +116,31 @@ export function AuthForm({ mode }: AuthFormProps) {
     }
 
     setSubmitLoading(true)
-    const result = isSignup
-      ? await signUpWithEmail({ name, email, password })
-      : await signInWithEmail({ email, password })
+    if (isSignup) {
+      const outcome = await signUpWithEmail({ name, email, password })
+      setSubmitLoading(false)
+
+      if (!outcome.ok) {
+        setErrors(outcome.errors)
+        setSignupEmailSent(false)
+        return
+      }
+
+      if (outcome.needsEmailConfirmation) {
+        setErrors({})
+        setSignupEmailSent(true)
+        return
+      }
+
+      navigate({ to: postAuthTo, replace: true })
+      return
+    }
+
+    const signInErrors = await signInWithEmail({ email, password })
     setSubmitLoading(false)
 
-    if (result) {
-      setErrors(result)
+    if (signInErrors) {
+      setErrors(signInErrors)
       return
     }
 
@@ -144,6 +163,13 @@ export function AuthForm({ mode }: AuthFormProps) {
             : 'Sign in to your GDG account.'}
         </p>
       </header>
+
+      {signupEmailSent ? (
+        <p className="rounded-xl border border-google-green/30 bg-google-green/10 px-3 py-2 text-xs leading-relaxed text-fg-secondary">
+          Account created. Check your email to confirm your address, then sign
+          in.
+        </p>
+      ) : null}
 
       {errors.general ? (
         <p className="rounded-xl border border-google-red/30 bg-google-red/10 px-3 py-2 text-xs text-google-red">
@@ -252,7 +278,10 @@ export function AuthForm({ mode }: AuthFormProps) {
               search={redirectSearch}
               replace
               preload="intent"
-              onClick={() => setErrors({})}
+              onClick={() => {
+                setErrors({})
+                setSignupEmailSent(false)
+              }}
               className="cursor-pointer font-medium text-fg-secondary transition-colors hover:text-fg"
             >
               Sign in

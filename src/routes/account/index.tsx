@@ -1,9 +1,8 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { CalendarDays, Check, FileText, Users } from 'lucide-react'
-import { AccountGetStarted } from '#/components/account'
+import { AccountGetStarted, MembershipPromptBanner } from '#/components/account'
 import { Card } from '#/components/ui/Card'
 import { useAuth } from '#/contexts/AuthContext'
-import { BecomeMemberLink } from '#/components/membership/BecomeMemberLink'
 import { MemberPill } from '#/components/membership/MemberPill'
 import { hasHackdscHackathonId } from '#/lib/hackathon-config'
 import { useHackathonRegistrationQuery, useMyHackathonSubmissionQuery } from '#/queries/hackathon-submissions'
@@ -16,6 +15,7 @@ export const Route = createFileRoute('/account/')({
 function AccountOverviewTab() {
   const { user } = useAuth()
   const userId = user?.auth.id
+  const isMember = user?.isVerified ?? false
 
   const canShowHackdsc = hasHackdscHackathonId()
   const hackdscSubmissionQuery = useMyHackathonSubmissionQuery(
@@ -29,56 +29,62 @@ function AccountOverviewTab() {
   const hasApplication = Boolean(hackdscSubmissionQuery.data)
   const hasSubmittedApplication =
     hackdscSubmissionQuery.data?.status === 'submitted'
-  // RSVP list not wired yet — flip when event_rsvps exists.
   const hasEventRsvps = false
 
   const showGetStarted = !hasEventRsvps && !hasApplication
 
   const isOpen = hackdscRegistrationQuery.data?.isOpen ?? false
 
+  const memberJoinedLabel = user?.profile?.created_at
+    ? new Date(user.profile.created_at).toLocaleDateString('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric',
+      })
+    : null
+
   return (
     <div className="space-y-6">
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <Card className="sm:col-span-1">
-          <div className="flex items-center gap-2">
-            <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-google-green/15">
-              <Users className="h-4 w-4 text-google-green" aria-hidden />
-            </span>
-            <p className="text-xs font-semibold tracking-[0.12em] text-fg-muted uppercase">
-              Membership
-            </p>
-          </div>
-          {user?.isVerified ? (
-            <>
-              <div className="mt-3 inline-flex items-center gap-2">
-                <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-google-green/15">
-                  <Check className="h-5 w-5 text-google-green" aria-hidden />
-                </span>
-                <div>
-                  <p className="text-sm font-semibold text-fg">Full member</p>
-                  <p className="text-xs text-fg-muted">
-                    You’re eligible for member-only drops.
-                  </p>
-                </div>
-              </div>
-              <div className="mt-4">
-                <MemberPill />
-              </div>
-            </>
-          ) : (
-            <>
-              <p className="mt-3 text-sm text-fg-secondary">
-                Not a member yet. Join to unlock eligibility for HackDSC reviews
-                and member perks.
-              </p>
-              <div className="mt-4">
-                <BecomeMemberLink className="font-semibold text-accent underline decoration-accent/60 underline-offset-[3px] hover:text-accent-hover hover:decoration-accent" />
-              </div>
-            </>
-          )}
-        </Card>
+      {!isMember ? <MembershipPromptBanner /> : null}
 
-        <Card className="sm:col-span-1">
+      <div
+        className={cn(
+          'grid gap-4',
+          isMember ? 'sm:grid-cols-2 lg:grid-cols-3' : 'sm:grid-cols-2',
+        )}
+      >
+        {isMember ? (
+          <Card className="sm:col-span-1">
+            <div className="flex items-center gap-2">
+              <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-google-green/15">
+                <Users className="h-4 w-4 text-google-green" aria-hidden />
+              </span>
+              <p className="text-xs font-semibold tracking-[0.12em] text-fg-muted uppercase">
+                Membership
+              </p>
+            </div>
+            <div className="mt-3 inline-flex items-center gap-2">
+              <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-google-green/15">
+                <Check className="h-5 w-5 text-google-green" aria-hidden />
+              </span>
+              <div>
+                <p className="text-sm font-semibold text-fg">Full member</p>
+                {memberJoinedLabel ? (
+                  <p className="text-xs text-fg-muted">Joined {memberJoinedLabel}</p>
+                ) : (
+                  <p className="text-xs text-fg-muted">
+                    You&apos;re eligible for member-only perks.
+                  </p>
+                )}
+              </div>
+            </div>
+            <div className="mt-4">
+              <MemberPill />
+            </div>
+          </Card>
+        ) : null}
+
+        <Card>
           <div className="flex items-center gap-2">
             <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-accent/15">
               <CalendarDays className="h-4 w-4 text-accent" aria-hidden />
@@ -88,7 +94,7 @@ function AccountOverviewTab() {
             </p>
           </div>
           <p className="mt-3 text-sm text-fg-secondary">
-            You haven’t RSVP’d to any upcoming events yet.
+            You haven&apos;t RSVP&apos;d to any upcoming events yet.
           </p>
           <div className="mt-4">
             <Link
@@ -101,7 +107,7 @@ function AccountOverviewTab() {
         </Card>
 
         {canShowHackdsc ? (
-          <Card className="sm:col-span-2 lg:col-span-1">
+          <Card>
             <div className="flex items-center gap-2">
               <span
                 className={cn(
@@ -161,7 +167,7 @@ function AccountOverviewTab() {
       </div>
 
       {showGetStarted ? (
-        <AccountGetStarted showBecomeMember={!user?.isVerified} />
+        <AccountGetStarted showBecomeMember={isMember} />
       ) : null}
     </div>
   )

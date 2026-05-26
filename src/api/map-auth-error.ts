@@ -1,6 +1,15 @@
 import { AuthError } from '@supabase/supabase-js'
 import type { AuthFieldErrors } from '#/types/auth'
 
+function messageFromUnknown(error: unknown): string | undefined {
+  if (error instanceof Error) return error.message
+  if (typeof error === 'object' && error !== null && 'message' in error) {
+    const message = (error as { message: unknown }).message
+    if (typeof message === 'string' && message.trim()) return message
+  }
+  return undefined
+}
+
 export function mapAuthApiError(error: unknown): AuthFieldErrors {
   if (error instanceof AuthError) {
     const message = error.message.toLowerCase()
@@ -27,8 +36,9 @@ export function mapAuthApiError(error: unknown): AuthFieldErrors {
     return { general: error.message }
   }
 
-  if (error instanceof Error) {
-    return { general: error.message }
+  const message = messageFromUnknown(error)
+  if (message) {
+    return { general: message }
   }
 
   return { general: 'Something went wrong. Please try again.' }

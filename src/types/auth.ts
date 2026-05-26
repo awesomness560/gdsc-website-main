@@ -71,6 +71,10 @@ export type AuthFieldErrors = {
   general?: string
 }
 
+export type SignUpEmailOutcome =
+  | { ok: true; needsEmailConfirmation: boolean }
+  | { ok: false; errors: AuthFieldErrors }
+
 export type SignInCredentials = {
   email: string
   password: string

@@ -21,6 +21,7 @@ import type {
   AuthUser,
   SignInCredentials,
   SignUpCredentials,
+  SignUpEmailOutcome,
   SupabaseAuthUser,
   UserProfile,
   UserRole,
@@ -52,7 +53,7 @@ type AuthContextValue = {
   ) => Promise<AuthFieldErrors | null>
   signUpWithEmail: (
     credentials: SignUpCredentials,
-  ) => Promise<AuthFieldErrors | null>
+  ) => Promise<SignUpEmailOutcome>
   signInWithGoogle: () => Promise<AuthFieldErrors | null>
   signOut: () => Promise<void>
 }
@@ -109,18 +110,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   )
 
   const signUpWithEmail = useCallback(
-    async (credentials: SignUpCredentials) => {
+    async (credentials: SignUpCredentials): Promise<SignUpEmailOutcome> => {
       try {
         const result = await signUpMutation.mutateAsync(credentials)
-        if (result.needsEmailConfirmation) {
-          return {
-            general:
-              'Check your email to confirm your account, then sign in.',
-          }
+        return {
+          ok: true,
+          needsEmailConfirmation: result.needsEmailConfirmation,
         }
-        return null
       } catch (error) {
-        return mapAuthApiError(error)
+        return { ok: false, errors: mapAuthApiError(error) }
       }
     },
     [signUpMutation],
