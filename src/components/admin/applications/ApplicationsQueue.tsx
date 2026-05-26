@@ -1,5 +1,6 @@
 import { ChevronDown, Search, SlidersHorizontal } from 'lucide-react'
 import { useState } from 'react'
+import { ApplicationKeyboardHints } from '#/components/admin/applications/ApplicationKeyboardHints'
 import { ApplicationListItem } from '#/components/admin/applications/ApplicationListItem'
 import {
   defaultApplicationFilters,
@@ -67,6 +68,7 @@ export function ApplicationsQueue({
               pending
             </>
           )}
+          <span className="hidden lg:inline text-fg-muted/80"> · ? shortcuts</span>
         </p>
       </div>
 
@@ -107,6 +109,7 @@ export function ApplicationsQueue({
               aria-hidden
             />
           </button>
+          <ApplicationKeyboardHints />
         </div>
 
         <div className="flex flex-wrap gap-1.5">
