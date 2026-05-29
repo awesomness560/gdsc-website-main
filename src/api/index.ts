@@ -34,6 +34,12 @@ export {
   unflagApplication,
 } from '#/api/admin-applications'
 export {
+  applyRosterSync,
+  buildRosterSyncPreview,
+  mapRosterSyncError,
+  parseRosterCsvUpload,
+} from '#/api/roster-sync'
+export {
   fetchHackathonRegistrationStatus,
   fetchMyHackathonSubmission,
   mapHackathonSubmissionError,

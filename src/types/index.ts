@@ -78,6 +78,12 @@ export type {
 } from '#/types/admin-application'
 
 export type {
+  ParsedRosterCsv,
+  RosterSyncApplyResult,
+  VerifyUsersByEmailRpcResult,
+} from '#/types/roster-sync'
+
+export type {
   AdminMember,
   AdminMemberActivity,
   AdminMembersSummary,

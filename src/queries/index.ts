@@ -35,3 +35,9 @@ export {
   useSetApplicationDecisionMutation,
   useUnflagApplicationMutation,
 } from '#/queries/admin-applications'
+export { rosterSyncKeys } from '#/queries/roster-sync-keys'
+export {
+  getRosterSyncMutationError,
+  useApplyRosterSyncMutation,
+  useParseRosterCsvMutation,
+} from '#/queries/roster-sync'

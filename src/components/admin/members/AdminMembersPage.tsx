@@ -1,11 +1,11 @@
 import { Search } from 'lucide-react'
 import { useMemo, useState } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
 import { computeAdminMembersSummary } from '#/api/admin-users'
 import { MemberDetailPanel } from '#/components/admin/members/MemberDetailPanel'
 import { MemberSyncModal } from '#/components/admin/members/MemberSyncModal'
 import { MembersBulkBar } from '#/components/admin/members/MembersBulkBar'
 import { MembersTable } from '#/components/admin/members/MembersTable'
-import { dummyRosterSyncPreview } from '#/data/dummy-admin-members'
 import { formatSyncAge } from '#/lib/admin-member-utils'
 import {
   getAdminUsersMutationError,
@@ -14,7 +14,9 @@ import {
   useSetAdminMemberRoleMutation,
   useSetAdminMemberVerifiedMutation,
 } from '#/queries/admin-users'
+import { adminUserKeys } from '#/queries/admin-user-keys'
 import type { AdminMember, MemberFilter, MemberSort } from '#/types/admin-member'
+import type { RosterSyncApplyResult } from '#/types/roster-sync'
 import type { UserRole } from '#/types/auth'
 import { cn } from '#/lib/cn'
 
@@ -74,6 +76,7 @@ function daysSince(iso: string | null): number | null {
 }
 
 export function AdminMembersPage() {
+  const queryClient = useQueryClient()
   const membersQuery = useAdminMembersQuery()
   const verifiedMutation = useSetAdminMemberVerifiedMutation()
   const roleMutation = useSetAdminMemberRoleMutation()
@@ -158,11 +161,11 @@ export function AdminMembersPage() {
     }
   }
 
-  function handleSyncComplete() {
-    const added = dummyRosterSyncPreview.added.length
-    const removed = dummyRosterSyncPreview.removed.length
+  function handleSyncComplete(result: RosterSyncApplyResult) {
+    void queryClient.invalidateQueries({ queryKey: adminUserKeys.list() })
+    const { rpc, emailCount } = result
     setSyncBanner(
-      `Synced ${added} new members and removed ${removed}. Roster sync API coming soon.`,
+      `Roster sync: ${rpc.newly_verified} newly verified · ${rpc.total_verified} total verified members · ${rpc.total_users} users in database (${emailCount} roster email${emailCount === 1 ? '' : 's'}).`,
     )
   }
 
@@ -401,7 +404,6 @@ export function AdminMembersPage() {
       <MemberSyncModal
         open={syncOpen}
         onClose={() => setSyncOpen(false)}
-        preview={dummyRosterSyncPreview}
         onComplete={handleSyncComplete}
       />
     </div>

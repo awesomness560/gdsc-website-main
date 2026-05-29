@@ -40,6 +40,10 @@ export type MemberFilter = 'all' | 'members' | 'non-members' | 'admins'
 export type MemberSort = 'joined-desc' | 'joined-asc' | 'name-asc' | 'name-desc'
 
 export type RosterSyncPreview = {
+  fileName: string
+  /** All emails extracted from the roster CSV. */
+  emails: string[]
+  emailCount: number
   added: { name: string; email: string }[]
   removed: { name: string; email: string }[]
   unchangedCount: number
