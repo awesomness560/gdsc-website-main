@@ -1,9 +1,9 @@
 import type { LucideIcon } from 'lucide-react'
 import {
   Calendar,
-  ClipboardList,
   FileText,
   LayoutDashboard,
+  Rocket,
   Settings,
   Users,
 } from 'lucide-react'
@@ -19,12 +19,7 @@ export type AdminNavItem = {
 export const adminPrimaryNav: AdminNavItem[] = [
   { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
   { label: 'Events', href: '/admin/events', icon: Calendar },
-  {
-    label: 'Applications',
-    href: '/admin/applications',
-    icon: ClipboardList,
-    badge: 12,
-  },
+  { label: 'HackDSC', href: '/admin/hackdsc', icon: Rocket },
   { label: 'Members', href: '/admin/members', icon: Users },
   { label: 'Site content', href: '/admin/site-content', icon: FileText },
 ]
@@ -34,6 +29,10 @@ export const adminSecondaryNav: AdminNavItem[] = [
 ]
 
 export function adminBreadcrumbLabel(pathname: string): string {
+  if (pathname.startsWith('/admin/hackdsc')) {
+    return 'HackDSC'
+  }
+
   const item = [...adminPrimaryNav, ...adminSecondaryNav].find(
     (entry) =>
       entry.href === pathname ||

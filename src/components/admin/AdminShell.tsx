@@ -18,14 +18,14 @@ export function AdminShell() {
   }, [user, isSessionPending, isSignOutPending, navigate])
 
   return (
-    <div className="flex min-h-dvh bg-bg-deep text-fg">
+    <div className="flex h-dvh overflow-hidden bg-bg-deep text-fg">
       <AdminSidebar
         mobileOpen={mobileNavOpen}
         onMobileClose={() => setMobileNavOpen(false)}
       />
-      <div className="flex min-h-dvh min-w-0 flex-1 flex-col">
+      <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
         <AdminTopBar onMenuOpen={() => setMobileNavOpen(true)} />
-        <div className="flex-1 overflow-auto">
+        <div className="min-h-0 flex-1 overflow-auto">
           <Outlet />
         </div>
       </div>

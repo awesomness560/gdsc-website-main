@@ -16,7 +16,6 @@ type ApplicationDecisionBarProps = {
   hasPrevious: boolean
   hasNext: boolean
   disabled?: boolean
-  mobileSticky?: boolean
   /** Increment to open the flag reason input from keyboard shortcuts. */
   flagPromptToken?: number
 }
@@ -49,7 +48,6 @@ export function ApplicationDecisionBar({
   hasPrevious,
   hasNext,
   disabled,
-  mobileSticky,
   flagPromptToken = 0,
 }: ApplicationDecisionBarProps) {
   const [flagReason, setFlagReason] = useState('')
@@ -70,12 +68,7 @@ export function ApplicationDecisionBar({
   }
 
   return (
-    <div
-      className={cn(
-        'border-t border-border-subtle bg-bg-base/80',
-        mobileSticky && 'sticky bottom-0 z-10 backdrop-blur-md',
-      )}
-    >
+    <div className="border-t border-border-subtle bg-bg-base/80">
       <div className="mx-auto max-w-[640px] space-y-4 px-5 py-6 sm:px-8">
         {showFlagInput ? (
           <div className="space-y-2">

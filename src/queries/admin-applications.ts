@@ -8,16 +8,26 @@ import {
   setApplicationDecision,
   unflagApplication,
 } from '#/api/admin-applications'
-import { getHackdscHackathonId } from '#/lib/hackathon-config'
+import {
+  getHackdscHackathonId,
+  hasHackdscHackathonId,
+} from '#/lib/hackathon-config'
 import { adminApplicationKeys } from '#/queries/admin-application-keys'
 import type { AdminApplication, ApplicationDecisionStatus } from '#/types/admin-application'
 
-export function useAdminApplicationsQuery(
-  hackathonId = getHackdscHackathonId(),
-) {
+function resolveHackathonId(explicit?: string) {
+  if (explicit) return explicit
+  return getHackdscHackathonId()
+}
+
+export function useAdminApplicationsQuery(hackathonId?: string) {
+  const configured = hasHackdscHackathonId()
+  const resolvedId = configured ? resolveHackathonId(hackathonId) : ''
+
   return useQuery({
-    queryKey: adminApplicationKeys.list(hackathonId),
-    queryFn: () => fetchAdminApplications(hackathonId),
+    queryKey: adminApplicationKeys.list(resolvedId || 'none'),
+    queryFn: () => fetchAdminApplications(resolveHackathonId(hackathonId)),
+    enabled: configured,
     staleTime: 30 * 1000,
   })
 }

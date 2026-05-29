@@ -1,17 +1,41 @@
 import { Link, useNavigate } from '@tanstack/react-router'
 import { ExternalLink, Loader2, LogOut } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { AdminBrand } from '#/components/admin/AdminBrand'
 import { AdminSidebarNav } from '#/components/admin/AdminSidebarNav'
 import { UserAvatar } from '#/components/ui/UserAvatar'
 import { useAuth } from '#/contexts/AuthContext'
-import { adminPrimaryNav, adminSecondaryNav } from '#/lib/admin-nav'
+import {
+  adminPrimaryNav,
+  adminSecondaryNav,
+  type AdminNavItem,
+} from '#/lib/admin-nav'
+import { pendingApplications } from '#/lib/admin-application-utils'
+import { hasHackdscHackathonId } from '#/lib/hackathon-config'
 import { primaryRoleLabel } from '#/lib/admin-member-utils'
+import { useAdminApplicationsQuery } from '#/queries/admin-applications'
 import { cn } from '#/lib/cn'
 
 type AdminSidebarProps = {
   mobileOpen: boolean
   onMobileClose: () => void
+}
+
+function useAdminPrimaryNavItems(): AdminNavItem[] {
+  const applicationsQuery = useAdminApplicationsQuery()
+  const pendingCount = hasHackdscHackathonId()
+    ? pendingApplications(applicationsQuery.data ?? []).length
+    : 0
+
+  return useMemo(
+    () =>
+      adminPrimaryNav.map((item) =>
+        item.href === '/admin/hackdsc' && pendingCount > 0
+          ? { ...item, badge: pendingCount }
+          : { ...item, badge: undefined },
+      ),
+    [pendingCount],
+  )
 }
 
 function SidebarFooter({ onNavigate }: { onNavigate?: () => void }) {
@@ -95,6 +119,8 @@ function SidebarPanel({
   onNavigate?: () => void
   className?: string
 }) {
+  const primaryNav = useAdminPrimaryNavItems()
+
   return (
     <aside
       className={cn(
@@ -107,7 +133,7 @@ function SidebarPanel({
       </div>
 
       <div className="flex-1 overflow-y-auto px-1 pb-2">
-        <AdminSidebarNav items={adminPrimaryNav} onNavigate={onNavigate} />
+        <AdminSidebarNav items={primaryNav} onNavigate={onNavigate} />
         <div className="mx-3 my-3 border-t border-border-subtle" />
         <AdminSidebarNav items={adminSecondaryNav} onNavigate={onNavigate} />
         <div className="px-2 pt-1">

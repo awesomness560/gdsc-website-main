@@ -1,10 +1,7 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { AdminApplicationsPage } from '#/components/admin/applications/AdminApplicationsPage'
+import { createFileRoute, redirect } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/admin/applications')({
-  component: AdminApplicationsRoute,
+  beforeLoad: () => {
+    throw redirect({ to: '/admin/hackdsc/applications' })
+  },
 })
-
-function AdminApplicationsRoute() {
-  return <AdminApplicationsPage />
-}

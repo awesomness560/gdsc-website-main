@@ -78,6 +78,13 @@ export type {
 } from '#/types/admin-application'
 
 export type {
+  HackdscAdminConfig,
+  HackdscAttentionItem,
+  HackdscLifecycleStatus,
+  HackdscOverviewMetrics,
+} from '#/types/admin-hackdsc'
+
+export type {
   ParsedRosterCsv,
   RosterSyncApplyResult,
   VerifyUsersByEmailRpcResult,

@@ -30,7 +30,7 @@ export function ApplicationNotesSection({
   const timeline = app.activity
 
   return (
-    <section className="border-t border-border-subtle bg-bg-base/50">
+    <section className="border-t border-border-subtle bg-bg-base/50 pb-10">
       <div className="mx-auto max-w-[640px] px-5 py-6 sm:px-8">
         {collapsed ? (
           <button

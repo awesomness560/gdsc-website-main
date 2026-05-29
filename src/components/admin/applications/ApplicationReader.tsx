@@ -70,7 +70,7 @@ export function ApplicationReader({ app, className }: ApplicationReaderProps) {
         : 'Going solo'
 
   return (
-    <article className={cn('min-h-0 flex-1 overflow-y-auto', className)}>
+    <article className={cn(className)}>
       <div className="mx-auto max-w-[640px] px-5 py-8 sm:px-8">
         <header className="space-y-3">
           <h1 className="text-3xl font-semibold tracking-tight text-fg">

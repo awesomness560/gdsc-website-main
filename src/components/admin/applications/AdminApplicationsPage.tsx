@@ -309,7 +309,7 @@ export function AdminApplicationsPage() {
   const showDetail = !isMobile || mobileShowDetail
 
   return (
-    <div className="flex min-h-[calc(100dvh-3.5rem)] flex-col lg:min-h-0 lg:flex-1">
+    <div className="flex h-full min-h-0 flex-col">
       {actionError ? (
         <div
           className="shrink-0 border-b border-google-red/30 bg-google-red/10 px-4 py-2 text-sm text-fg-secondary"
@@ -351,7 +351,7 @@ export function AdminApplicationsPage() {
             ) : null}
 
             {selectedApp ? (
-              <>
+              <div className="min-h-0 flex-1 overflow-y-auto">
                 <ApplicationReader app={selectedApp} />
                 <ApplicationDecisionBar
                   app={selectedApp}
@@ -367,7 +367,6 @@ export function AdminApplicationsPage() {
                   hasPrevious={queueApps.length > 1}
                   hasNext={queueApps.length > 1}
                   disabled={isMutating}
-                  mobileSticky={isMobile}
                   flagPromptToken={flagPromptToken}
                 />
                 <ApplicationNotesSection
@@ -376,7 +375,7 @@ export function AdminApplicationsPage() {
                   disabled={isMutating}
                   collapsed={isMobile}
                 />
-              </>
+              </div>
             ) : (
               <div className="flex flex-1 items-center justify-center text-sm text-fg-muted">
                 Select an application to review
