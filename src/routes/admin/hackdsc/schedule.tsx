@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { HackdscPlaceholderTab } from '#/components/admin/hackdsc/HackdscAdminLayout'
+import { HackdscScheduleProvider } from '#/contexts/HackdscScheduleContext'
+import { HackdscScheduleTab } from '#/components/admin/hackdsc/schedule/HackdscScheduleTab'
 
 export const Route = createFileRoute('/admin/hackdsc/schedule')({
   component: HackdscScheduleRoute,
@@ -7,9 +8,8 @@ export const Route = createFileRoute('/admin/hackdsc/schedule')({
 
 function HackdscScheduleRoute() {
   return (
-    <HackdscPlaceholderTab
-      title="Schedule"
-      description="Build and edit the hackathon schedule — workshops, meals, ceremonies, and more."
-    />
+    <HackdscScheduleProvider>
+      <HackdscScheduleTab />
+    </HackdscScheduleProvider>
   )
 }

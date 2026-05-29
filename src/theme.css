@@ -26,6 +26,12 @@
   --color-google-yellow: #fbbc05;
   --color-google-green: #34a853;
 
+  /* Schedule category accents */
+  --color-schedule-teal: #14b8a6;
+  --color-schedule-purple: #9333ea;
+  --color-schedule-pink: #ec4899;
+  --color-schedule-coral: #f97316;
+
   /* Semantic accents */
   --color-accent: #4a8cff;
   --color-accent-hover: #5da1ff;

@@ -85,6 +85,14 @@ export type {
 } from '#/types/admin-hackdsc'
 
 export type {
+  AdminScheduleDayMeta,
+  AdminScheduleEntry,
+  ScheduleDayId,
+  ScheduleEntryCategory,
+  ScheduleEntryDraft,
+} from '#/types/admin-schedule'
+
+export type {
   ParsedRosterCsv,
   RosterSyncApplyResult,
   VerifyUsersByEmailRpcResult,
