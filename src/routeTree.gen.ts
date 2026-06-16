@@ -26,7 +26,7 @@ import { Route as HackdscScheduleRouteImport } from './routes/hackdsc/schedule'
 import { Route as HackdscRegisterRouteImport } from './routes/hackdsc/register'
 import { Route as EventsSlugRouteImport } from './routes/events/$slug'
 import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
-import { Route as AdminSiteContentRouteImport } from './routes/admin/site-content'
+import { Route as AdminTeamRouteImport } from './routes/admin/team'
 import { Route as AdminSettingsRouteImport } from './routes/admin/settings'
 import { Route as AdminMembersRouteImport } from './routes/admin/members'
 import { Route as AdminEventsRouteImport } from './routes/admin/events'
@@ -128,9 +128,9 @@ const AuthCallbackRoute = AuthCallbackRouteImport.update({
   path: '/auth/callback',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminSiteContentRoute = AdminSiteContentRouteImport.update({
-  id: '/site-content',
-  path: '/site-content',
+const AdminTeamRoute = AdminTeamRouteImport.update({
+  id: '/team',
+  path: '/team',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminSettingsRoute = AdminSettingsRouteImport.update({
@@ -236,7 +236,7 @@ export interface FileRoutesByFullPath {
   '/admin/events': typeof AdminEventsRoute
   '/admin/members': typeof AdminMembersRoute
   '/admin/settings': typeof AdminSettingsRoute
-  '/admin/site-content': typeof AdminSiteContentRoute
+  '/admin/team': typeof AdminTeamRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/events/$slug': typeof EventsSlugRoute
   '/hackdsc/register': typeof HackdscRegisterRoute
@@ -266,7 +266,7 @@ export interface FileRoutesByTo {
   '/admin/events': typeof AdminEventsRoute
   '/admin/members': typeof AdminMembersRoute
   '/admin/settings': typeof AdminSettingsRoute
-  '/admin/site-content': typeof AdminSiteContentRoute
+  '/admin/team': typeof AdminTeamRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/events/$slug': typeof EventsSlugRoute
   '/hackdsc/register': typeof HackdscRegisterRoute
@@ -303,7 +303,7 @@ export interface FileRoutesById {
   '/admin/events': typeof AdminEventsRoute
   '/admin/members': typeof AdminMembersRoute
   '/admin/settings': typeof AdminSettingsRoute
-  '/admin/site-content': typeof AdminSiteContentRoute
+  '/admin/team': typeof AdminTeamRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/events/$slug': typeof EventsSlugRoute
   '/hackdsc/register': typeof HackdscRegisterRoute
@@ -340,7 +340,7 @@ export interface FileRouteTypes {
     | '/admin/events'
     | '/admin/members'
     | '/admin/settings'
-    | '/admin/site-content'
+    | '/admin/team'
     | '/auth/callback'
     | '/events/$slug'
     | '/hackdsc/register'
@@ -370,7 +370,7 @@ export interface FileRouteTypes {
     | '/admin/events'
     | '/admin/members'
     | '/admin/settings'
-    | '/admin/site-content'
+    | '/admin/team'
     | '/auth/callback'
     | '/events/$slug'
     | '/hackdsc/register'
@@ -406,7 +406,7 @@ export interface FileRouteTypes {
     | '/admin/events'
     | '/admin/members'
     | '/admin/settings'
-    | '/admin/site-content'
+    | '/admin/team'
     | '/auth/callback'
     | '/events/$slug'
     | '/hackdsc/register'
@@ -557,11 +557,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthCallbackRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin/site-content': {
-      id: '/admin/site-content'
-      path: '/site-content'
-      fullPath: '/admin/site-content'
-      preLoaderRoute: typeof AdminSiteContentRouteImport
+    '/admin/team': {
+      id: '/admin/team'
+      path: '/team'
+      fullPath: '/admin/team'
+      preLoaderRoute: typeof AdminTeamRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/settings': {
@@ -738,7 +738,7 @@ interface AdminRouteRouteChildren {
   AdminEventsRoute: typeof AdminEventsRoute
   AdminMembersRoute: typeof AdminMembersRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
-  AdminSiteContentRoute: typeof AdminSiteContentRoute
+  AdminTeamRoute: typeof AdminTeamRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
@@ -748,7 +748,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminEventsRoute: AdminEventsRoute,
   AdminMembersRoute: AdminMembersRoute,
   AdminSettingsRoute: AdminSettingsRoute,
-  AdminSiteContentRoute: AdminSiteContentRoute,
+  AdminTeamRoute: AdminTeamRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 

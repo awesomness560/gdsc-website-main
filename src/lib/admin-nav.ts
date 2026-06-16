@@ -1,10 +1,10 @@
 import type { LucideIcon } from 'lucide-react'
 import {
   Calendar,
-  FileText,
   LayoutDashboard,
   Rocket,
   Settings,
+  UserRound,
   Users,
 } from 'lucide-react'
 
@@ -21,7 +21,7 @@ export const adminPrimaryNav: AdminNavItem[] = [
   { label: 'Events', href: '/admin/events', icon: Calendar },
   { label: 'HackDSC', href: '/admin/hackdsc', icon: Rocket },
   { label: 'Members', href: '/admin/members', icon: Users },
-  { label: 'Site content', href: '/admin/site-content', icon: FileText },
+  { label: 'Team', href: '/admin/team', icon: UserRound },
 ]
 
 export const adminSecondaryNav: AdminNavItem[] = [

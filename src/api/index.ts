@@ -40,6 +40,15 @@ export {
   parseRosterCsvUpload,
 } from '#/api/roster-sync'
 export {
+  createAdminOfficer,
+  deactivateAdminOfficer,
+  fetchAdminOfficers,
+  mapAdminOfficersError,
+  reactivateAdminOfficer,
+  updateAdminOfficer,
+  uploadOfficerPhoto,
+} from '#/api/admin-officers'
+export {
   fetchHackathonRegistrationStatus,
   fetchMyHackathonSubmission,
   mapHackathonSubmissionError,

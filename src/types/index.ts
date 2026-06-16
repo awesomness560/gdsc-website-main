@@ -107,6 +107,22 @@ export type {
   RosterSyncPreview,
 } from '#/types/admin-member'
 
+export type {
+  AdminOfficer,
+  AdminOfficerDraft,
+  MemberSearchResult,
+  OfficerDisplaySection,
+  OfficerRoleId,
+  OfficerRoleOption,
+  OfficerSectionId,
+} from '#/types/admin-team'
+
+export type {
+  CreateOfficerInput,
+  OfficersRow,
+  UpdateOfficerInput,
+} from '#/types/officers'
+
 export type { UsersRow, UpdateUserProfileInput } from '#/types/users'
 
 export type {

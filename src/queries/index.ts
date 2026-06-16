@@ -41,3 +41,12 @@ export {
   useApplyRosterSyncMutation,
   useParseRosterCsvMutation,
 } from '#/queries/roster-sync'
+export { adminOfficerKeys } from '#/queries/admin-officer-keys'
+export {
+  getAdminOfficersMutationError,
+  useAdminOfficersQuery,
+  useCreateAdminOfficerMutation,
+  useDeactivateAdminOfficerMutation,
+  useReactivateAdminOfficerMutation,
+  useUpdateAdminOfficerMutation,
+} from '#/queries/admin-officers'
