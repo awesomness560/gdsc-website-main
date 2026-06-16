@@ -45,7 +45,9 @@ export type {
 } from '#/types/schedule'
 
 export type {
+  AboutDivisionCluster,
   AboutHero,
+  AboutOfficer,
   AboutPageData,
   Division,
   LeadershipTeam,

@@ -14,6 +14,7 @@ export {
 } from '#/api/auth'
 export { mapAuthApiError } from '#/api/map-auth-error'
 export { fetchUserProfile, upsertUserProfile } from '#/api/users'
+export { fetchAboutPageData, mapAboutPageError } from '#/api/about'
 export {
   computeAdminMembersSummary,
   fetchAdminMembers,

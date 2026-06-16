@@ -1,21 +1,22 @@
-export interface TeamMember {
+import type { OfficerRoleId } from '#/types/admin-team'
+
+export interface AboutOfficer {
   id: string
   name: string
-  role: string
+  roleLabel: string
+  roleId: OfficerRoleId
   imageUrl?: string
+  bio: string
+  linkedInUrl?: string
+  githubUrl?: string
+  websiteUrl?: string
 }
 
-export interface LeadershipTeam {
-  president: TeamMember
-  vicePresident: TeamMember
-  admin: TeamMember
-}
-
-export interface Division {
+export interface AboutDivisionCluster {
   id: string
   title: string
-  director: TeamMember
-  officers: TeamMember[]
+  director?: AboutOfficer
+  officers: AboutOfficer[]
 }
 
 export interface AboutHero {
@@ -25,10 +26,33 @@ export interface AboutHero {
   subtitle: string
 }
 
-/** Shape returned by a future about-page API endpoint. */
 export interface AboutPageData {
   hero: AboutHero
-  leadership: LeadershipTeam
-  divisions: Division[]
-  pastOfficers: TeamMember[]
+  president?: AboutOfficer
+  vicePresident?: AboutOfficer
+  divisions: AboutDivisionCluster[]
+  pastOfficers: AboutOfficer[]
+}
+
+/** @deprecated Use AboutOfficer on the public page. */
+export interface TeamMember {
+  id: string
+  name: string
+  role: string
+  imageUrl?: string
+}
+
+/** @deprecated Legacy dummy shape. */
+export interface LeadershipTeam {
+  president: TeamMember
+  vicePresident: TeamMember
+  admin: TeamMember
+}
+
+/** @deprecated Legacy dummy shape. */
+export interface Division {
+  id: string
+  title: string
+  director: TeamMember
+  officers: TeamMember[]
 }

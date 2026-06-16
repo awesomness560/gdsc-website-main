@@ -50,3 +50,5 @@ export {
   useReactivateAdminOfficerMutation,
   useUpdateAdminOfficerMutation,
 } from '#/queries/admin-officers'
+export { aboutKeys } from '#/queries/about-keys'
+export { getAboutPageQueryError, useAboutPageQuery } from '#/queries/about'
