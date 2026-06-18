@@ -29,13 +29,7 @@ export function DivisionClusterSection({
       ) : null}
 
       {hasOfficers ? (
-        <div
-          className={
-            hasDirector
-              ? 'mt-8 flex flex-wrap justify-center gap-4'
-              : 'mt-8 flex flex-wrap justify-center gap-4'
-          }
-        >
+        <div className="mt-8 flex flex-wrap justify-center gap-4">
           {division.officers.map((officer) => (
             <AboutOfficerCard
               key={officer.id}

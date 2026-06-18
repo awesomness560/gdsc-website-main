@@ -134,3 +134,8 @@ export function getOfficerRole(roleId: OfficerRoleId): OfficerRoleOption {
 export function getOfficerRoleLabel(roleId: OfficerRoleId): string {
   return roleById.get(roleId)?.label ?? roleId
 }
+
+export function isLeadershipOrDirectorRole(roleId: OfficerRoleId): boolean {
+  const role = roleById.get(roleId)
+  return role?.section === 'leadership' || role?.section === 'directors'
+}

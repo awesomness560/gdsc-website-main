@@ -1,7 +1,9 @@
 import { Github, Globe, Linkedin, X } from 'lucide-react'
 import { useEffect } from 'react'
+import { OfficerRoleBadge } from '#/components/admin/team/OfficerRoleBadge'
 import { AboutOfficerAvatar } from '#/components/sections/about/AboutOfficerAvatar'
 import { OfficerAccentGlow } from '#/components/sections/about/OfficerAccentGlow'
+import { isLeadershipOrDirectorRole } from '#/data/officer-roles'
 import { useOfficerAccentColor } from '#/hooks/use-officer-accent-color'
 import { useIsMobileLayout } from '#/lib/use-media-query'
 import type { AboutOfficer } from '#/types/about'
@@ -67,9 +69,11 @@ export function OfficerBioReveal({ officer, open, onClose }: OfficerBioRevealPro
       >
         {officer.name}
       </h2>
-      <span className="mt-2 inline-flex rounded-full border border-border-default bg-white/5 px-3 py-1 text-xs font-semibold tracking-wide text-fg-secondary uppercase">
-        {officer.roleLabel}
-      </span>
+      {isLeadershipOrDirectorRole(officer.roleId) ? (
+        <OfficerRoleBadge roleId={officer.roleId} className="mt-2" />
+      ) : (
+        <OfficerRoleBadge roleId={officer.roleId} muted className="mt-2" />
+      )}
 
       {officer.bio ? (
         <p className="mt-5 max-w-md text-left text-sm leading-relaxed text-fg-secondary sm:text-center">

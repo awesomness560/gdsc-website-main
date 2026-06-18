@@ -1,9 +1,14 @@
 import { ChevronRight } from 'lucide-react'
+import { OfficerRoleBadge } from '#/components/admin/team/OfficerRoleBadge'
 import { AboutOfficerAvatar } from '#/components/sections/about/AboutOfficerAvatar'
+import { isLeadershipOrDirectorRole } from '#/data/officer-roles'
 import { useOfficerAccentColor } from '#/hooks/use-officer-accent-color'
 import { accentGlowStyle } from '#/lib/officer-accent-color'
 import type { AboutOfficer } from '#/types/about'
 import { cn } from '#/lib/cn'
+
+const cardShellClass =
+  'relative flex w-[200px] shrink-0 flex-col items-center rounded-2xl border border-border-default bg-surface p-4 text-center'
 
 type AboutOfficerCardProps = {
   officer: AboutOfficer
@@ -21,6 +26,7 @@ export function AboutOfficerCard({
 }: AboutOfficerCardProps) {
   const accentColor = useOfficerAccentColor(officer.name, officer.imageUrl)
   const hoverGlow = accentGlowStyle(accentColor, 'subtle')
+  const showColoredRole = isLeadershipOrDirectorRole(officer.roleId)
 
   const content = (
     <>
@@ -35,10 +41,15 @@ export function AboutOfficerCard({
 
       <AboutOfficerAvatar name={officer.name} imageUrl={officer.imageUrl} />
 
-      <h3 className="mt-4 text-base font-bold tracking-tight text-fg">
+      <h3 className="mt-4 line-clamp-2 w-full text-base font-bold leading-snug tracking-tight text-fg">
         {officer.name}
       </h3>
-      <p className="mt-1 text-sm text-fg-secondary">{officer.roleLabel}</p>
+
+      <OfficerRoleBadge
+        roleId={officer.roleId}
+        muted={!showColoredRole}
+        className="mt-2 max-w-full whitespace-normal text-center leading-tight"
+      />
 
       {!preview ? (
         <span className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-fg-muted transition-colors group-hover:text-accent lg:hidden">
@@ -53,7 +64,8 @@ export function AboutOfficerCard({
     return (
       <div
         className={cn(
-          'relative flex w-full max-w-[200px] flex-col items-center rounded-2xl border border-border-default bg-surface p-4 text-center shadow-[0_8px_28px_rgba(0,0,0,0.12)]',
+          cardShellClass,
+          'shadow-[0_8px_28px_rgba(0,0,0,0.12)]',
           className,
         )}
       >
@@ -67,7 +79,8 @@ export function AboutOfficerCard({
       type="button"
       onClick={() => onSelect?.(officer)}
       className={cn(
-        'group relative flex w-full max-w-[200px] flex-col items-center rounded-2xl border border-border-default bg-surface p-4 text-center transition-[transform,border-color,box-shadow] duration-200',
+        cardShellClass,
+        'group transition-[transform,border-color,box-shadow] duration-200',
         'cursor-pointer hover:-translate-y-0.5 hover:border-border-strong hover:shadow-[0_8px_28px_rgba(0,0,0,0.18)]',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40',
         className,
