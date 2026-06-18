@@ -71,7 +71,9 @@ export function validateRegistrationStep(
     }
     case 4: {
       if (data.resumeShareConsent) {
-        const hasResume = Boolean(resumeFile || data.resumeFileName)
+        const hasResume = Boolean(
+          resumeFile || data.resumeFileName || data.resumeStoragePath,
+        )
         const hasLink =
           data.linkedinUrl.trim() ||
           data.githubUrl.trim() ||
@@ -127,7 +129,7 @@ export function validateResumeFile(file: File): string | null {
     return 'Resume must be a PDF'
   }
   if (file.size > RESUME_MAX_BYTES) {
-    return 'Resume must be 5 MB or smaller'
+    return 'Resume must be under 3 MB'
   }
   return null
 }

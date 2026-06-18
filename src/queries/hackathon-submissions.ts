@@ -41,6 +41,7 @@ type SaveDraftInput = {
   userId: string
   submissionId: string | null
   form: HackdscRegistrationFormState
+  resumeFile?: File | null
   hackathonId?: string
 }
 
@@ -56,6 +57,7 @@ export function useSaveHackathonDraftMutation(
         userId: input.userId,
         submissionId: input.submissionId,
         form: input.form,
+        resumeFile: input.resumeFile,
       }),
     onSuccess: (submission) => {
       queryClient.setQueryData(
@@ -80,6 +82,7 @@ export function useSubmitHackathonApplicationMutation(
         userId: input.userId,
         submissionId: input.submissionId,
         form: input.form,
+        resumeFile: input.resumeFile,
       }),
     onSuccess: (submission) => {
       queryClient.setQueryData(

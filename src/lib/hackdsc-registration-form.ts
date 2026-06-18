@@ -33,6 +33,7 @@ export function createInitialRegistrationForm(
     emergencyContactRelationship: '',
     resumeShareConsent: null,
     resumeFileName: null,
+    resumeStoragePath: null,
     linkedinUrl: '',
     githubUrl: '',
     portfolioUrl: '',

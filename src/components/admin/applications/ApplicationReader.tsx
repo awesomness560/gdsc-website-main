@@ -1,6 +1,7 @@
 import { ChevronDown, ExternalLink, Flag } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { ApplicationMembershipPill } from '#/components/admin/applications/ApplicationMembershipPill'
+import { ResumeViewButton } from '#/components/hackdsc/ResumeViewButton'
 import {
   displayApplicationName,
   experienceLabel,
@@ -180,17 +181,23 @@ export function ApplicationReader({ app, className }: ApplicationReaderProps) {
             {form.resumeFileName || form.resumeShareConsent ? (
               <div className="overflow-hidden rounded-xl border border-border-default bg-bg-elevated/30">
                 {form.resumeFileName ? (
-                  <p className="border-b border-border-subtle px-3 py-2 text-xs text-fg-muted">
-                    Resume: {form.resumeFileName}
-                    {form.resumeShareConsent
-                      ? ' · shared with sponsors'
-                      : ''}
-                  </p>
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border-subtle px-3 py-2">
+                    <p className="text-xs text-fg-muted">
+                      Resume: {form.resumeFileName}
+                      {form.resumeShareConsent
+                        ? ' · shared with sponsors'
+                        : ''}
+                    </p>
+                    {form.resumeStoragePath ? (
+                      <ResumeViewButton storagePath={form.resumeStoragePath} />
+                    ) : null}
+                  </div>
                 ) : null}
-                <div className="flex min-h-[200px] items-center justify-center px-4 py-8 text-sm text-fg-muted">
-                  Resume preview will appear when a file URL is stored on the
-                  submission.
-                </div>
+                {!form.resumeStoragePath ? (
+                  <div className="flex min-h-[120px] items-center justify-center px-4 py-6 text-sm text-fg-muted">
+                    No resume file on record.
+                  </div>
+                ) : null}
               </div>
             ) : (
               <p className="text-sm text-fg-muted">No resume provided.</p>

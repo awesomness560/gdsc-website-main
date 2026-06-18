@@ -152,7 +152,11 @@ function splitAllergyNotes(
 
 export function mapFormToSubmissionRow(
   form: HackdscRegistrationFormState,
-  options: { status: SubmissionStatus; submittedAt?: string | null },
+  options: {
+    status: SubmissionStatus
+    submittedAt?: string | null
+    resumeUrl?: string | null
+  },
 ) {
   const dietary = dietaryLabelsToDb(form.dietaryRestrictions)
 
@@ -182,7 +186,7 @@ export function mapFormToSubmissionRow(
     dietary_restrictions: dietary.restrictions,
     allergies: mergeAllergyNotes(form.allergies, dietary.extraAllergyNote),
     share_resume_with_sponsors: form.resumeShareConsent,
-    resume_url: null,
+    resume_url: options.resumeUrl ?? null,
     linkedin_url: form.linkedinUrl.trim() || null,
     github_url: form.githubUrl.trim() || null,
     portfolio_url: form.portfolioUrl.trim() || null,
@@ -232,6 +236,7 @@ export function mapSubmissionRowToForm(
     resumeFileName: row.resume_url
       ? row.resume_url.split('/').pop() ?? row.resume_url
       : null,
+    resumeStoragePath: row.resume_url,
     linkedinUrl: row.linkedin_url ?? '',
     githubUrl: row.github_url ?? '',
     portfolioUrl: row.portfolio_url ?? '',

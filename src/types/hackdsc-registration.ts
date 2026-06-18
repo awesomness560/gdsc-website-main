@@ -54,6 +54,8 @@ export type HackdscRegistrationFormState = Omit<
   resumeShareConsent: boolean | null
   experienceLevel: HackdscExperienceLevel | ''
   mlhCodeOfConduct: boolean
+  /** Storage path in the resumes bucket (not a public URL). */
+  resumeStoragePath: string | null
 }
 
 export type HackdscRegistrationErrors = Partial<

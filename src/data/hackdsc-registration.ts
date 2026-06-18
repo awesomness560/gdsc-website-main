@@ -87,4 +87,4 @@ export const COMMON_MAJORS = [
 
 export const ESSAY_MAX_LENGTH = 500
 
-export const RESUME_MAX_BYTES = 5 * 1024 * 1024
+export const RESUME_MAX_BYTES = 3 * 1024 * 1024

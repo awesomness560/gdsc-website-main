@@ -21,6 +21,13 @@ export function mapAuthApiError(error: unknown): AuthFieldErrors {
       return { general: 'Invalid email or password.' }
     }
 
+    if (message.includes('email not confirmed')) {
+      return {
+        general:
+          'Your email is not confirmed yet. Open the link we sent, then try again.',
+      }
+    }
+
     if (message.includes('user already registered')) {
       return { email: 'An account with this email already exists.' }
     }

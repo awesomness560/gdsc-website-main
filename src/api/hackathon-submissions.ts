@@ -1,3 +1,7 @@
+import {
+  hackathonResumeStoragePath,
+  uploadHackathonResume,
+} from '#/api/resumes'
 import { supabase } from '#/lib/supabase'
 import {
   mapFormToSubmissionRow,
@@ -56,6 +60,29 @@ function mapSubmission(row: HackathonSubmissionRow): HackathonSubmission {
   }
 }
 
+async function resolveResumeUrl(input: {
+  userId: string
+  hackathonId: string
+  form: HackdscRegistrationFormState
+  resumeFile?: File | null
+}): Promise<string | null> {
+  if (!input.form.resumeShareConsent) return null
+
+  if (input.resumeFile) {
+    const path = hackathonResumeStoragePath(input.userId, input.hackathonId)
+    await uploadHackathonResume(path, input.resumeFile)
+    return path
+  }
+
+  if (input.form.resumeStoragePath) return input.form.resumeStoragePath
+
+  if (input.form.resumeFileName) {
+    return hackathonResumeStoragePath(input.userId, input.hackathonId)
+  }
+
+  return null
+}
+
 export async function fetchHackathonRegistrationStatus(
   hackathonId: string,
 ): Promise<HackathonRegistrationStatus> {
@@ -103,10 +130,13 @@ export async function saveHackathonSubmissionDraft(input: {
   userId: string
   submissionId: string | null
   form: HackdscRegistrationFormState
+  resumeFile?: File | null
 }): Promise<HackathonSubmission> {
+  const resumeUrl = await resolveResumeUrl(input)
   const payload = mapFormToSubmissionRow(input.form, {
     status: 'draft',
     submittedAt: null,
+    resumeUrl,
   })
 
   if (input.submissionId) {
@@ -141,11 +171,14 @@ export async function submitHackathonApplication(input: {
   userId: string
   submissionId: string | null
   form: HackdscRegistrationFormState
+  resumeFile?: File | null
 }): Promise<HackathonSubmission> {
   const submittedAt = new Date().toISOString()
+  const resumeUrl = await resolveResumeUrl(input)
   const payload = mapFormToSubmissionRow(input.form, {
     status: 'submitted',
     submittedAt,
+    resumeUrl,
   })
 
   if (input.submissionId) {

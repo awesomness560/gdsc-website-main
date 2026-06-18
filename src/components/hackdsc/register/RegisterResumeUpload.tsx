@@ -49,7 +49,7 @@ export function RegisterResumeUpload({
   return (
     <div className="space-y-1.5">
       <span className={registerLabelClassName}>Resume (PDF)</span>
-      <p className="text-xs text-fg-muted">PDF only, max 5 MB</p>
+      <p className="text-xs text-fg-muted">PDF only, max 3 MB</p>
 
       {displayName ? (
         <div
@@ -102,7 +102,7 @@ export function RegisterResumeUpload({
             </label>
           </p>
           <p className="mt-1 hidden text-xs text-fg-muted sm:block">
-            PDF, up to 5 MB
+            PDF, up to 3 MB
           </p>
           <input
             ref={inputRef}

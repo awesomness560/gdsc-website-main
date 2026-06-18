@@ -1,6 +1,7 @@
 import { Link, useNavigate, useSearch } from '@tanstack/react-router'
 import { Check } from 'lucide-react'
 import { useState, type FormEvent } from 'react'
+import { AuthEmailConfirmation } from '#/components/auth/AuthEmailConfirmation'
 import { AuthField } from '#/components/auth/AuthField'
 import { GoogleSignInButton } from '#/components/auth/GoogleSignInButton'
 import { AuthSessionCompleting } from '#/components/auth/AuthSessionCompleting'
@@ -81,11 +82,22 @@ export function AuthForm({ mode }: AuthFormProps) {
   const [googleLoading, setGoogleLoading] = useState(false)
   const [submitLoading, setSubmitLoading] = useState(false)
 
-  const isCompletingSession =
-    submitLoading || isSignInPending || isSignUpPending
-  const busy = isCompletingSession || googleLoading
+  const isCreatingAccount = submitLoading || isSignUpPending
+  const busy = isCreatingAccount || isSignInPending || googleLoading
 
-  if (isCompletingSession) {
+  if (signupEmailSent) {
+    return (
+      <AuthEmailConfirmation
+        email={email}
+        onUseDifferentEmail={() => {
+          setSignupEmailSent(false)
+          setErrors({})
+        }}
+      />
+    )
+  }
+
+  if (isCreatingAccount || isSignInPending) {
     return (
       <AuthSessionCompleting
         message={isSignup ? 'Creating your account…' : 'Finishing sign-in…'}
@@ -163,13 +175,6 @@ export function AuthForm({ mode }: AuthFormProps) {
             : 'Sign in to your GDG account.'}
         </p>
       </header>
-
-      {signupEmailSent ? (
-        <p className="rounded-xl border border-google-green/30 bg-google-green/10 px-3 py-2 text-xs leading-relaxed text-fg-secondary">
-          Account created. Check your email to confirm your address, then sign
-          in.
-        </p>
-      ) : null}
 
       {errors.general ? (
         <p className="rounded-xl border border-google-red/30 bg-google-red/10 px-3 py-2 text-xs text-google-red">

@@ -5,6 +5,7 @@ import {
   ApplicationStatusBanner,
   MembershipEligibilityCallout,
 } from '#/components/account'
+import { ResumeViewButton } from '#/components/hackdsc/ResumeViewButton'
 import { Card } from '#/components/ui/Card'
 import { EXPERIENCE_LEVEL_OPTIONS } from '#/data/hackdsc-registration'
 import { useAuth } from '#/contexts/AuthContext'
@@ -168,6 +169,17 @@ function AccountHackdscTab() {
                   : 'No'
             }
           />
+          {submission.form.resumeStoragePath ? (
+            <div className="flex flex-wrap items-center justify-between gap-2 py-2">
+              <span className="text-sm text-fg-muted">Resume</span>
+              <ResumeViewButton storagePath={submission.form.resumeStoragePath} />
+            </div>
+          ) : (
+            <SummaryRow
+              label="Resume"
+              value={submission.form.resumeFileName ?? '—'}
+            />
+          )}
           <SummaryRow label="LinkedIn" value={submission.form.linkedinUrl || '—'} />
           <SummaryRow label="GitHub" value={submission.form.githubUrl || '—'} />
           <SummaryRow label="Portfolio" value={submission.form.portfolioUrl || '—'} />

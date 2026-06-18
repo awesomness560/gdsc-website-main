@@ -100,8 +100,11 @@ export function HackdscRegisterForm({ onSubmitted }: HackdscRegisterFormProps) {
         userId,
         submissionId,
         form: nextForm,
+        resumeFile,
       })
       setSubmissionId(saved.id)
+      setForm(saved.form)
+      if (resumeFile) setResumeFile(null)
     } catch (error) {
       setSaveError(getHackathonMutationError(error))
     }
@@ -187,8 +190,11 @@ export function HackdscRegisterForm({ onSubmitted }: HackdscRegisterFormProps) {
         userId,
         submissionId,
         form,
+        resumeFile,
       })
       setSubmissionId(saved.id)
+      setForm(saved.form)
+      setResumeFile(null)
       setSubmitted(true)
       onSubmitted?.()
     } catch (error) {
@@ -471,19 +477,21 @@ export function HackdscRegisterForm({ onSubmitted }: HackdscRegisterFormProps) {
             <RegisterSegmentedControl
               label="Share my resume with sponsors for recruiting?"
               value={form.resumeShareConsent}
-              onChange={(resumeShareConsent) =>
+              onChange={(resumeShareConsent) => {
+                if (!resumeShareConsent) setResumeFile(null)
                 patch({
                   resumeShareConsent,
                   ...(resumeShareConsent
                     ? {}
                     : {
                         resumeFileName: null,
+                        resumeStoragePath: null,
                         linkedinUrl: '',
                         githubUrl: '',
                         portfolioUrl: '',
                       }),
                 })
-              }
+              }}
             />
             <RegisterConditionalBlock show={form.resumeShareConsent === true}>
               <div className="space-y-5 pt-1 pb-2">
@@ -492,7 +500,10 @@ export function HackdscRegisterForm({ onSubmitted }: HackdscRegisterFormProps) {
                   fileName={form.resumeFileName}
                   onFileChange={(file, fileName) => {
                     setResumeFile(file)
-                    patch({ resumeFileName: fileName })
+                    patch({
+                      resumeFileName: fileName,
+                      resumeStoragePath: fileName ? form.resumeStoragePath : null,
+                    })
                   }}
                   onValidationError={(message) => {
                     setErrors((prev) => {
