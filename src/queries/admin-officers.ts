@@ -7,7 +7,9 @@ import {
   reactivateAdminOfficer,
   updateAdminOfficer,
 } from '#/api/admin-officers'
+import { aboutKeys } from '#/queries/about-keys'
 import { adminOfficerKeys } from '#/queries/admin-officer-keys'
+import { officerKeys } from '#/queries/officer-keys'
 import type { AdminOfficer, AdminOfficerDraft } from '#/types/admin-team'
 
 export function useAdminOfficersQuery() {
@@ -86,6 +88,8 @@ export function useUpdateAdminOfficerMutation() {
         adminOfficerKeys.list(),
         (prev: AdminOfficer[] | undefined) => patchOfficerInList(prev, updated),
       )
+      queryClient.setQueryData(officerKeys.my(updated.memberId), updated)
+      void queryClient.invalidateQueries({ queryKey: aboutKeys.page() })
     },
   })
 }

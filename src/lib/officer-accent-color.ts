@@ -127,3 +127,8 @@ export function accentGlowStyle(
     background: `radial-gradient(circle, color-mix(in srgb, ${accentColor} ${Math.round(opacity * 100)}%, transparent) 0%, transparent 70%)`,
   }
 }
+
+/** Conic gradient for avatar rings derived from a photo accent. */
+export function accentRingBackground(accentColor: string): string {
+  return `conic-gradient(from 210deg, ${accentColor}, color-mix(in srgb, ${accentColor} 75%, white), color-mix(in srgb, ${accentColor} 55%, #4285f4), color-mix(in srgb, ${accentColor} 65%, #34a853), ${accentColor})`
+}

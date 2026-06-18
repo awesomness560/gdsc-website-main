@@ -33,6 +33,7 @@ import { Route as AdminMembersRouteImport } from './routes/admin/members'
 import { Route as AdminEventsRouteImport } from './routes/admin/events'
 import { Route as AdminApplicationsRouteImport } from './routes/admin/applications'
 import { Route as AccountSettingsRouteImport } from './routes/account/settings'
+import { Route as AccountOfficerRouteImport } from './routes/account/officer'
 import { Route as AccountHackdscRouteImport } from './routes/account/hackdsc'
 import { Route as AccountEventsRouteImport } from './routes/account/events'
 import { Route as AuthSignupRouteImport } from './routes/_auth/signup'
@@ -164,6 +165,11 @@ const AccountSettingsRoute = AccountSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => AccountRouteRoute,
 } as any)
+const AccountOfficerRoute = AccountOfficerRouteImport.update({
+  id: '/officer',
+  path: '/officer',
+  getParentRoute: () => AccountRouteRoute,
+} as any)
 const AccountHackdscRoute = AccountHackdscRouteImport.update({
   id: '/hackdsc',
   path: '/hackdsc',
@@ -238,6 +244,7 @@ export interface FileRoutesByFullPath {
   '/signup': typeof AuthSignupRoute
   '/account/events': typeof AccountEventsRoute
   '/account/hackdsc': typeof AccountHackdscRoute
+  '/account/officer': typeof AccountOfficerRoute
   '/account/settings': typeof AccountSettingsRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/events': typeof AdminEventsRoute
@@ -269,6 +276,7 @@ export interface FileRoutesByTo {
   '/signup': typeof AuthSignupRoute
   '/account/events': typeof AccountEventsRoute
   '/account/hackdsc': typeof AccountHackdscRoute
+  '/account/officer': typeof AccountOfficerRoute
   '/account/settings': typeof AccountSettingsRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/events': typeof AdminEventsRoute
@@ -307,6 +315,7 @@ export interface FileRoutesById {
   '/_auth/signup': typeof AuthSignupRoute
   '/account/events': typeof AccountEventsRoute
   '/account/hackdsc': typeof AccountHackdscRoute
+  '/account/officer': typeof AccountOfficerRoute
   '/account/settings': typeof AccountSettingsRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/events': typeof AdminEventsRoute
@@ -345,6 +354,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/account/events'
     | '/account/hackdsc'
+    | '/account/officer'
     | '/account/settings'
     | '/admin/applications'
     | '/admin/events'
@@ -376,6 +386,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/account/events'
     | '/account/hackdsc'
+    | '/account/officer'
     | '/account/settings'
     | '/admin/applications'
     | '/admin/events'
@@ -413,6 +424,7 @@ export interface FileRouteTypes {
     | '/_auth/signup'
     | '/account/events'
     | '/account/hackdsc'
+    | '/account/officer'
     | '/account/settings'
     | '/admin/applications'
     | '/admin/events'
@@ -619,6 +631,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AccountSettingsRouteImport
       parentRoute: typeof AccountRouteRoute
     }
+    '/account/officer': {
+      id: '/account/officer'
+      path: '/officer'
+      fullPath: '/account/officer'
+      preLoaderRoute: typeof AccountOfficerRouteImport
+      parentRoute: typeof AccountRouteRoute
+    }
     '/account/hackdsc': {
       id: '/account/hackdsc'
       path: '/hackdsc'
@@ -716,6 +735,7 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 interface AccountRouteRouteChildren {
   AccountEventsRoute: typeof AccountEventsRoute
   AccountHackdscRoute: typeof AccountHackdscRoute
+  AccountOfficerRoute: typeof AccountOfficerRoute
   AccountSettingsRoute: typeof AccountSettingsRoute
   AccountIndexRoute: typeof AccountIndexRoute
 }
@@ -723,6 +743,7 @@ interface AccountRouteRouteChildren {
 const AccountRouteRouteChildren: AccountRouteRouteChildren = {
   AccountEventsRoute: AccountEventsRoute,
   AccountHackdscRoute: AccountHackdscRoute,
+  AccountOfficerRoute: AccountOfficerRoute,
   AccountSettingsRoute: AccountSettingsRoute,
   AccountIndexRoute: AccountIndexRoute,
 }

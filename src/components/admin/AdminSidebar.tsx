@@ -5,6 +5,7 @@ import { AdminBrand } from '#/components/admin/AdminBrand'
 import { AdminSidebarNav } from '#/components/admin/AdminSidebarNav'
 import { UserAvatar } from '#/components/ui/UserAvatar'
 import { useAuth } from '#/contexts/AuthContext'
+import { useUserAvatarPresentation } from '#/hooks/use-user-avatar-presentation'
 import {
   adminPrimaryNav,
   adminSecondaryNav,
@@ -41,6 +42,7 @@ function useAdminPrimaryNavItems(): AdminNavItem[] {
 function SidebarFooter({ onNavigate }: { onNavigate?: () => void }) {
   const navigate = useNavigate()
   const { user, signOut, isSignOutPending } = useAuth()
+  const avatar = useUserAvatarPresentation()
   const [menuOpen, setMenuOpen] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
 
@@ -56,7 +58,7 @@ function SidebarFooter({ onNavigate }: { onNavigate?: () => void }) {
   if (!user) return null
 
   const roleLabel = primaryRoleLabel(user.roles)
-  const shortName = user.name.split(' ').slice(0, 2).join(' ')
+  const shortName = avatar.name.split(' ').slice(0, 2).join(' ')
 
   return (
     <div ref={rootRef} className="relative border-t border-border-subtle px-3 py-3">
@@ -68,11 +70,12 @@ function SidebarFooter({ onNavigate }: { onNavigate?: () => void }) {
         onClick={() => setMenuOpen((v) => !v)}
       >
         <UserAvatar
-          name={user.name}
-          email={user.auth.email}
-          avatarUrl={user.avatarUrl}
+          name={avatar.name}
+          email={avatar.email}
+          avatarUrl={avatar.avatarUrl}
           size="sm"
-          memberRing={user.isVerified}
+          memberRing={avatar.memberRing}
+          officerAccentColor={avatar.officerAccentColor}
         />
         <div className="min-w-0 flex-1">
           <p className="truncate text-sm font-medium text-fg">{shortName}</p>

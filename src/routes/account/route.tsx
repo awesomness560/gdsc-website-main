@@ -1,8 +1,10 @@
 import { Link, Outlet, createFileRoute, redirect } from '@tanstack/react-router'
-import { CalendarDays, FileText, Settings, User } from 'lucide-react'
+import { BadgeCheck, CalendarDays, FileText, Settings, User } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { hasAuthSession } from '#/api/auth'
 import { useAuth } from '#/contexts/AuthContext'
+import { useOfficer } from '#/contexts/OfficerContext'
+import { useUserAvatarPresentation } from '#/hooks/use-user-avatar-presentation'
 import { hasHackdscHackathonId } from '#/lib/hackathon-config'
 import { getInitials } from '#/lib/avatar'
 import { cn } from '#/lib/cn'
@@ -19,7 +21,12 @@ export const Route = createFileRoute('/account')({
 })
 
 type AccountTab = {
-  to: '/account' | '/account/events' | '/account/hackdsc' | '/account/settings'
+  to:
+    | '/account'
+    | '/account/events'
+    | '/account/hackdsc'
+    | '/account/officer'
+    | '/account/settings'
   label: string
   icon: ReactNode
   hidden?: boolean
@@ -30,6 +37,8 @@ const tabBaseClass =
 
 function AccountLayout() {
   const { user } = useAuth()
+  const { isOfficer, isOfficerPending } = useOfficer()
+  const avatar = useUserAvatarPresentation()
   if (!user) return null
 
   const userId = user.auth.id
@@ -67,6 +76,12 @@ function AccountLayout() {
       hidden: !hasHackdscSubmission,
     },
     {
+      to: '/account/officer',
+      label: 'Officer profile',
+      icon: <BadgeCheck className="h-4 w-4" aria-hidden />,
+      hidden: !isOfficerPending && !isOfficer,
+    },
+    {
       to: '/account/settings',
       label: 'Settings',
       icon: <Settings className="h-4 w-4" aria-hidden />,
@@ -79,16 +94,17 @@ function AccountLayout() {
         <div className="flex items-start gap-4">
           <div className="shrink-0">
             <UserAvatar
-              name={user.name}
-              email={user.auth.email}
-              avatarUrl={user.avatarUrl}
+              name={avatar.name}
+              email={avatar.email}
+              avatarUrl={avatar.avatarUrl}
               size="lg"
-              memberRing={user.isVerified}
+              memberRing={avatar.memberRing}
+              officerAccentColor={avatar.officerAccentColor}
             />
           </div>
           <div className="min-w-0 flex-1">
             <h1 className="truncate text-xl font-semibold tracking-tight text-fg sm:text-2xl">
-              {user.name || getInitials(user.auth.email)}
+              {avatar.name || getInitials(user.auth.email)}
             </h1>
             <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-2 text-sm text-fg-muted">
               <span className="truncate">{user.auth.email}</span>

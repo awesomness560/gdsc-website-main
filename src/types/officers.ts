@@ -31,3 +31,10 @@ export type UpdateOfficerInput = {
   photo?: Blob
   removePhoto?: boolean
 }
+
+export type UpdateMyOfficerProfileInput = {
+  displayName?: string
+  bio?: string
+  photo?: Blob
+  removePhoto?: boolean
+}

@@ -40,6 +40,15 @@ export type AdminOfficer = {
   active: boolean
 }
 
+/** Self-service officer profile edits (account tab). */
+export type OfficerProfileDraft = {
+  displayName: string
+  bio: string
+  officerImageUrl?: string
+  pendingPhoto?: Blob
+  removePhoto?: boolean
+}
+
 /** Form payload for creating or updating an officer profile. */
 export type AdminOfficerDraft = {
   roleId: OfficerRoleId

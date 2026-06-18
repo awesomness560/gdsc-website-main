@@ -7,6 +7,7 @@ import { useState } from 'react'
 import { AppShell } from '#/components/layout/AppShell'
 import { SiteNavbar } from '#/components/layout/SiteNavbar'
 import { AuthProvider } from '#/contexts/AuthContext'
+import { OfficerProvider } from '#/contexts/OfficerContext'
 import { siteNavItems } from '#/data/site-nav'
 import { isAdminRoute } from '#/lib/admin-routes'
 import { isAuthRoute } from '#/lib/auth-routes'
@@ -25,21 +26,23 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <AppShell>
-          {hideNav ? null : <SiteNavbar items={siteNavItems} />}
-          <Outlet />
-          <TanStackDevtools
-            config={{
-              position: 'bottom-right',
-            }}
-            plugins={[
-              {
-                name: 'TanStack Router',
-                render: <TanStackRouterDevtoolsPanel />,
-              },
-            ]}
-          />
-        </AppShell>
+        <OfficerProvider>
+          <AppShell>
+            {hideNav ? null : <SiteNavbar items={siteNavItems} />}
+            <Outlet />
+            <TanStackDevtools
+              config={{
+                position: 'bottom-right',
+              }}
+              plugins={[
+                {
+                  name: 'TanStack Router',
+                  render: <TanStackRouterDevtoolsPanel />,
+                },
+              ]}
+            />
+          </AppShell>
+        </OfficerProvider>
       </AuthProvider>
     </QueryClientProvider>
   )

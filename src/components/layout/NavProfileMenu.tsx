@@ -1,6 +1,8 @@
 import { Link } from '@tanstack/react-router'
-import { FileText, LayoutDashboard, Loader2, LogOut, User } from 'lucide-react'
+import { BadgeCheck, FileText, LayoutDashboard, Loader2, LogOut, User } from 'lucide-react'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { useOfficer } from '#/contexts/OfficerContext'
+import { useUserAvatarPresentation } from '#/hooks/use-user-avatar-presentation'
 import { isAdminRole } from '#/lib/auth-roles'
 import { BecomeMemberLink } from '#/components/membership/BecomeMemberLink'
 import { MemberPill } from '#/components/membership/MemberPill'
@@ -28,9 +30,11 @@ type ProfileMenuPanelProps = {
 }
 
 function ProfileMenuHeader({ user }: { user: AuthUser }) {
+  const avatar = useUserAvatarPresentation()
+
   return (
     <div className="border-b border-border-subtle px-3.5 py-3">
-      <p className="truncate text-sm font-semibold text-fg">{user.name}</p>
+      <p className="truncate text-sm font-semibold text-fg">{avatar.name}</p>
       <p className="truncate text-xs text-fg-muted">{user.auth.email}</p>
       <div className="mt-2">
         {user.isVerified ? (
@@ -54,6 +58,7 @@ function ProfileMenuPanel({
   onNavigate,
 }: ProfileMenuPanelProps) {
   const showAdminLink = isAdminRole(user.roles)
+  const { isOfficer } = useOfficer()
   const canShowHackdsc = hasHackdscHackathonId()
   const submissionQuery = useMyHackathonSubmissionQuery(
     user.auth.id,
@@ -89,6 +94,17 @@ function ProfileMenuPanel({
         >
           <FileText className="h-4 w-4 shrink-0 text-fg-muted" aria-hidden />
           My application
+        </Link>
+      ) : null}
+      {isOfficer ? (
+        <Link
+          to="/account/officer"
+          role="menuitem"
+          onClick={onNavigate}
+          className={menuItemClass}
+        >
+          <BadgeCheck className="h-4 w-4 shrink-0 text-fg-muted" aria-hidden />
+          Officer profile
         </Link>
       ) : null}
       {showAdminLink ? (
@@ -135,6 +151,7 @@ export function NavProfileMenu({
 }: NavProfileMenuProps) {
   const [open, setOpen] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
+  const avatar = useUserAvatarPresentation()
 
   useEffect(() => {
     if (variant !== 'mobile' || !open) return
@@ -173,11 +190,12 @@ export function NavProfileMenu({
       onClick={variant === 'mobile' ? () => setOpen((v) => !v) : undefined}
     >
       <UserAvatar
-        name={user.name}
-        email={user.auth.email}
-        avatarUrl={user.avatarUrl}
+        name={avatar.name}
+        email={avatar.email}
+        avatarUrl={avatar.avatarUrl}
         size={avatarSize}
-        memberRing={user.isVerified}
+        memberRing={avatar.memberRing}
+        officerAccentColor={avatar.officerAccentColor}
       />
     </button>
   )

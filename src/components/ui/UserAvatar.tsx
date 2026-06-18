@@ -1,5 +1,6 @@
-import type { ReactNode } from 'react'
+import type { CSSProperties, ReactNode } from 'react'
 import { getAvatarColorClass, getInitials } from '#/lib/avatar'
+import { accentRingBackground } from '#/lib/officer-accent-color'
 import { cn } from '#/lib/cn'
 
 type UserAvatarSize = 'nav' | 'sm' | 'md' | 'lg'
@@ -11,6 +12,8 @@ type UserAvatarProps = {
   size?: UserAvatarSize
   /** 2px smooth Google-color ring for verified members (nav + presenter cards only). */
   memberRing?: boolean
+  /** Photo-derived accent ring for active officers — overrides member ring. */
+  officerAccentColor?: string
   className?: string
 }
 
@@ -31,6 +34,7 @@ export function UserAvatar({
   avatarUrl,
   size = 'md',
   memberRing = false,
+  officerAccentColor,
   className,
 }: UserAvatarProps) {
   const { box, text } = sizeClass[size]
@@ -70,16 +74,21 @@ export function UserAvatar({
     )
   }
 
-  if (!memberRing) {
+  if (!memberRing && !officerAccentColor) {
     return inner
   }
+
+  const ringStyle: CSSProperties | undefined = officerAccentColor
+    ? { background: accentRingBackground(officerAccentColor) }
+    : undefined
 
   return (
     <span
       className={cn(
         'inline-flex shrink-0 rounded-full p-[2px]',
-        memberRingClass,
+        !officerAccentColor && memberRingClass,
       )}
+      style={ringStyle}
     >
       <span className="inline-flex rounded-full bg-bg-base p-[2px]">{inner}</span>
     </span>
