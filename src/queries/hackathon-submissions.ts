@@ -9,6 +9,7 @@ import {
 import { getHackdscHackathonId } from '#/lib/hackathon-config'
 import { hackathonSubmissionKeys } from '#/queries/hackathon-submission-keys'
 import type { HackdscRegistrationFormState } from '#/types/hackdsc-registration'
+import type { HackathonSubmission } from '#/types/hackathon-submission'
 
 export function useHackathonRegistrationQuery(hackathonId?: string | null) {
   const resolvedHackathonId =
@@ -42,6 +43,7 @@ type SaveDraftInput = {
   submissionId: string | null
   form: HackdscRegistrationFormState
   resumeFile?: File | null
+  existingSubmission?: Pick<HackathonSubmission, 'status' | 'submittedAt'>
   hackathonId?: string
 }
 
@@ -58,6 +60,7 @@ export function useSaveHackathonDraftMutation(
         submissionId: input.submissionId,
         form: input.form,
         resumeFile: input.resumeFile,
+        existingSubmission: input.existingSubmission,
       }),
     onSuccess: (submission) => {
       queryClient.setQueryData(
@@ -83,6 +86,7 @@ export function useSubmitHackathonApplicationMutation(
         submissionId: input.submissionId,
         form: input.form,
         resumeFile: input.resumeFile,
+        existingSubmission: input.existingSubmission,
       }),
     onSuccess: (submission) => {
       queryClient.setQueryData(

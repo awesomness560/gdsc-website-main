@@ -1,4 +1,5 @@
 import { ArrowLeft, ArrowRight, Check } from 'lucide-react'
+import { useNavigate, useSearch } from '@tanstack/react-router'
 import { useEffect, useState, type FormEvent } from 'react'
 import { RegisterChipSelect } from '#/components/hackdsc/register/RegisterChipSelect'
 import { RegisterConditionalBlock } from '#/components/hackdsc/register/RegisterConditionalBlock'
@@ -20,6 +21,10 @@ import {
 } from '#/data/hackdsc-registration'
 import { useAuth } from '#/contexts/AuthContext'
 import { getHackdscHackathonId } from '#/lib/hackathon-config'
+import {
+  canAccessHackathonRegistration,
+  canEditHackathonStep,
+} from '#/lib/hackathon-registration-edit'
 import { createInitialRegistrationForm } from '#/lib/hackdsc-registration-form'
 import {
   getHackathonMutationError,
@@ -38,6 +43,7 @@ import type {
   HackdscRegistrationFormState,
   HackdscRegistrationStepId,
 } from '#/types/hackdsc-registration'
+import type { SubmissionStatus } from '#/types/hackathon-submission'
 const TOTAL_STEPS = 6 as const
 const CONFIRM_STEP = 6 as HackdscRegistrationStepId
 
@@ -46,6 +52,8 @@ type HackdscRegisterFormProps = {
 }
 
 export function HackdscRegisterForm({ onSubmitted }: HackdscRegisterFormProps) {
+  const navigate = useNavigate()
+  const { step: stepFromSearch } = useSearch({ from: '/hackdsc/register' })
   const { user } = useAuth()
   const hackathonId = getHackdscHackathonId()
   const userId = user?.auth.id
@@ -62,15 +70,22 @@ export function HackdscRegisterForm({ onSubmitted }: HackdscRegisterFormProps) {
     createInitialRegistrationForm(user),
   )
   const [submissionId, setSubmissionId] = useState<string | null>(null)
+  const [submissionStatus, setSubmissionStatus] = useState<SubmissionStatus | null>(
+    null,
+  )
+  const [submittedAt, setSubmittedAt] = useState<string | null>(null)
   const [hydratedFromServer, setHydratedFromServer] = useState(false)
   const [resumeFile, setResumeFile] = useState<File | null>(null)
   const [errors, setErrors] = useState<HackdscRegistrationErrors>({})
   const [saveError, setSaveError] = useState<string | null>(null)
-  const [submitted, setSubmitted] = useState(false)
+  const [justSubmitted, setJustSubmitted] = useState(false)
+  const [changesSaved, setChangesSaved] = useState(false)
   /** User jumped here from confirm — offer quick return to review. */
   const [editingFromConfirm, setEditingFromConfirm] = useState(false)
   const stepMeta = HACKDSC_REGISTRATION_STEPS[step - 1]
   const isRegistrationOpen = registrationQuery.data?.isOpen ?? true
+  const isAlreadySubmitted = submissionStatus === 'submitted'
+  const editOptions = { isRegistrationOpen, submissionStatus }
   const isLoading =
     submissionQuery.isPending || registrationQuery.isPending || !hydratedFromServer
   const isSaving = saveDraftMutation.isPending
@@ -78,35 +93,81 @@ export function HackdscRegisterForm({ onSubmitted }: HackdscRegisterFormProps) {
   const busy = isSaving || isSubmitting
 
   useEffect(() => {
-    if (submissionQuery.isPending || hydratedFromServer) return
+    if (submissionQuery.isPending || registrationQuery.isPending || hydratedFromServer) {
+      return
+    }
+
+    const registrationOpen = registrationQuery.data?.isOpen ?? true
 
     if (submissionQuery.data) {
-      setForm(submissionQuery.data.form)
-      setSubmissionId(submissionQuery.data.id)
-      if (submissionQuery.data.status === 'submitted') {
-        setSubmitted(true)
+      const submission = submissionQuery.data
+      setForm(submission.form)
+      setSubmissionId(submission.id)
+      setSubmissionStatus(submission.status)
+      setSubmittedAt(submission.submittedAt)
+      setMaxReachedStep(6)
+
+      const defaultStep =
+        submission.status === 'submitted' && !registrationOpen
+          ? (3 as HackdscRegistrationStepId)
+          : (1 as HackdscRegistrationStepId)
+      const initialStep = stepFromSearch ?? defaultStep
+
+      if (canEditHackathonStep(initialStep, {
+        isRegistrationOpen: registrationOpen,
+        submissionStatus: submission.status,
+      })) {
+        setStep(initialStep)
       }
+    } else if (stepFromSearch) {
+      setStep(stepFromSearch)
+      setMaxReachedStep(stepFromSearch)
     }
 
     setHydratedFromServer(true)
-  }, [submissionQuery.data, submissionQuery.isPending, hydratedFromServer])
+  }, [
+    submissionQuery.data,
+    submissionQuery.isPending,
+    registrationQuery.data?.isOpen,
+    registrationQuery.isPending,
+    hydratedFromServer,
+    stepFromSearch,
+  ])
 
-  async function persistDraft(nextForm: HackdscRegistrationFormState) {
-    if (!userId || !isRegistrationOpen) return
+  function existingSubmissionMeta() {
+    if (!submissionStatus || !submissionId) return undefined
+    return { status: submissionStatus, submittedAt }
+  }
+
+  async function persistDraft(
+    nextForm: HackdscRegistrationFormState,
+  ): Promise<boolean> {
+    if (!userId) return false
+
+    if (!canEditHackathonStep(step, editOptions)) {
+      setSaveError('This section is locked while registration is closed.')
+      return false
+    }
 
     setSaveError(null)
+    setChangesSaved(false)
     try {
       const saved = await saveDraftMutation.mutateAsync({
         userId,
         submissionId,
         form: nextForm,
         resumeFile,
+        existingSubmission: existingSubmissionMeta(),
       })
       setSubmissionId(saved.id)
       setForm(saved.form)
+      setSubmissionStatus(saved.status)
+      setSubmittedAt(saved.submittedAt)
       if (resumeFile) setResumeFile(null)
+      return true
     } catch (error) {
       setSaveError(getHackathonMutationError(error))
+      return false
     }
   }
 
@@ -124,6 +185,11 @@ export function HackdscRegisterForm({ onSubmitted }: HackdscRegisterFormProps) {
   }
 
   function goToStep(next: HackdscRegistrationStepId, options?: { fromConfirm?: boolean }) {
+    if (!canEditHackathonStep(next, editOptions)) {
+      setSaveError('This section is locked while registration is closed.')
+      return
+    }
+
     setStep(next)
     if (options?.fromConfirm) {
       setEditingFromConfirm(true)
@@ -153,10 +219,16 @@ export function HackdscRegisterForm({ onSubmitted }: HackdscRegisterFormProps) {
       return
     }
 
-    await persistDraft(form)
+    const saved = await persistDraft(form)
+    if (!saved) return
 
     if (editingFromConfirm) {
       returnToConfirm()
+      return
+    }
+
+    if (!isRegistrationOpen && isAlreadySubmitted && step === 3) {
+      navigate({ to: '/account/hackdsc' })
       return
     }
 
@@ -185,18 +257,28 @@ export function HackdscRegisterForm({ onSubmitted }: HackdscRegisterFormProps) {
     }
 
     setSaveError(null)
+    setChangesSaved(false)
     try {
+      const wasAlreadySubmitted = isAlreadySubmitted
       const saved = await submitMutation.mutateAsync({
         userId,
         submissionId,
         form,
         resumeFile,
+        existingSubmission: existingSubmissionMeta(),
       })
       setSubmissionId(saved.id)
       setForm(saved.form)
+      setSubmissionStatus(saved.status)
+      setSubmittedAt(saved.submittedAt)
       setResumeFile(null)
-      setSubmitted(true)
-      onSubmitted?.()
+
+      if (wasAlreadySubmitted) {
+        setChangesSaved(true)
+      } else {
+        setJustSubmitted(true)
+        onSubmitted?.()
+      }
     } catch (error) {
       setSaveError(getHackathonMutationError(error))
     }
@@ -220,7 +302,7 @@ export function HackdscRegisterForm({ onSubmitted }: HackdscRegisterFormProps) {
     )
   }
 
-  if (!isRegistrationOpen && !submitted) {
+  if (!canAccessHackathonRegistration(isRegistrationOpen, submissionStatus)) {
     return (
       <p className="rounded-xl border border-border-default bg-surface/50 px-4 py-3 text-sm text-fg-secondary">
         Registration is closed for this hackathon. The deadline plus grace period
@@ -229,7 +311,7 @@ export function HackdscRegisterForm({ onSubmitted }: HackdscRegisterFormProps) {
     )
   }
 
-  if (submitted) {
+  if (justSubmitted) {
     return (
       <div className="text-center">
         <div className="mx-auto inline-flex h-12 w-12 items-center justify-center rounded-full bg-google-green/15">
@@ -259,11 +341,25 @@ export function HackdscRegisterForm({ onSubmitted }: HackdscRegisterFormProps) {
         </p>
       ) : null}
 
+      {changesSaved ? (
+        <p className="mb-4 rounded-xl border border-google-green/30 bg-google-green/10 px-3 py-2 text-xs text-fg-secondary">
+          Your changes were saved.
+        </p>
+      ) : null}
+
+      {isAlreadySubmitted && !justSubmitted ? (
+        <p className="mb-4 rounded-xl border border-accent/25 bg-accent/8 px-3 py-2 text-xs text-fg-secondary">
+          {isRegistrationOpen
+            ? 'You’re editing your submitted application.'
+            : 'Registration is closed. You can still update logistics below.'}
+        </p>
+      ) : null}
+
       <RegisterProgress
         currentStep={step}
         maxReachedStep={maxReachedStep}
         onStepClick={(s) => {
-          if (s < step) goToStep(s)
+          if (s < step && canEditHackathonStep(s, editOptions)) goToStep(s)
         }}
       />
 
@@ -570,7 +666,11 @@ export function HackdscRegisterForm({ onSubmitted }: HackdscRegisterFormProps) {
           <>
             <RegisterConfirmSummary
               data={form}
-              onEditStep={(target) => goToStep(target, { fromConfirm: true })}
+              onEditStep={(target) => {
+                if (canEditHackathonStep(target, editOptions)) {
+                  goToStep(target, { fromConfirm: true })
+                }
+              }}
             />
             <label className="mt-6 flex cursor-pointer items-start gap-3 rounded-xl border border-border-default bg-surface/40 px-4 py-3">
               <input
@@ -655,7 +755,11 @@ export function HackdscRegisterForm({ onSubmitted }: HackdscRegisterFormProps) {
                   'sm:w-auto sm:min-w-[200px]',
                 )}
               >
-                {isSubmitting ? 'Submitting…' : 'Submit application'}
+                {isSubmitting
+                  ? 'Saving…'
+                  : isAlreadySubmitted
+                    ? 'Save changes'
+                    : 'Submit application'}
               </button>
             )}
           </div>

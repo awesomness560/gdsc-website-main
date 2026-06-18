@@ -131,11 +131,15 @@ export async function saveHackathonSubmissionDraft(input: {
   submissionId: string | null
   form: HackdscRegistrationFormState
   resumeFile?: File | null
+  existingSubmission?: Pick<HackathonSubmission, 'status' | 'submittedAt'>
 }): Promise<HackathonSubmission> {
   const resumeUrl = await resolveResumeUrl(input)
+  const preserveSubmitted = input.existingSubmission?.status === 'submitted'
   const payload = mapFormToSubmissionRow(input.form, {
-    status: 'draft',
-    submittedAt: null,
+    status: preserveSubmitted ? 'submitted' : 'draft',
+    submittedAt: preserveSubmitted
+      ? (input.existingSubmission?.submittedAt ?? null)
+      : null,
     resumeUrl,
   })
 
@@ -172,8 +176,12 @@ export async function submitHackathonApplication(input: {
   submissionId: string | null
   form: HackdscRegistrationFormState
   resumeFile?: File | null
+  existingSubmission?: Pick<HackathonSubmission, 'status' | 'submittedAt'>
 }): Promise<HackathonSubmission> {
-  const submittedAt = new Date().toISOString()
+  const preserveSubmitted = input.existingSubmission?.status === 'submitted'
+  const submittedAt = preserveSubmitted
+    ? (input.existingSubmission?.submittedAt ?? new Date().toISOString())
+    : new Date().toISOString()
   const resumeUrl = await resolveResumeUrl(input)
   const payload = mapFormToSubmissionRow(input.form, {
     status: 'submitted',

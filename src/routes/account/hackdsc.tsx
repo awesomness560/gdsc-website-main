@@ -80,6 +80,7 @@ function AccountHackdscTab() {
         <Section
           title="About you"
           editHref="/hackdsc/register"
+          editSearch={{ step: 1 }}
           locked={!isOpen && submission.status === 'submitted'}
         >
           <SummaryRow label="Full name" value={submission.form.fullName} />
@@ -93,6 +94,7 @@ function AccountHackdscTab() {
         <Section
           title="Team"
           editHref="/hackdsc/register"
+          editSearch={{ step: 2 }}
           locked={!isOpen && submission.status === 'submitted'}
         >
           <SummaryRow
@@ -138,6 +140,7 @@ function AccountHackdscTab() {
         <Section
           title="Logistics"
           editHref="/hackdsc/register"
+          editSearch={{ step: 3 }}
           locked={false}
           note={!isOpen ? 'Logistics stay editable after the deadline.' : undefined}
         >
@@ -157,6 +160,7 @@ function AccountHackdscTab() {
         <Section
           title="Recruiting"
           editHref="/hackdsc/register"
+          editSearch={{ step: 4 }}
           locked={!isOpen && submission.status === 'submitted'}
         >
           <SummaryRow
@@ -188,6 +192,7 @@ function AccountHackdscTab() {
         <Section
           title="Essays"
           editHref="/hackdsc/register"
+          editSearch={{ step: 5 }}
           locked={!isOpen && submission.status === 'submitted'}
         >
           <LongRow label="Why interested" value={submission.form.whyInterested || '—'} />
@@ -205,12 +210,14 @@ function AccountHackdscTab() {
 function Section({
   title,
   editHref,
+  editSearch,
   locked,
   note,
   children,
 }: {
   title: string
   editHref: string
+  editSearch?: { step: number }
   locked: boolean
   note?: string
   children: ReactNode
@@ -225,6 +232,7 @@ function Section({
         {!locked ? (
           <Link
             to={editHref}
+            search={editSearch}
             className="inline-flex items-center gap-1.5 text-xs font-semibold text-accent hover:text-accent-hover"
           >
             <Pencil className="h-3.5 w-3.5" aria-hidden />

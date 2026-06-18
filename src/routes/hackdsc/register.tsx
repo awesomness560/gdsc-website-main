@@ -5,8 +5,17 @@ import { HackMembershipBanner } from '#/components/membership/HackMembershipBann
 import { HACKDSC_REGISTER_EVENT } from '#/data/hackdsc-registration'
 import { dummyHackdscData } from '#/data/dummy-hackdsc'
 import { HACKDSC_REGISTER_PATH } from '#/lib/auth-redirect'
+import { parseRegisterStepParam } from '#/lib/hackathon-registration-edit'
+import type { HackdscRegistrationStepId } from '#/types/hackdsc-registration'
+
+type RegisterSearch = {
+  step?: HackdscRegistrationStepId
+}
 
 export const Route = createFileRoute('/hackdsc/register')({
+  validateSearch: (search: Record<string, unknown>): RegisterSearch => ({
+    step: parseRegisterStepParam(search.step),
+  }),
   beforeLoad: async () => {
     const signedIn = await hasAuthSession()
     if (!signedIn) {
