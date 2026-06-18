@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as MembershipRouteImport } from './routes/membership'
 import { Route as JoinRouteImport } from './routes/join'
 import { Route as AboutRouteImport } from './routes/about'
@@ -44,6 +45,11 @@ import { Route as AdminHackdscCommunicationsRouteImport } from './routes/admin/h
 import { Route as AdminHackdscAttendeesRouteImport } from './routes/admin/hackdsc/attendees'
 import { Route as AdminHackdscApplicationsRouteImport } from './routes/admin/hackdsc/applications'
 
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MembershipRoute = MembershipRouteImport.update({
   id: '/membership',
   path: '/membership',
@@ -226,6 +232,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/join': typeof JoinRoute
   '/membership': typeof MembershipRoute
+  '/privacy': typeof PrivacyRoute
   '/admin/hackdsc': typeof AdminHackdscRouteRouteWithChildren
   '/login': typeof AuthLoginRoute
   '/signup': typeof AuthSignupRoute
@@ -257,6 +264,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/join': typeof JoinRoute
   '/membership': typeof MembershipRoute
+  '/privacy': typeof PrivacyRoute
   '/login': typeof AuthLoginRoute
   '/signup': typeof AuthSignupRoute
   '/account/events': typeof AccountEventsRoute
@@ -293,6 +301,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/join': typeof JoinRoute
   '/membership': typeof MembershipRoute
+  '/privacy': typeof PrivacyRoute
   '/admin/hackdsc': typeof AdminHackdscRouteRouteWithChildren
   '/_auth/login': typeof AuthLoginRoute
   '/_auth/signup': typeof AuthSignupRoute
@@ -330,6 +339,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/join'
     | '/membership'
+    | '/privacy'
     | '/admin/hackdsc'
     | '/login'
     | '/signup'
@@ -361,6 +371,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/join'
     | '/membership'
+    | '/privacy'
     | '/login'
     | '/signup'
     | '/account/events'
@@ -396,6 +407,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/join'
     | '/membership'
+    | '/privacy'
     | '/admin/hackdsc'
     | '/_auth/login'
     | '/_auth/signup'
@@ -433,11 +445,19 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   JoinRoute: typeof JoinRoute
   MembershipRoute: typeof MembershipRoute
+  PrivacyRoute: typeof PrivacyRoute
   AuthCallbackRoute: typeof AuthCallbackRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/membership': {
       id: '/membership'
       path: '/membership'
@@ -796,6 +816,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   JoinRoute: JoinRoute,
   MembershipRoute: MembershipRoute,
+  PrivacyRoute: PrivacyRoute,
   AuthCallbackRoute: AuthCallbackRoute,
 }
 export const routeTree = rootRouteImport

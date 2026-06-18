@@ -18,6 +18,7 @@ import {
   getStatusPillLabel,
   shouldShowRegistrationBlock,
 } from '#/lib/events'
+import { MEMBERSHIP_CONTACT_EMAIL } from '#/lib/membership'
 import { CalendarDateIcon } from '#/components/ui/CalendarDateIcon'
 import { MetaIconCard } from '#/components/ui/MetaIconCard'
 import { Badge } from '#/components/ui/Badge'
@@ -189,7 +190,7 @@ export function EventDetailContent({
             Share
           </button>
           <a
-            href="mailto:gdsc@utdallas.edu"
+            href={`mailto:${MEMBERSHIP_CONTACT_EMAIL}`}
             className="text-[11px] text-fg-muted/80 transition-colors hover:text-fg-muted"
           >
             Report an issue

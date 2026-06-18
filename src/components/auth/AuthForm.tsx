@@ -319,7 +319,14 @@ export function AuthForm({ mode }: AuthFormProps) {
           <p className="text-xs leading-relaxed text-fg-muted">
             By creating an account, you agree to our{' '}
             <span className="text-fg-secondary">Terms</span> and{' '}
-            <span className="text-fg-secondary">Privacy Policy</span>.
+            <Link
+              to="/privacy"
+              preload="intent"
+              className="text-fg-secondary transition-colors hover:text-fg"
+            >
+              Privacy Policy
+            </Link>
+            .
           </p>
         </div>
       </div>

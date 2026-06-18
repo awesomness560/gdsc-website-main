@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { dummyEventsData } from '#/data/dummy-events'
 import { dummyLandingData } from '#/data/dummy-landing'
+import { HomeFooter } from '#/components/layout/HomeFooter'
 import {
   HomeEventsSection,
   HeroSection,
@@ -20,6 +21,7 @@ function Home() {
       <StatsSection stats={stats} />
       <HomeEventsSection {...eventsSection} events={events} />
       <ProgramsSection {...programsSection} programs={programs} />
+      <HomeFooter />
     </main>
   )
 }
