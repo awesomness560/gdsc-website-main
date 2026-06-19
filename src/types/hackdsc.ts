@@ -11,7 +11,7 @@ export interface HackHero {
   titleSuffix: string
   subtitle: string
   primaryCta: { label: string; href: string }
-  secondaryCta: { label: string; href: string }
+  secondaryCta?: { label: string; href: string }
   meta: Array<{ icon: 'calendar' | 'map-pin'; text: string }>
 }
 

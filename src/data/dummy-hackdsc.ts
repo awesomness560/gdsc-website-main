@@ -9,21 +9,20 @@ export const dummyHackdscData = {
     },
     titleLines: ['Build the'],
     titleAccent: 'impossible',
-    titleSuffix: 'in 36 hours.',
+    titleSuffix: 'in 24 hours.',
     subtitle:
       'UT Dallas’ student hackathon — ship a project, join workshops, and compete for prizes over one weekend.',
     primaryCta: { label: 'Register', href: '/hackdsc/register' },
-    secondaryCta: { label: 'View schedule', href: '/hackdsc/schedule' },
     meta: [
       { icon: 'calendar' as const, text: 'Sep 12–13, 2026' },
       { icon: 'map-pin' as const, text: 'Richardson, TX' },
     ],
   },
   stats: [
-    { value: '500+', label: 'Hackers', accent: 'blue' },
-    { value: '$50K', label: 'In prizes', accent: 'red' },
-    { value: '36hrs', label: 'Of building', accent: 'yellow' },
-    { value: '40+', label: 'Universities', accent: 'green' },
+    { value: '400', label: 'Hackers', accent: 'blue' },
+    { value: '$5K', label: 'In prizes', accent: 'red' },
+    { value: '24hrs', label: 'Of building', accent: 'yellow' },
+    { value: '4', label: 'Universities', accent: 'green' },
   ],
   tracksSection: {
     kicker: 'Tracks',
@@ -63,7 +62,7 @@ export const dummyHackdscData = {
   ],
   sponsorsSection: {
     kicker: 'Sponsors',
-    title: 'Backed by partners who hire builders.',
+    title: 'Backed by our partners.',
   },
   sponsors: [
     { id: 'google', name: 'Google', initials: 'G' },

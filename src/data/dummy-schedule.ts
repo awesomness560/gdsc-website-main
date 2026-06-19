@@ -3,7 +3,7 @@ import type { SchedulePageData } from '#/types/schedule'
 export const dummyScheduleData = {
   hero: {
     kicker: 'Schedule',
-    title: '36 hours,',
+    title: '24 hours,',
     titleGradient: 'minute by',
     titleGradientLine2: 'minute.',
     subtitle: 'A rough map — room for workshops, meals, and side quests.',
@@ -34,7 +34,7 @@ export const dummyScheduleData = {
           id: 'fri-hacking',
           time: '8:30 PM',
           title: 'Hacking begins',
-          description: '36 hours on the clock. Mentors on standby.',
+          description: '24 hours on the clock. Mentors on standby.',
           accent: 'yellow',
           icon: 'code',
         },

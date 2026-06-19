@@ -17,9 +17,11 @@ export function HackHeroActions({
         >
           {primaryCta.label}
         </Button>
-        <Button href={secondaryCta.href} variant="secondary">
-          {secondaryCta.label}
-        </Button>
+        {secondaryCta ? (
+          <Button href={secondaryCta.href} variant="secondary">
+            {secondaryCta.label}
+          </Button>
+        ) : null}
       </div>
     </section>
   )
