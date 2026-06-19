@@ -504,7 +504,7 @@ export function HackdscRegisterForm({ onSubmitted }: HackdscRegisterFormProps) {
                   error={errors.preferredTeamSize}
                 />
                 <RegisterChipSelect
-                  label="Skills you want on your team"
+                  label="Skills you have"
                   options={TEAMMATE_SKILL_OPTIONS}
                   value={form.skillsWanted}
                   onChange={(skillsWanted) => patch({ skillsWanted })}
@@ -685,7 +685,7 @@ export function HackdscRegisterForm({ onSubmitted }: HackdscRegisterFormProps) {
                   href={MLH_CODE_OF_CONDUCT_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-medium text-accent hover:text-accent-hover"
+                  className="font-medium text-accent underline decoration-accent/60 underline-offset-[3px] hover:text-accent-hover hover:decoration-accent"
                 >
                   MLH Code of Conduct
                 </a>

@@ -110,7 +110,7 @@ export function RegisterConfirmSummary({
               }
             />
             <Row
-              label="Skills wanted"
+              label="Skills you have"
               value={[
                 ...data.skillsWanted,
                 data.skillsWantedOther.trim(),

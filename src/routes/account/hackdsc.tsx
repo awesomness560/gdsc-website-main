@@ -127,7 +127,7 @@ function AccountHackdscTab() {
                 value={submission.form.preferredTeamSize?.toString() ?? '—'}
               />
               <SummaryRow
-                label="Skills wanted"
+                label="Skills you have"
                 value={[...submission.form.skillsWanted, submission.form.skillsWantedOther]
                   .map((v) => v.trim())
                   .filter(Boolean)
