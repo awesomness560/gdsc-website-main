@@ -13,9 +13,10 @@ import {
   FaqSection,
   HackHeroActions,
   HackHeroSection,
+  HackdscSectionPlaceholder,
   HackStatsSection,
-  SponsorsSection,
-  TracksSection,
+  // SponsorsSection,
+  // TracksSection,
 } from '#/components/sections/hackdsc'
 
 export const Route = createFileRoute('/hackdsc/')({
@@ -41,9 +42,7 @@ function HackdscPage() {
     hero,
     stats,
     tracksSection,
-    tracks,
     sponsorsSection,
-    sponsors,
     faqSection,
     faq,
   } = dummyHackdscData
@@ -97,9 +96,19 @@ function HackdscPage() {
         secondaryCta={hero.secondaryCta}
       />
       <CountdownSection timeLeft={timeLeft} />
-      <TracksSection {...tracksSection} tracks={tracks} />
+      {/* <TracksSection {...tracksSection} tracks={tracks} /> */}
+      <HackdscSectionPlaceholder
+        {...tracksSection}
+        className="border-t border-border-subtle bg-bg-elevated/40"
+        message="We'll post track details here once they're set."
+      />
       <HackStatsSection stats={stats} />
-      <SponsorsSection {...sponsorsSection} sponsors={sponsors} />
+      {/* <SponsorsSection {...sponsorsSection} sponsors={sponsors} /> */}
+      <HackdscSectionPlaceholder
+        {...sponsorsSection}
+        align="center"
+        message="Our sponsor lineup is on the way — check back soon."
+      />
       <FaqSection {...faqSection} items={faq} />
     </main>
   )
