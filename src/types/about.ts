@@ -15,7 +15,10 @@ export interface AboutOfficer {
 export interface AboutDivisionCluster {
   id: string
   title: string
+  /** Single division lead (DB-backed path). */
   director?: AboutOfficer
+  /** Co-leads, rendered on their own row above the officers. Overrides `director`. */
+  directors?: AboutOfficer[]
   officers: AboutOfficer[]
 }
 

@@ -12,3 +12,6 @@ dist-ssr
 __unconfig*
 todos.json
 oldsite
+
+# Raw team photo submissions — optimized copies live in public/team/
+Send a photo of yourself*/

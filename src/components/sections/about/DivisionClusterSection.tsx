@@ -10,7 +10,12 @@ export function DivisionClusterSection({
   division,
   onSelectOfficer,
 }: DivisionClusterSectionProps) {
-  const hasDirector = Boolean(division.director)
+  const directors = division.directors?.length
+    ? division.directors
+    : division.director
+      ? [division.director]
+      : []
+  const hasDirectors = directors.length > 0
   const hasOfficers = division.officers.length > 0
 
   return (
@@ -19,12 +24,15 @@ export function DivisionClusterSection({
         {division.title}
       </h2>
 
-      {hasDirector ? (
-        <div className="mt-8 flex justify-center">
-          <AboutOfficerCard
-            officer={division.director!}
-            onSelect={onSelectOfficer}
-          />
+      {hasDirectors ? (
+        <div className="mt-8 flex flex-wrap justify-center gap-4">
+          {directors.map((director) => (
+            <AboutOfficerCard
+              key={director.id}
+              officer={director}
+              onSelect={onSelectOfficer}
+            />
+          ))}
         </div>
       ) : null}
 
@@ -39,8 +47,6 @@ export function DivisionClusterSection({
           ))}
         </div>
       ) : null}
-
-      {!hasDirector && !hasOfficers ? null : null}
     </section>
   )
 }

@@ -26,6 +26,8 @@ export function AboutOfficerAvatar({
       <img
         src={imageUrl}
         alt=""
+        loading="lazy"
+        decoding="async"
         className={cn(box, 'rounded-full object-cover', className)}
       />
     )
