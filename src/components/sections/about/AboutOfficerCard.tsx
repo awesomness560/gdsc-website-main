@@ -47,6 +47,7 @@ export function AboutOfficerCard({
 
       <OfficerRoleBadge
         roleId={officer.roleId}
+        label={officer.roleLabel}
         muted={!showColoredRole}
         className="mt-2 max-w-full whitespace-normal text-center leading-tight"
       />

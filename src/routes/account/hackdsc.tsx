@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute, Link, redirect } from '@tanstack/react-router'
 import { Pencil } from 'lucide-react'
 import type { ReactNode } from 'react'
 import {
@@ -16,6 +16,10 @@ import {
 } from '#/queries/hackathon-submissions'
 
 export const Route = createFileRoute('/account/hackdsc')({
+  // Hidden for launch alongside the public HackDSC pages.
+  beforeLoad: () => {
+    throw redirect({ to: '/account' })
+  },
   component: AccountHackdscTab,
 })
 

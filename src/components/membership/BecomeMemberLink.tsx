@@ -1,5 +1,4 @@
-import { Link } from '@tanstack/react-router'
-import { JOIN_PAGE_PATH } from '#/lib/membership'
+import { GDG_CHAPTER_URL } from '#/lib/membership'
 import { cn } from '#/lib/cn'
 
 type BecomeMemberLinkProps = {
@@ -7,10 +6,19 @@ type BecomeMemberLinkProps = {
   onClick?: () => void
 }
 
-export function BecomeMemberLink({ className, onClick }: BecomeMemberLinkProps) {
+/**
+ * Sends people straight to the official GDG chapter page to join.
+ * The in-app `/join` flow is paused for launch (see `src/routes/join.tsx`).
+ */
+export function BecomeMemberLink({
+  className,
+  onClick,
+}: BecomeMemberLinkProps) {
   return (
-    <Link
-      to={JOIN_PAGE_PATH}
+    <a
+      href={GDG_CHAPTER_URL}
+      target="_blank"
+      rel="noopener noreferrer"
       onClick={onClick}
       className={cn(
         'text-sm font-medium text-fg-secondary transition-colors hover:text-fg',
@@ -18,6 +26,6 @@ export function BecomeMemberLink({ className, onClick }: BecomeMemberLinkProps) 
       )}
     >
       Become a member →
-    </Link>
+    </a>
   )
 }

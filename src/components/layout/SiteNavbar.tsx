@@ -39,6 +39,18 @@ function DesktopNavLink({
   link: NavLink
   pathname: string
 }) {
+  if (link.external) {
+    return (
+      <a
+        href={link.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={linkClass}
+      >
+        {link.label}
+      </a>
+    )
+  }
   const active = isPathActive(pathname, link.href)
   return (
     <Link
@@ -129,6 +141,19 @@ function MobileNavLink({
   onNavigate?: () => void
   className?: string
 }) {
+  if (link.external) {
+    return (
+      <a
+        href={link.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={onNavigate}
+        className={cn(mobileLinkClass, className)}
+      >
+        {link.label}
+      </a>
+    )
+  }
   const active = isPathActive(pathname, link.href)
   return (
     <Link

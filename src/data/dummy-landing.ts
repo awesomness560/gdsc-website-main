@@ -1,42 +1,39 @@
 import type { LandingPageData } from '#/types/landing'
+import { GDG_CHAPTER_URL } from '#/lib/membership'
 
 export const dummyLandingData = {
-  navLinks: [
-    { label: 'About Us', href: '#about' },
-    { label: 'HACKDSC', href: '#hackdsc' },
-    { label: 'Schedule', href: '#schedule' },
-  ],
+  navLinks: [{ label: 'About Us', href: '/about' }],
   hero: {
-    statusLabel: 'Google Developer Groups · UTD',
-    titleLines: ['Build with', 'community,'],
-    titleGradient: 'projects and events.',
+    statusLabel: 'Google Developer Group · UT Dallas',
+    titleLines: ['A student club for', 'people who like'],
+    titleGradient: 'building software.',
     subtitle:
-      'Workshops, project nights, and community events for students who want to ship real software at UT Dallas.',
-    primaryCta: { label: 'Explore events', href: '/events' },
-    secondaryCta: { label: 'Meet the team', href: '/about' },
+      'GDG on Campus at UT Dallas runs workshops, project teams, and socials for students who want to get better at building things. Everyone is welcome — no experience required.',
+    primaryCta: { label: 'Meet the team', href: '/about' },
+    secondaryCta: { label: 'Join GDG', href: GDG_CHAPTER_URL },
     meta: [
-      { icon: 'map-pin' as const, text: 'UT Dallas' },
-      { icon: 'sparkles' as const, text: 'Workshops · Projects · Community' },
+      { icon: 'map-pin' as const, text: 'ECSW · UT Dallas' },
+      { icon: 'sparkles' as const, text: 'Open to all majors' },
     ],
   },
   stats: [
     { value: '2020', label: 'Founded', accent: 'blue' },
     { value: '4', label: 'Divisions', accent: 'red' },
     { value: '2', label: 'Core programs', accent: 'yellow' },
-    { value: '1', label: 'Flagship hackathon', accent: 'green' },
+    { value: 'Free', label: 'To join', accent: 'green' },
   ],
   eventsSection: {
     kicker: 'Events',
-    title: 'Learn, build, and',
-    titleGradient: 'show up consistently.',
-    subtitle: 'Upcoming workshops and project nights on campus — tap an event for details.',
+    title: 'Workshops and',
+    titleGradient: 'project nights.',
+    subtitle: 'Regular meetups on campus — tap an event for details.',
   },
   programsSection: {
     kicker: 'Programs',
     title: 'Two ways to',
-    titleGradient: 'grow with us.',
+    titleGradient: 'get involved.',
     subtitle:
-      'Pick a track — show up, build, and leave with something you can demo.',
+      'Come to a workshop, join a project team, or do both. Show up when you can.',
   },
   programs: [
     {
@@ -44,15 +41,15 @@ export const dummyLandingData = {
       kicker: 'Workshops',
       title: 'Technical workshops',
       description:
-        'Structured sessions on frameworks, APIs, cloud, and dev workflows — beginner-friendly and hands-on.',
+        'Hands-on sessions on the tools, frameworks, and workflows developers actually use. Beginner-friendly — just bring a laptop.',
       accent: 'blue',
     },
     {
       id: 'projects',
-      kicker: 'Technical projects',
-      title: 'Project teams',
+      kicker: 'GDG Sprints',
+      title: 'GDG Sprints',
       description:
-        'Scoped builds with teammates — practice collaboration and add real work to your portfolio.',
+        'Small teams building a real project together over the semester, with something to demo at the end.',
       accent: 'green',
     },
   ],

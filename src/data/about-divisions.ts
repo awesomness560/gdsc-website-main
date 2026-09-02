@@ -4,7 +4,8 @@ export const ABOUT_HERO = {
   kicker: 'About us',
   title: 'Meet the',
   titleGradient: 'team.',
-  subtitle: 'Leadership, divisions, and the people who run GDG at UT Dallas.',
+  subtitle:
+    'The students who plan events, run workshops, and keep GDG at UT Dallas going.',
 } as const
 
 export type AboutDivisionDef = {

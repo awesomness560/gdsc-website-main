@@ -1,6 +1,7 @@
 import {
   Outlet,
   createFileRoute,
+  redirect,
   useMatch,
   useNavigate,
 } from '@tanstack/react-router'
@@ -24,6 +25,11 @@ import { EventsListSection } from '#/components/sections/events/EventsListSectio
 import { EventDetailPanel } from '#/components/sections/events/EventDetailPanel'
 
 export const Route = createFileRoute('/events')({
+  // Hidden for launch. Remove this `beforeLoad` to bring the Events pages back —
+  // `EventsLayout` and the child routes are left intact below.
+  beforeLoad: () => {
+    throw redirect({ to: '/' })
+  },
   validateSearch: (search: Record<string, unknown>): EventsSearch => ({
     cat: typeof search.cat === 'string' ? search.cat : undefined,
   }),

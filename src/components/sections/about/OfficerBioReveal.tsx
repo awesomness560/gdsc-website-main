@@ -15,7 +15,11 @@ type OfficerBioRevealProps = {
   onClose: () => void
 }
 
-export function OfficerBioReveal({ officer, open, onClose }: OfficerBioRevealProps) {
+export function OfficerBioReveal({
+  officer,
+  open,
+  onClose,
+}: OfficerBioRevealProps) {
   const isMobile = useIsMobileLayout()
   const accentColor = useOfficerAccentColor(
     officer?.name ?? '',
@@ -70,9 +74,18 @@ export function OfficerBioReveal({ officer, open, onClose }: OfficerBioRevealPro
         {officer.name}
       </h2>
       {isLeadershipOrDirectorRole(officer.roleId) ? (
-        <OfficerRoleBadge roleId={officer.roleId} className="mt-2" />
+        <OfficerRoleBadge
+          roleId={officer.roleId}
+          label={officer.roleLabel}
+          className="mt-2"
+        />
       ) : (
-        <OfficerRoleBadge roleId={officer.roleId} muted className="mt-2" />
+        <OfficerRoleBadge
+          roleId={officer.roleId}
+          label={officer.roleLabel}
+          muted
+          className="mt-2"
+        />
       )}
 
       {officer.bio ? (
@@ -118,7 +131,10 @@ export function OfficerBioReveal({ officer, open, onClose }: OfficerBioRevealPro
           className="relative max-h-[min(88dvh,720px)] overflow-hidden rounded-t-3xl border border-border-default bg-bg-base shadow-2xl"
         >
           <div className="flex justify-center pt-3 pb-1">
-            <span className="h-1 w-10 rounded-full bg-border-strong" aria-hidden />
+            <span
+              className="h-1 w-10 rounded-full bg-border-strong"
+              aria-hidden
+            />
           </div>
           <button
             type="button"

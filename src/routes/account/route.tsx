@@ -5,12 +5,10 @@ import { hasAuthSession } from '#/api/auth'
 import { useAuth } from '#/contexts/AuthContext'
 import { useOfficer } from '#/contexts/OfficerContext'
 import { useUserAvatarPresentation } from '#/hooks/use-user-avatar-presentation'
-import { hasHackdscHackathonId } from '#/lib/hackathon-config'
 import { getInitials } from '#/lib/avatar'
 import { cn } from '#/lib/cn'
 import { MemberPill } from '#/components/membership/MemberPill'
 import { UserAvatar } from '#/components/ui/UserAvatar'
-import { useMyHackathonSubmissionQuery } from '#/queries/hackathon-submissions'
 
 export const Route = createFileRoute('/account')({
   beforeLoad: async () => {
@@ -41,15 +39,6 @@ function AccountLayout() {
   const avatar = useUserAvatarPresentation()
   if (!user) return null
 
-  const userId = user.auth.id
-  const canShowHackdsc = hasHackdscHackathonId()
-  const hackdscSubmissionQuery = useMyHackathonSubmissionQuery(
-    userId,
-    canShowHackdsc ? undefined : null,
-  )
-
-  const hasHackdscSubmission = Boolean(hackdscSubmissionQuery.data)
-
   const joinedSource = user.profile?.created_at ?? user.auth.createdAt
   const joinedLabel = new Date(joinedSource).toLocaleDateString('en-US', {
     month: 'short',
@@ -68,12 +57,15 @@ function AccountLayout() {
       to: '/account/events',
       label: 'My events',
       icon: <CalendarDays className="h-4 w-4" aria-hidden />,
+      // Hidden for launch alongside the public Events pages.
+      hidden: true,
     },
     {
       to: '/account/hackdsc',
       label: 'HackDSC',
       icon: <FileText className="h-4 w-4" aria-hidden />,
-      hidden: !hasHackdscSubmission,
+      // Hidden for launch alongside the public HackDSC pages.
+      hidden: true,
     },
     {
       to: '/account/officer',

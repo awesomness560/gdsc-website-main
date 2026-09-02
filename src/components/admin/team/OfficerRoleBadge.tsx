@@ -4,12 +4,15 @@ import { cn } from '#/lib/cn'
 
 type OfficerRoleBadgeProps = {
   roleId: OfficerRoleId
+  /** Overrides the default role label text (keeps the role's color). */
+  label?: string
   className?: string
   muted?: boolean
 }
 
 export function OfficerRoleBadge({
   roleId,
+  label,
   className,
   muted = false,
 }: OfficerRoleBadgeProps) {
@@ -25,7 +28,7 @@ export function OfficerRoleBadge({
         className,
       )}
     >
-      {role.label}
+      {label ?? role.label}
     </span>
   )
 }

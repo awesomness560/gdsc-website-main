@@ -1,7 +1,11 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute, Link, redirect } from '@tanstack/react-router'
 import { Card } from '#/components/ui/Card'
 
 export const Route = createFileRoute('/account/events')({
+  // Hidden for launch alongside the public Events pages.
+  beforeLoad: () => {
+    throw redirect({ to: '/account' })
+  },
   component: AccountEventsTab,
 })
 

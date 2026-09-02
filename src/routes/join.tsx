@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute, Link, redirect } from '@tanstack/react-router'
 import { ArrowUpRight, Check } from 'lucide-react'
 import { useState } from 'react'
 import { useAuth } from '#/contexts/AuthContext'
@@ -12,6 +12,12 @@ import {
 } from '#/lib/membership'
 
 export const Route = createFileRoute('/join')({
+  // Paused for launch: send people straight to the official GDG chapter page
+  // instead of the two-step in-app flow. Remove this `beforeLoad` to restore the
+  // full flow implemented in `JoinPage` below.
+  beforeLoad: () => {
+    throw redirect({ href: GDG_CHAPTER_URL })
+  },
   component: JoinPage,
 })
 

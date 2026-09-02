@@ -1,6 +1,8 @@
 export interface NavLink {
   label: string
   href: string
+  /** Render as a plain external anchor (opens in a new tab) instead of a router Link. */
+  external?: boolean
 }
 
 export interface NavGroup {

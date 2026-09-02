@@ -1,12 +1,13 @@
-import { Link } from '@tanstack/react-router'
-import { JOIN_PAGE_PATH } from '#/lib/membership'
+import { GDG_CHAPTER_URL } from '#/lib/membership'
 import { cn } from '#/lib/cn'
 
 type MembershipPromptBannerProps = {
   className?: string
 }
 
-export function MembershipPromptBanner({ className }: MembershipPromptBannerProps) {
+export function MembershipPromptBanner({
+  className,
+}: MembershipPromptBannerProps) {
   return (
     <section
       className={cn(
@@ -19,26 +20,21 @@ export function MembershipPromptBanner({ className }: MembershipPromptBannerProp
         Membership
       </p>
       <h2 className="mt-2 text-lg font-semibold tracking-tight text-fg sm:text-xl">
-        You&apos;re not a full member yet
+        You&apos;re not a member yet
       </h2>
       <p className="mt-2 max-w-2xl text-sm leading-relaxed text-fg-secondary">
-        Full membership is free and unlocks HackDSC application eligibility, member-only
-        events, and priority access to club resources. It only takes a few minutes on the
-        official GDG page.
+        Membership is free. Sign up on the official Google Developer Group
+        chapter page and you&apos;re in — it takes about a minute.
       </p>
       <div className="mt-5 flex flex-wrap items-center gap-4">
-        <Link
-          to={JOIN_PAGE_PATH}
+        <a
+          href={GDG_CHAPTER_URL}
+          target="_blank"
+          rel="noopener noreferrer"
           className="inline-flex h-11 items-center justify-center rounded-2xl bg-accent px-6 text-sm font-semibold text-accent-fg shadow-[0_12px_32px_rgba(74,140,255,0.28)] transition-colors hover:bg-accent-hover"
         >
-          Become a member
-        </Link>
-        <Link
-          to={JOIN_PAGE_PATH}
-          className="text-sm font-medium text-fg-secondary transition-colors hover:text-fg"
-        >
-          Learn more
-        </Link>
+          Join GDG
+        </a>
       </div>
     </section>
   )
